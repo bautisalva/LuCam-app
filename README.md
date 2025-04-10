@@ -32,7 +32,6 @@ pip install -r requirements.txt
 ### 3. Running the Application
 
 ```bash
-cd src
 python test.py
 ```
 
