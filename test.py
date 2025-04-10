@@ -56,7 +56,7 @@ class Worker(QObject):
         except Exception as e:
             print(f"[ERROR] Falló la captura con Lucam: {e}")
 
-
+#------------------------------------------------------------------------------
 class CameraApp(QWidget):
     def __init__(self):
         super().__init__()
