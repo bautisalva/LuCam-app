@@ -27,7 +27,7 @@ pip install numpy opencv-python PyQt6
 - `numpy`
 - `opencv-python`
 - `PyQt6`
-- (plus Lumenera drivers installed on the system)
+- (plus [Lumenera USB camera and drivers 5.0](https://www.lumenera.com/))
 
 You can also install all at once with:
 
