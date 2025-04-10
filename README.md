@@ -4,8 +4,7 @@
 
 ## Description
 
-A Python application for **acquiring images from Lumenera cameras** using the LuCam API.  
-Features a graphical user interface for live preview, image capture (average, median modes), background subtraction, parameter control, and file saving.
+A Python application for **acquiring and processiong images from Lumenera cameras** using the LuCam API. Features a graphical user interface.
 
 ---
 
