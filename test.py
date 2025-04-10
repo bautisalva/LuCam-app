@@ -11,6 +11,7 @@ from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject
 
 from lucam import Lucam
 
+#------------------------------------------------------------------------------
 class Worker(QObject):
     image_captured = pyqtSignal(np.ndarray)
 
