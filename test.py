@@ -11,6 +11,7 @@ from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject
 
 from lucam import Lucam
 
+#------------------------------------------------------------------------------
 class Worker(QObject):
     image_captured = pyqtSignal(np.ndarray)
 
@@ -55,7 +56,7 @@ class Worker(QObject):
         except Exception as e:
             print(f"[ERROR] Falló la captura con Lucam: {e}")
 
-
+#------------------------------------------------------------------------------
 class CameraApp(QWidget):
     def __init__(self):
         super().__init__()
