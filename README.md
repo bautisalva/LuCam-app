@@ -1,24 +1,7 @@
 # LuCam Python Image Acquisition Software
 
-Python application for **capturing images using Lumenera cameras** via the LuCam API.  
+Python application for **capturing and processiong images using Lumenera cameras** via the LuCam API.  
 Includes GUI tools for live preview, capture modes (average, median), background subtraction, and parameter saving.
-
----
-
-## 📂 Project Structure
-
-```
-LuCam-python-image-acquisition-software/
-├── docs/
-│   └── Teledyne-Camera-Manual.pdf  # Official camera manual
-├── external/
-│   └── lucam.py                    # LuCam API Python wrapper (from Christoph Gohlke)
-├── src/
-│   └── test.py                     # Main application with GUI for camera control
-├── README.md
-├── .gitignore
-└── requirements.txt
-```
 
 ---
 
