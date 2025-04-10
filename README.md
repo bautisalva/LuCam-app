@@ -11,8 +11,8 @@ Features a graphical user interface for live preview, image capture (average, me
 
 ## Authors
 
-- **Bautista Salvatierra**
-- (Add other collaborators here)
+- [**Bautista Salvatierra Pérez**](https://github.com/bautisalva)
+- (Pone aca tu  github toto)
 
 ---
 
@@ -46,7 +46,7 @@ pip install -r requirements.txt
 
 ## 🔗 References
 
-- [`lucam.py`](https://github.com/cgohlke/lucam) — Python wrapper for the LuCam API, by Christoph Gohlke.
+- [`lucam.py`](https://github.com/cgohlke/lucam) — Python wrapper for the LuCam API, by [Christoph Gohlke](https://github.com/cgohlke).
 - Lumenera USB Camera API Reference Manual Release 5.0. Lumenera Corporation.
 
 ---
