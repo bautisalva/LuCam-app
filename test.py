@@ -232,14 +232,15 @@ class CameraApp(QWidget):
         layout.addLayout(controls_layout)
         
         # Botones para guardar y cargar parámetros
-        self.save_settings_button = QPushButton("Guardar Parámetros")
-        self.save_settings_button.clicked.connect(self.save_parameters)
-        
+        self.save_preview_button = QPushButton("Guardar Parámetros de Preview")
+        self.save_preview_button.clicked.connect(self.save_preview_parameters)
+        controls_layout.addWidget(self.save_preview_button)
+
         self.load_settings_button = QPushButton("Cargar Parámetros")
         self.load_settings_button.clicked.connect(self.load_parameters)
         
-        controls_layout.addWidget(self.save_settings_button)
         controls_layout.addWidget(self.load_settings_button)
+        self.apply_default_slider_values_to_camera()
 
         self.preview_tab.setLayout(layout)
 
@@ -344,9 +345,10 @@ class CameraApp(QWidget):
         self.toggle_preview_button.setEnabled(False)
         controls_layout.addWidget(self.toggle_preview_button)
     
-        self.save_settings_button = QPushButton("Guardar Parámetros")
-        self.save_settings_button.clicked.connect(self.save_parameters)
-        controls_layout.addWidget(self.save_settings_button)
+        self.save_capture_button = QPushButton("Guardar Parámetros de Captura")
+        self.save_capture_button.clicked.connect(self.save_capture_parameters)
+        controls_layout.addWidget(self.save_capture_button)
+
     
         self.load_settings_button = QPushButton("Cargar Parámetros")
         self.load_settings_button.clicked.connect(self.load_parameters)
@@ -358,7 +360,11 @@ class CameraApp(QWidget):
     
         self.capture_tab.setLayout(layout)
 
-    
+    def apply_default_slider_values_to_camera(self):
+        for prop, (min_val, max_val, default) in self.properties.items():
+            if self.camera:
+                self.camera.set_properties(**{prop: default})
+
     def update_property(self, prop, value):
         if self.camera:
             self.camera.set_properties(**{prop: value})
@@ -504,17 +510,34 @@ class CameraApp(QWidget):
             cv2.imwrite(file_path, self.captured_image)
             self.log_message(f"Imagen guardada manualmente en: {file_path}")
     
-    def save_parameters(self):
+    def save_preview_parameters(self):
         params = {prop: self.sliders[prop].value() / 10 for prop in self.properties}
-        params['blur'] = self.blur_slider.value()
-        params['num_images'] = self.num_images_spinbox.value()
-        params['capture_mode'] = self.capture_mode_selector.currentText()
-        file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros", "", "JSON (*.json)")
+        file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros de Preview", "", "JSON (*.json)")
         if file_path:
-            with open(file_path, 'w') as f:
-                json.dump(params, f, indent=4)
-            self.log_message(f"Parámetros guardados en archivo: {file_path}")
-    
+            try:
+                with open(file_path, 'w') as f:
+                    json.dump(params, f, indent=4)
+                self.log_message(f"Parámetros de Preview guardados en {file_path}")
+            except Exception as e:
+                self.log_message(f"[ERROR] No se pudieron guardar parámetros de Preview: {e}")
+
+
+    def save_capture_parameters(self):
+        params = {
+            "blur": self.blur_slider.value(),
+            "num_images": self.num_images_spinbox.value(),
+            "capture_mode": self.capture_mode_selector.currentText()
+        }
+        file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros de Captura", "", "JSON (*.json)")
+        if file_path:
+            try:
+                with open(file_path, 'w') as f:
+                    json.dump(params, f, indent=4)
+                self.log_message(f"Parámetros de Captura guardados en {file_path}")
+            except Exception as e:
+                self.log_message(f"[ERROR] No se pudieron guardar parámetros de Captura: {e}")
+
+
     def load_parameters(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Cargar Parámetros", "", "JSON (*.json)")
         if file_path:
