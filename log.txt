@@ -671,3 +671,5 @@
 [12:34:33] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params_captura.json
 [12:34:34] Iniciando captura de imagen...
 [12:34:35] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 14/04/2025 a las 13:26:41 ===
+=== Se inició la app el día 14/04/2025 a las 13:38:22 ===

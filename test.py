@@ -368,8 +368,12 @@ class CameraApp(QWidget):
     def update_property(self, prop, value):
         if self.camera:
             self.camera.set_properties(**{prop: value})
+        self.sliders[prop].blockSignals(True)
+        self.sliders[prop].setValue(int(value * 10))
+        self.sliders[prop].blockSignals(False)
         self.inputs[prop].setText(f"{value:.1f}")
         self.log_message(f"Se actualizó '{prop}' a {value:.1f}")
+
     
     def set_property_from_input(self, prop, field):
         try:
