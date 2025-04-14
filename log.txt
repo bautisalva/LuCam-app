@@ -1,0 +1,5 @@
+=== Se inició la app el día 14/04/2025 a las 11:57:25 ===
+=== Se inició la app el día 14/04/2025 a las 11:59:54 ===
+[12:00:03] Iniciando captura de imagen...
+[12:00:05] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 14/04/2025 a las 12:00:41 ===

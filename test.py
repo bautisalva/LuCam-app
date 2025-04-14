@@ -1,391 +1,4 @@
 import sys
-import numpy as np
-import cv2
-import threading
-import json
-from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
-                             QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
-                             QSpinBox, QComboBox, QFileDialog, QGroupBox)
-from PyQt6.QtGui import QPixmap, QImage
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject
-
-from lucam import Lucam
-
-#------------------------------------------------------------------------------
-class Worker(QObject):
-    image_captured = pyqtSignal(np.ndarray)
-
-    def __init__(self, camera, num_images, mode, blur_strength):
-        super().__init__()
-        self.camera = camera
-        self.num_images = num_images
-        self.mode = mode
-        self.blur_strength = blur_strength
-
-    def run(self):
-        try:
-            images = []
-            for _ in range(self.num_images):
-                image = self.camera.TakeSnapshot()
-                if image is None:
-                    print("[WARNING] Imagen capturada fue None. Se salta.")
-                    continue
-                images.append(image)
-
-            if not images:
-                print("[ERROR] No se capturó ninguna imagen válida.")
-                return
-
-            # Convertimos a float para el promedio si es necesario
-            if self.mode == "Promedio":
-                stack = np.stack(images).astype(np.float32)
-                result_image = np.mean(stack, axis=0).astype(np.uint8)
-            elif self.mode == "Mediana":
-                stack = np.stack(images).astype(np.uint8)
-                result_image = np.median(stack, axis=0).astype(np.uint8)
-            else:
-                print(f"[WARNING] Modo desconocido: {self.mode}, se usa la primera imagen.")
-                result_image = images[0]
-
-            if self.blur_strength > 0:
-                k = self.blur_strength * 2 + 1
-                result_image = cv2.GaussianBlur(result_image, (k, k), 0)
-                
-            self.image_captured.emit(result_image)
-
-        except Exception as e:
-            print(f"[ERROR] Falló la captura con Lucam: {e}")
-
-#------------------------------------------------------------------------------
-class CameraApp(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.camera = Lucam()
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_preview)
-        self.preview_mode = True
-        self.timer.start(300)
-        self.capture_mode = "Promedio"
-        self.captured_image = None
-        self.blur_strength = 0
-        self.background_image = None
-        self.background_enabled = True
-        self.properties = {
-            "brightness": (0, 100, 10.0),
-            "contrast": (0, 10, 1.0),
-            "saturation": (0, 100, 10.0),
-            "hue": (-180, 180, 0.0),
-            "gamma": (1, 50, 10),
-            "exposure": (1, 100, 10.0),
-            "gain": (0, 10, 1.0)
-        }
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle("Lumenera Camera Control")
-        self.setGeometry(100, 100, 1000, 600)
-    
-        self.preview_label = QLabel("Preview en vivo")
-        self.preview_label.setFixedSize(640, 480)
-    
-        controls_layout = QVBoxLayout()
-    
-        self.capture_button = QPushButton("Capturar Imagen")
-        self.capture_button.clicked.connect(self.capture_image)
-    
-        self.capture_background_button = QPushButton("Capturar Fondo")
-        self.capture_background_button.clicked.connect(self.capture_background)
-    
-        self.toggle_background_selector = QComboBox()
-        self.toggle_background_selector.addItems(["Sin Fondo", "Con Fondo"])
-        self.toggle_background_selector.currentTextChanged.connect(self.toggle_background)
-    
-        self.save_button = QPushButton("Guardar Imagen")
-        self.save_button.clicked.connect(self.save_image)
-        self.save_button.setEnabled(False)
-    
-        self.toggle_preview_button = QPushButton("Volver a Preview")
-        self.toggle_preview_button.clicked.connect(self.start_preview)
-        self.toggle_preview_button.setEnabled(False)
-    
-        self.save_settings_button = QPushButton("Guardar Parámetros")
-        self.save_settings_button.clicked.connect(self.save_parameters)
-    
-        self.load_settings_button = QPushButton("Cargar Parámetros")
-        self.load_settings_button.clicked.connect(self.load_parameters)
-    
-        # Capture settings group
-        capture_settings_box = QGroupBox("Configuraciones de Captura")
-        capture_settings_layout = QVBoxLayout()
-    
-        self.num_images_spinbox = QSpinBox()
-        self.num_images_spinbox.setRange(1, 100)
-        self.num_images_spinbox.setValue(5)
-        capture_num_layout = QHBoxLayout()
-        capture_num_layout.addWidget(QLabel("Imágenes por captura:"))
-        capture_num_layout.addWidget(self.num_images_spinbox)
-    
-        self.capture_mode_selector = QComboBox()
-        self.capture_mode_selector.addItems(["Promedio", "Mediana"])
-        self.capture_mode_selector.currentTextChanged.connect(self.change_capture_mode)
-        capture_mode_layout = QHBoxLayout()
-        capture_mode_layout.addWidget(QLabel("Modo de captura:"))
-        capture_mode_layout.addWidget(self.capture_mode_selector)
-    
-        # Blur control
-        blur_box = QGroupBox("Desenfoque")
-        blur_layout = QHBoxLayout()
-        self.blur_label = QLabel("Blur: 0")
-        self.blur_slider = QSlider(Qt.Orientation.Horizontal)
-        self.blur_slider.setMinimum(0)
-        self.blur_slider.setMaximum(10)
-        self.blur_slider.setValue(0)
-        self.blur_slider.valueChanged.connect(self.update_blur)
-    
-        self.blur_input = QLineEdit("0")
-        self.blur_input.setFixedWidth(50)
-        self.blur_input.editingFinished.connect(self.set_blur_from_input)
-    
-        blur_layout.addWidget(self.blur_label)
-        blur_layout.addWidget(self.blur_slider)
-        blur_layout.addWidget(self.blur_input)
-        blur_box.setLayout(blur_layout)
-    
-        capture_settings_layout.addLayout(capture_num_layout)
-        capture_settings_layout.addLayout(capture_mode_layout)
-        capture_settings_layout.addWidget(blur_box)
-        capture_settings_box.setLayout(capture_settings_layout)
-    
-        # Camera controls group
-        camera_controls_box = QGroupBox("Controles de la Cámara")
-        camera_controls_layout = QVBoxLayout()
-    
-        self.sliders = {}
-        self.inputs = {}
-        for prop, (min_val, max_val, default) in self.properties.items():
-            label = QLabel(f"{prop.capitalize()}: {default}")
-            slider = QSlider(Qt.Orientation.Horizontal)
-            slider.setMinimum(int(min_val * 10))
-            slider.setMaximum(int(max_val * 10))
-            slider.setValue(int(default * 10))
-            slider.valueChanged.connect(lambda value, p=prop: self.update_property(p, value / 10))
-    
-            input_field = QLineEdit(str(default))
-            input_field.setFixedWidth(50)
-            input_field.editingFinished.connect(lambda p=prop, field=input_field: self.set_property_from_input(p, field))
-    
-            hbox = QHBoxLayout()
-            hbox.addWidget(label)
-            hbox.addWidget(slider)
-            hbox.addWidget(input_field)
-    
-            camera_controls_layout.addLayout(hbox)
-            self.sliders[prop] = slider
-            self.inputs[prop] = input_field
-    
-        camera_controls_box.setLayout(camera_controls_layout)
-    
-        # Add all to controls layout
-        controls_layout.addWidget(capture_settings_box)
-        controls_layout.addWidget(self.capture_button)
-        controls_layout.addWidget(self.capture_background_button)
-        controls_layout.addWidget(self.toggle_background_selector)
-        controls_layout.addWidget(self.save_button)
-        controls_layout.addWidget(self.toggle_preview_button)
-        controls_layout.addWidget(self.save_settings_button)
-        controls_layout.addWidget(self.load_settings_button)
-        controls_layout.addWidget(camera_controls_box)
-        controls_layout.addStretch()
-    
-        # Main layout
-        main_layout = QHBoxLayout()
-        main_layout.addWidget(self.preview_label)
-        main_layout.addLayout(controls_layout)
-        self.setLayout(main_layout)
-
-
-    def update_property(self, prop, value):
-        if self.camera:
-            self.camera.set_properties(**{prop: value})
-        self.inputs[prop].setText(f"{value:.1f}")
-
-    def set_property_from_input(self, prop, field):
-        try:
-            value = float(field.text())
-            self.sliders[prop].setValue(int(value * 10))
-            self.update_property(prop, value)
-        except ValueError:
-            field.setText(f"{self.sliders[prop].value() / 10:.1f}")
-            
-    def update_blur(self, value):
-        self.blur_strength = value  # <-- no lo transformes acá
-        self.blur_label.setText(f"Blur: {value}")
-        self.blur_input.setText(str(value))
-
-    def set_blur_from_input(self):
-        try:
-            value = int(self.blur_input.text())
-            if 0 <= value <= 10:
-                self.blur_slider.setValue(value)
-            else:
-                self.blur_input.setText(str(self.blur_slider.value()))
-        except ValueError:
-            self.blur_input.setText(str(self.blur_slider.value()))
-
-    def change_capture_mode(self, mode):
-        self.capture_mode = mode
-
-    def capture_background(self):
-        self.preview_mode = False
-        self.timer.stop()
-    
-        num_images = self.num_images_spinbox.value()
-        mode = self.capture_mode_selector.currentText()
-        blur_strength = self.blur_strength
-    
-        self.background_worker = Worker(self.camera, num_images, mode, blur_strength)
-        self.background_worker.image_captured.connect(self.set_background_image)
-    
-        threading.Thread(target=self.background_worker.run, daemon=True).start()
-
-
-    def set_background_image(self, image):
-        self.background_image = image
-        self.display_image(image)
-        print("Fondo capturado.")
-
-    def toggle_background(self, text):
-        self.background_enabled = (text == "Fondo Activado")
-        if self.captured_image is not None:
-            self.display_captured_image(self.captured_image)
-
-    def capture_image(self):
-        num_images = self.num_images_spinbox.value()
-        mode = self.capture_mode_selector.currentText()  # importante usar este
-        self.preview_mode = False
-        self.timer.stop()
-    
-        self.worker = Worker(self.camera, num_images, mode, self.blur_strength)
-        self.worker.image_captured.connect(self.display_captured_image)
-        threading.Thread(target=self.worker.run, daemon=True).start()
-        
-    def display_captured_image(self, image):
-        if (self.background_enabled 
-                and self.background_image is not None 
-                and self.background_image.shape == image.shape):
-        
-            image_int16 = image.astype(np.int16)
-            background_int16 = self.background_image.astype(np.int16)
-            diff = image_int16 - background_int16
-            diff_shifted = diff + 255
-            diff_normalized = np.clip((diff_shifted / 2), 0, 255).astype(np.uint8)
-            result = diff_normalized
-        else:
-            result = image.copy()
-
-        self.captured_image = result
-        self.display_image(result)
-        self.save_button.setEnabled(True)
-        self.toggle_preview_button.setEnabled(True)
-
-        self.captured_image = result
-        self.display_image(result)
-        self.save_button.setEnabled(True)
-        self.toggle_preview_button.setEnabled(True)
-
-    def save_image(self):
-        if self.captured_image is None:
-            return
-
-        file_dialog = QFileDialog()
-        file_dialog.setDefaultSuffix("tif")
-        file_path, _ = file_dialog.getSaveFileName(self, "Guardar Imagen", "", "TIFF (*.tif)")
-
-        if file_path:
-            cv2.imwrite(file_path, self.captured_image)
-            print(f"Imagen guardada en {file_path}")
-            
-    def save_parameters(self):
-        params = {prop: self.sliders[prop].value() / 10 for prop in self.properties}
-        params['blur'] = self.blur_slider.value()
-        params['num_images'] = self.num_images_spinbox.value()
-        params['capture_mode'] = self.capture_mode_selector.currentText()
-
-        file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros", "", "JSON (*.json)")
-
-        if file_path:
-            with open(file_path, 'w') as f:
-                json.dump(params, f, indent=4)
-            print(f"Parámetros guardados en {file_path}")
-
-    def load_parameters(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "Cargar Parámetros", "", "JSON (*.json)")
-
-        if file_path:
-            with open(file_path, 'r') as f:
-                params = json.load(f)
-
-            for prop in self.properties:
-                value = params.get(prop, None)
-                if value is not None:
-                    self.sliders[prop].setValue(int(value * 10))
-                    self.update_property(prop, value)
-
-            if 'blur' in params:
-                self.blur_slider.setValue(params['blur'])
-                self.update_blur(params['blur'])
-
-            if 'num_images' in params:
-                self.num_images_spinbox.setValue(params['num_images'])
-
-            if 'capture_mode' in params:
-                index = self.capture_mode_selector.findText(params['capture_mode'])
-                if index != -1:
-                    self.capture_mode_selector.setCurrentIndex(index)
-
-            print(f"Parámetros cargados desde {file_path}")
-
-    def start_preview(self):
-        self.preview_mode = True
-        self.timer.start(100)
-        self.toggle_preview_button.setEnabled(False)
-
-    def update_preview(self):
-        if self.preview_mode:
-            try:
-                image = self.camera.TakeSnapshot()
-                self.display_image(image)
-            except Exception:
-                pass
-
-    def display_image(self, image, scale_factor=1):
-        if len(image.shape) == 3:
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        height, width = image.shape
-        new_width = int(width * scale_factor)
-        new_height = int(height * scale_factor)
-        resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
-        bytes_per_line = new_width
-        qimage = QImage(resized_image.data, new_width, new_height, bytes_per_line, QImage.Format.Format_Grayscale8)
-        self.preview_label.setPixmap(QPixmap.fromImage(qimage))
-
-if __name__ == "__main__":
-    app = QApplication.instance() or QApplication(sys.argv)
-    window = CameraApp()
-    window.show()
-    sys.exit(app.exec())
-
-#%%
-
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Apr  9 10:33:37 2025
-
-@author: Marina
-"""
-
-
-import sys
 import os
 import numpy as np
 import cv2
@@ -394,9 +7,10 @@ import json
 import datetime
 from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
-                             QSpinBox, QComboBox, QFileDialog, QGroupBox)
+                             QSpinBox, QComboBox, QFileDialog,
+                             QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
 from PyQt6.QtGui import QPixmap, QImage
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject
+from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread
 
 class SimulatedCamera:
     def TakeSnapshot(self):
@@ -458,8 +72,35 @@ class Worker(QObject):
                 
             self.image_captured.emit(result_image)
 
-        except Exception as e:
+        except Exception:
             pass
+        
+class PreviewWorker(QObject):
+    new_frame = pyqtSignal(np.ndarray)
+
+    def __init__(self, camera):
+        super().__init__()
+        self.camera = camera
+        self.running = True
+        self.paused = False
+
+    def run(self):
+        while self.running:
+            if not self.paused:
+                image = self.camera.TakeSnapshot()
+                if image is not None:
+                    self.new_frame.emit(image)
+            QThread.msleep(300)  # delay entre frames
+
+    def stop(self):
+        self.running = False
+
+    def pause(self):
+        self.paused = True
+
+    def resume(self):
+        self.paused = False
+
 
 class CameraApp(QWidget):
     def __init__(self):
@@ -474,11 +115,38 @@ class CameraApp(QWidget):
             print(f"[WARNING] No se pudo inicializar Lucam. Se usará SimulatedCamera. Error: {e}")
             self.camera = SimulatedCamera()
             self.simulation = True
+            
+        self.log_file_path = os.path.join(os.getcwd(), "log.txt")
+        self.log_file = open(self.log_file_path, "a", encoding="utf-8")
+        
+        # Escribir mensaje de inicio
+        now = datetime.datetime.now()
+        start_message = f"=== Se inició la app el día {now.strftime('%d/%m/%Y')} a las {now.strftime('%H:%M:%S')} ==="
+        self.log_file.write(start_message + "\n")
+        self.log_file.flush()  # Asegurarnos que se escriba inmediatamente
 
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_preview)
+        self.preview_worker = PreviewWorker(self.camera)
+        self.preview_thread = QThread()
+        self.preview_worker.moveToThread(self.preview_thread)
+        self.preview_worker.new_frame.connect(self.display_preview_image)
+        self.preview_thread.started.connect(self.preview_worker.run)
+        self.preview_thread.start()
+
+        self.preview_label_preview = QLabel("Preview en vivo")
+        self.preview_label_preview.setFixedSize(640, 480)
+        
+        self.preview_label_capture = QLabel("Preview captura")
+        self.preview_label_capture.setFixedSize(640, 480)
+        
+        self.console_preview = QPlainTextEdit()
+        self.console_preview.setReadOnly(True)
+
+        self.console_capture = QPlainTextEdit()
+        self.console_capture.setReadOnly(True)
+
+        
         self.preview_mode = True
-        self.timer.start(300)
+        
         self.capture_mode = "Promedio"
         self.captured_image = None
         self.blur_strength = 0
@@ -503,13 +171,90 @@ class CameraApp(QWidget):
     def initUI(self):
         self.setWindowTitle("Lumenera Camera Control")
         self.setGeometry(100, 100, 1000, 600)
-
-        self.preview_label = QLabel("Preview en vivo")
-        self.preview_label.setFixedSize(640, 480)
-
+    
+        # Crear las pestañas
+        self.tabs = QTabWidget(self)
+    
+        # Pestaña 1: Preview
+        self.preview_tab = QWidget()
+        self.init_preview_tab()
+    
+        # Pestaña 2: Captura
+        self.capture_tab = QWidget()
+        self.init_capture_tab()
+    
+        # Agregar pestañas
+        self.tabs.addTab(self.preview_tab, "Preview")
+        self.tabs.addTab(self.capture_tab, "Captura")
+    
+        # Layout principal
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self.tabs)
+        self.setLayout(main_layout)
+        
+    def init_preview_tab(self):
+        layout = QHBoxLayout()
+    
+        left_layout = QVBoxLayout()
+        left_layout.addWidget(self.preview_label_preview)
+        left_layout.addWidget(self.console_preview)
+    
+        layout.addLayout(left_layout)
+        # Controles de la cámara a la derecha
         controls_layout = QVBoxLayout()
+        self.sliders = {}
+        self.inputs = {}
+        for prop, (min_val, max_val, default) in self.properties.items():
+            group = QGroupBox(prop.capitalize())
+            group_layout = QHBoxLayout()
+    
+            label = QLabel(f"{default}")
+            slider = QSlider(Qt.Orientation.Horizontal)
+            slider.setMinimum(int(min_val * 10))
+            slider.setMaximum(int(max_val * 10))
+            slider.setValue(int(default * 10))
+            slider.valueChanged.connect(lambda value, p=prop: self.update_property(p, value / 10))
+            
+            input_field = QLineEdit(str(default))
+            input_field.setFixedWidth(50)
+            input_field.editingFinished.connect(lambda p=prop, field=input_field: self.set_property_from_input(p, field))
+    
+            group_layout.addWidget(label)
+            group_layout.addWidget(slider)
+            group_layout.addWidget(input_field)
+            group.setLayout(group_layout)
+    
+            controls_layout.addWidget(group)
+            self.sliders[prop] = slider
+            self.inputs[prop] = input_field
+    
+        controls_layout.addStretch()
+        layout.addLayout(controls_layout)
+        
+        # Botones para guardar y cargar parámetros
+        self.save_settings_button = QPushButton("Guardar Parámetros")
+        self.save_settings_button.clicked.connect(self.save_parameters)
+        
+        self.load_settings_button = QPushButton("Cargar Parámetros")
+        self.load_settings_button.clicked.connect(self.load_parameters)
+        
+        controls_layout.addWidget(self.save_settings_button)
+        controls_layout.addWidget(self.load_settings_button)
 
-        #Sección Directorio de Trabajo
+        self.preview_tab.setLayout(layout)
+
+    def init_capture_tab(self):
+        layout = QHBoxLayout()
+    
+        left_layout = QVBoxLayout()
+        left_layout.addWidget(self.preview_label_capture)
+        left_layout.addWidget(self.console_capture)
+        
+        layout.addLayout(left_layout)
+        # Controles a la derecha
+        controls_layout = QVBoxLayout()
+    
+        # Directorio de trabajo
         dir_layout = QHBoxLayout()
         self.dir_line_edit = QLineEdit()
         self.dir_button = QPushButton("...")
@@ -518,64 +263,36 @@ class CameraApp(QWidget):
         dir_layout.addWidget(QLabel("Directorio:"))
         dir_layout.addWidget(self.dir_line_edit)
         dir_layout.addWidget(self.dir_button)
-
-        #Sección Guardado Automático
+        controls_layout.addLayout(dir_layout)
+    
+        # Guardado automático
         auto_save_layout = QHBoxLayout()
         self.auto_save_selector = QComboBox()
         self.auto_save_selector.addItems(["No", "Sí"])
         self.auto_save_selector.currentTextChanged.connect(self.toggle_auto_save)
         auto_save_layout.addWidget(QLabel("Guardar automáticamente:"))
         auto_save_layout.addWidget(self.auto_save_selector)
-
-        #Botones principales
-        self.capture_button = QPushButton("Capturar Imagen")
-        self.capture_button.clicked.connect(self.capture_image)
-
-        self.capture_background_button = QPushButton("Capturar Fondo")
-        self.capture_background_button.clicked.connect(self.capture_background)
-
-        #Nueva sección: Restar fondo
-        toggle_background_layout = QHBoxLayout()
-        toggle_background_label = QLabel("Restar fondo:")
-        self.toggle_background_selector = QComboBox()
-        self.toggle_background_selector.addItems(["Sí", "No"])
-        self.toggle_background_selector.currentTextChanged.connect(self.toggle_background)
-        toggle_background_layout.addWidget(toggle_background_label)
-        toggle_background_layout.addWidget(self.toggle_background_selector)
-
-        self.save_button = QPushButton("Guardar Imagen")
-        self.save_button.clicked.connect(self.save_image)
-        self.save_button.setEnabled(False)
-
-        self.toggle_preview_button = QPushButton("Volver a Preview")
-        self.toggle_preview_button.clicked.connect(self.start_preview)
-        self.toggle_preview_button.setEnabled(False)
-
-        self.save_settings_button = QPushButton("Guardar Parámetros")
-        self.save_settings_button.clicked.connect(self.save_parameters)
-
-        self.load_settings_button = QPushButton("Cargar Parámetros")
-        self.load_settings_button.clicked.connect(self.load_parameters)
-
-        #Ajustes de Captura
+        controls_layout.addLayout(auto_save_layout)
+    
+        # Ajustes de captura
         capture_settings_box = QGroupBox("Configuraciones de Captura")
         capture_settings_layout = QVBoxLayout()
-
+    
         self.num_images_spinbox = QSpinBox()
         self.num_images_spinbox.setRange(1, 100)
         self.num_images_spinbox.setValue(5)
         capture_num_layout = QHBoxLayout()
         capture_num_layout.addWidget(QLabel("Imágenes por captura:"))
         capture_num_layout.addWidget(self.num_images_spinbox)
-
+    
         self.capture_mode_selector = QComboBox()
         self.capture_mode_selector.addItems(["Promedio", "Mediana"])
         self.capture_mode_selector.currentTextChanged.connect(self.change_capture_mode)
         capture_mode_layout = QHBoxLayout()
         capture_mode_layout.addWidget(QLabel("Modo de captura:"))
         capture_mode_layout.addWidget(self.capture_mode_selector)
-
-        #Blur
+    
+        # Blur
         blur_box = QGroupBox("Desenfoque")
         blur_layout = QHBoxLayout()
         self.blur_label = QLabel("Blur: 0")
@@ -584,75 +301,70 @@ class CameraApp(QWidget):
         self.blur_slider.setMaximum(10)
         self.blur_slider.setValue(0)
         self.blur_slider.valueChanged.connect(self.update_blur)
-
         self.blur_input = QLineEdit("0")
         self.blur_input.setFixedWidth(50)
         self.blur_input.editingFinished.connect(self.set_blur_from_input)
-
+    
         blur_layout.addWidget(self.blur_label)
         blur_layout.addWidget(self.blur_slider)
         blur_layout.addWidget(self.blur_input)
         blur_box.setLayout(blur_layout)
-
+    
         capture_settings_layout.addLayout(capture_num_layout)
         capture_settings_layout.addLayout(capture_mode_layout)
         capture_settings_layout.addWidget(blur_box)
         capture_settings_box.setLayout(capture_settings_layout)
-
-        #Controles de Cámara
-        camera_controls_box = QGroupBox("Controles de la Cámara")
-        camera_controls_layout = QVBoxLayout()
-
-        self.sliders = {}
-        self.inputs = {}
-        for prop, (min_val, max_val, default) in self.properties.items():
-            label = QLabel(f"{prop.capitalize()}: {default}")
-            slider = QSlider(Qt.Orientation.Horizontal)
-            slider.setMinimum(int(min_val * 10))
-            slider.setMaximum(int(max_val * 10))
-            slider.setValue(int(default * 10))
-            slider.valueChanged.connect(lambda value, p=prop: self.update_property(p, value / 10))
-
-            input_field = QLineEdit(str(default))
-            input_field.setFixedWidth(50)
-            input_field.editingFinished.connect(lambda p=prop, field=input_field: self.set_property_from_input(p, field))
-
-            hbox = QHBoxLayout()
-            hbox.addWidget(label)
-            hbox.addWidget(slider)
-            hbox.addWidget(input_field)
-
-            camera_controls_layout.addLayout(hbox)
-            self.sliders[prop] = slider
-            self.inputs[prop] = input_field
-
-        camera_controls_box.setLayout(camera_controls_layout)
-
-        #Armado de Layout Principal
-        controls_layout.addLayout(dir_layout)
-        controls_layout.addLayout(auto_save_layout)
         controls_layout.addWidget(capture_settings_box)
+    
+        # Botones
+        self.capture_button = QPushButton("Capturar Imagen")
+        self.capture_button.clicked.connect(self.capture_image)
         controls_layout.addWidget(self.capture_button)
+    
+        self.capture_background_button = QPushButton("Capturar Fondo")
+        self.capture_background_button.clicked.connect(self.capture_background)
         controls_layout.addWidget(self.capture_background_button)
+    
+        toggle_background_layout = QHBoxLayout()
+        toggle_background_label = QLabel("Restar fondo:")
+        self.toggle_background_selector = QComboBox()
+        self.toggle_background_selector.addItems(["Sí", "No"])
+        self.toggle_background_selector.currentTextChanged.connect(self.toggle_background)
+        toggle_background_layout.addWidget(toggle_background_label)
+        toggle_background_layout.addWidget(self.toggle_background_selector)
         controls_layout.addLayout(toggle_background_layout)
+    
+        self.save_button = QPushButton("Guardar Imagen")
+        self.save_button.clicked.connect(self.save_image)
+        self.save_button.setEnabled(False)
         controls_layout.addWidget(self.save_button)
+    
+        self.toggle_preview_button = QPushButton("Volver a Preview")
+        self.toggle_preview_button.clicked.connect(self.start_preview)
+        self.toggle_preview_button.setEnabled(False)
         controls_layout.addWidget(self.toggle_preview_button)
+    
+        self.save_settings_button = QPushButton("Guardar Parámetros")
+        self.save_settings_button.clicked.connect(self.save_parameters)
         controls_layout.addWidget(self.save_settings_button)
+    
+        self.load_settings_button = QPushButton("Cargar Parámetros")
+        self.load_settings_button.clicked.connect(self.load_parameters)
         controls_layout.addWidget(self.load_settings_button)
-        controls_layout.addWidget(camera_controls_box)
+    
         controls_layout.addStretch()
+    
+        layout.addLayout(controls_layout)
+    
+        self.capture_tab.setLayout(layout)
 
-        main_layout = QHBoxLayout()
-        main_layout.addWidget(self.preview_label)
-        main_layout.addLayout(controls_layout)
-        self.setLayout(main_layout)
-
-
+    
     def update_property(self, prop, value):
         if self.camera:
             self.camera.set_properties(**{prop: value})
         self.inputs[prop].setText(f"{value:.1f}")
-
+        self.log_message(f"Se actualizó '{prop}' a {value:.1f}")
+    
     def set_property_from_input(self, prop, field):
         try:
             value = float(field.text())
@@ -660,84 +372,92 @@ class CameraApp(QWidget):
             self.update_property(prop, value)
         except ValueError:
             field.setText(f"{self.sliders[prop].value() / 10:.1f}")
-
+    
     def update_blur(self, value):
         self.blur_strength = value
         self.blur_label.setText(f"Blur: {value}")
         self.blur_input.setText(str(value))
-
+        self.log_message(f"Se seteó el blur a {value}")
+    
     def set_blur_from_input(self):
         try:
             value = int(self.blur_input.text())
             if 0 <= value <= 10:
                 self.blur_slider.setValue(value)
+                self.log_message(f"Se ingresó blur manualmente a {value}")
             else:
                 self.blur_input.setText(str(self.blur_slider.value()))
         except ValueError:
             self.blur_input.setText(str(self.blur_slider.value()))
-
+    
     def change_capture_mode(self, mode):
         self.capture_mode = mode
-
+        self.log_message(f"Modo de captura cambiado a {mode}")
+    
     def select_work_dir(self):
         directory = QFileDialog.getExistingDirectory(self, "Seleccionar Directorio de Trabajo")
         if directory:
             self.work_dir = directory
             self.dir_line_edit.setText(directory)
-            print(f"[INFO] Directorio de trabajo establecido: {directory}")
-
+            self.log_message(f"Directorio de trabajo establecido: {directory}")
+    
     def toggle_auto_save(self, text):
         self.auto_save = (text == "Sí")
-        print(f"[INFO] Guardado automático {'activado' if self.auto_save else 'desactivado'}.")
-
+        estado = "activado" if self.auto_save else "desactivado"
+        self.log_message(f"Guardado automático {estado}")
+    
     def save_image_automatically(self, image, tipo):
         if not self.work_dir:
-            print("[ERROR] No se definió directorio de trabajo.")
+            self.log_message("[ERROR] No se definió directorio de trabajo para guardar imagen.")
             return
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{tipo}_{timestamp}.tif"
         full_path = os.path.join(self.work_dir, filename)
         success = cv2.imwrite(full_path, image)
         if success:
-            print(f"[INFO] Imagen guardada automáticamente: {full_path}")
+            self.log_message(f"Imagen guardada automáticamente en: {full_path}")
         else:
-            print(f"[ERROR] No se pudo guardar la imagen en {full_path}")
-
+            self.log_message(f"[ERROR] No se pudo guardar la imagen en: {full_path}")
+    
     def capture_background(self):
+        self.preview_worker.pause()
         self.preview_mode = False
-        self.timer.stop()
         num_images = self.num_images_spinbox.value()
         mode = self.capture_mode_selector.currentText()
         blur_strength = self.blur_strength
         self.background_worker = Worker(self.camera, num_images, mode, blur_strength)
         self.background_worker.image_captured.connect(self.set_background_image)
         threading.Thread(target=self.background_worker.run, daemon=True).start()
-
+        self.log_message("Iniciando captura de fondo...")
+    
     def set_background_image(self, image):
         self.background_image = image
         self.display_image(image)
-        print("Fondo capturado.")
+        self.log_message("Fondo capturado correctamente.")
         if self.auto_save:
             self.save_image_automatically(image, "fondo")
-
+    
     def toggle_background(self, text):
         self.background_enabled = (text == "No")
-       
+        estado = "desactivada" if self.background_enabled else "activada"
+        self.log_message(f"Restar fondo {estado}")
+    
     def capture_image(self):
+        self.preview_worker.pause()
         num_images = self.num_images_spinbox.value()
         mode = self.capture_mode_selector.currentText()
         if self.simulation:
-            print("[INFO] Captura de imagen simulada.")
-        self.preview_mode = False
-        self.timer.stop()
+            self.log_message("Captura de imagen simulada.")
+    
         self.worker = Worker(self.camera, num_images, mode, self.blur_strength)
         self.worker.image_captured.connect(self.display_captured_image)
         threading.Thread(target=self.worker.run, daemon=True).start()
-
+        self.log_message("Iniciando captura de imagen...")
+    
     def display_captured_image(self, image):
-        if (self.background_enabled 
-                and self.background_image is not None 
-                and self.background_image.shape == image.shape):
+        if (self.background_enabled and
+                self.background_image is not None and
+                self.background_image.shape == image.shape):
             image_int16 = image.astype(np.int16)
             background_int16 = self.background_image.astype(np.int16)
             diff = image_int16 - background_int16
@@ -748,25 +468,42 @@ class CameraApp(QWidget):
         else:
             result = image.copy()
             tipo_guardado = "normal"
-
+    
         self.captured_image = result
-        self.display_image(result)
+        self.display_captured_image_in_tab(result)
         self.save_button.setEnabled(True)
         self.toggle_preview_button.setEnabled(True)
-
+    
+        self.log_message("Imagen capturada y mostrada en pestaña 'Captura'.")
+    
         if self.auto_save:
             self.save_image_automatically(result, tipo_guardado)
+        
+    def display_captured_image_in_tab(self, image, scale_factor=1):
+        if len(image.shape) == 3:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        height, width = image.shape
+        new_width = int(width * scale_factor)
+        new_height = int(height * scale_factor)
+        resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
+        bytes_per_line = new_width
+        qimage = QImage(resized_image.data, new_width, new_height, bytes_per_line, QImage.Format.Format_Grayscale8)
+    
+        # Actualiza sólo el label de la pestaña Captura
+        self.preview_label_capture.setPixmap(QPixmap.fromImage(qimage))
+
 
     def save_image(self):
         if self.captured_image is None:
+            self.log_message("[ERROR] No hay imagen capturada para guardar.")
             return
         file_dialog = QFileDialog()
         file_dialog.setDefaultSuffix("tif")
         file_path, _ = file_dialog.getSaveFileName(self, "Guardar Imagen", "", "TIFF (*.tif)")
         if file_path:
             cv2.imwrite(file_path, self.captured_image)
-            print(f"Imagen guardada en {file_path}")
-
+            self.log_message(f"Imagen guardada manualmente en: {file_path}")
+    
     def save_parameters(self):
         params = {prop: self.sliders[prop].value() / 10 for prop in self.properties}
         params['blur'] = self.blur_slider.value()
@@ -776,8 +513,8 @@ class CameraApp(QWidget):
         if file_path:
             with open(file_path, 'w') as f:
                 json.dump(params, f, indent=4)
-            print(f"Parámetros guardados en {file_path}")
-
+            self.log_message(f"Parámetros guardados en archivo: {file_path}")
+    
     def load_parameters(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Cargar Parámetros", "", "JSON (*.json)")
         if file_path:
@@ -797,28 +534,27 @@ class CameraApp(QWidget):
                 index = self.capture_mode_selector.findText(params['capture_mode'])
                 if index != -1:
                     self.capture_mode_selector.setCurrentIndex(index)
-            print(f"Parámetros cargados desde {file_path}")
-
+            self.log_message(f"Parámetros cargados desde archivo: {file_path}")
+    
     def start_preview(self):
         self.preview_mode = True
-        self.timer.start(100)
         self.toggle_preview_button.setEnabled(False)
+        self.preview_worker.resume()
+        self.log_message("Preview reanudado.")
 
-    def update_preview(self):
-        if self.preview_mode:
-            try:
-                image = self.camera.TakeSnapshot()
-                if image is not None:
-                    self.display_image(image)
-                else:
-                    print("[WARNING] TakeSnapshot devolvió None")
-                    
-                if self.simulation:
-                    self.setWindowTitle("Lumenera Camera Control [Simulación]")
-                else:
-                    self.setWindowTitle("Lumenera Camera Control")
-            except Exception:
-                pass
+    def display_preview_image(self, image, scale_factor=1):
+        if len(image.shape) == 3:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        height, width = image.shape
+        new_width = int(width * scale_factor)
+        new_height = int(height * scale_factor)
+        resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
+        bytes_per_line = new_width
+        qimage = QImage(resized_image.data, new_width, new_height, bytes_per_line, QImage.Format.Format_Grayscale8)
+    
+        # Sólo actualizar el preview
+        self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
+
 
     def display_image(self, image, scale_factor=1):
         if len(image.shape) == 3:
@@ -829,7 +565,32 @@ class CameraApp(QWidget):
         resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
         bytes_per_line = new_width
         qimage = QImage(resized_image.data, new_width, new_height, bytes_per_line, QImage.Format.Format_Grayscale8)
-        self.preview_label.setPixmap(QPixmap.fromImage(qimage))
+    
+        # Actualizar ambos previews
+        self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
+        self.preview_label_capture.setPixmap(QPixmap.fromImage(qimage))
+
+    def log_message(self, message):
+        timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+        full_message = f"[{timestamp}] {message}"
+    
+        self.console_preview.appendPlainText(full_message)
+        self.console_capture.appendPlainText(full_message)
+    
+        print(full_message)  # Para consola de Spyder o terminal
+    
+        # También guardar en log.txt
+        if hasattr(self, "log_file") and self.log_file:
+            self.log_file.write(full_message + "\n")
+            self.log_file.flush()
+
+    def closeEvent(self, event):
+        self.preview_worker.stop()
+        self.preview_thread.quit()
+        self.preview_thread.wait()
+        if hasattr(self, "log_file") and self.log_file:
+            self.log_file.close()
+        event.accept()
 
 #Main
 if __name__ == "__main__":
@@ -837,3 +598,4 @@ if __name__ == "__main__":
     window = CameraApp()
     window.show()
     sys.exit(app.exec())
+    
