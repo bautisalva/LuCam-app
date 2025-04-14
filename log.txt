@@ -673,3 +673,7 @@
 [12:34:35] Imagen capturada y mostrada en pestaña 'Captura'.
 === Se inició la app el día 14/04/2025 a las 13:26:41 ===
 === Se inició la app el día 14/04/2025 a las 13:38:22 ===
+=== Se inició la app el día 14/04/2025 a las 14:43:13 ===
+[14:44:13] Captura de imagen simulada.
+[14:44:13] Iniciando captura de imagen...
+[14:44:13] Imagen capturada y mostrada en pestaña 'Captura'.
