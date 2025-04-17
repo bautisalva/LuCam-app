@@ -52,3 +52,4 @@ pip install -r requirements.txt
 - Lumenera USB Camera API Reference Manual Release 5.0. Lumenera Corporation.
 
 ---
+![image](https://github.com/user-attachments/assets/982437cf-5599-43d9-a4dd-87b9221eee4f)
