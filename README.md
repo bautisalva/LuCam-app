@@ -35,6 +35,7 @@ pip install -r requirements.txt
 ```
 ---
 ## Missing
+- tener cuidado con la branch de toto porque saca los botones separados de guardar parametros de preview y captura. Fijarse de agregar la branch de toto con el offset sin borrar esos botones (y que ningun otro cambio borre algo)
 - manejo del guardado de fotos (carpetas, guardar el raw de las fotos y eso, etc.)
 - revisar el tema del ‘toggle_background’ que parece que anda mal el botón
 ---
