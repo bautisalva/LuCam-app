@@ -11,7 +11,7 @@ A Python application for **acquiring and processiong images from Lumenera camera
 ## Authors
 
 - [**Bautista Salvatierra Pérez**](https://github.com/bautisalva)
-- (Pone aca tu  github toto)
+- [**Tomás Rodríguez Bouhier**](https://github.com/totorod1120)
 
 ---
 
@@ -33,7 +33,10 @@ You can also install all at once with:
 ```bash
 pip install -r requirements.txt
 ```
-
+---
+## Missing
+- manejo del guardado de fotos (carpetas, guardar el raw de las fotos y eso, etc.)
+- revisar el tema del ‘toggle_background’ que parece que anda mal el botón
 ---
 
 ## 📝 Notes
