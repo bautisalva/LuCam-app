@@ -5,12 +5,12 @@ import cv2
 import threading
 import json
 import datetime
-from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
+from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
                              QSpinBox, QComboBox, QFileDialog,
                              QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
-from PyQt6.QtGui import QPixmap, QImage
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread
+from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread
 
 class SimulatedCamera:
     def TakeSnapshot(self):
@@ -143,7 +143,9 @@ class CameraApp(QWidget):
 
         self.console_capture = QPlainTextEdit()
         self.console_capture.setReadOnly(True)
-
+        
+        self.background_gain = 1.0
+        self.background_offset = 0.0
         
         self.preview_mode = True
         
@@ -159,7 +161,7 @@ class CameraApp(QWidget):
             "saturation": (0, 100, 10.0),
             "hue": (-180, 180, 0.0),
             "gamma": (1, 50, 10),
-            "exposure": (1, 100, 10.0),
+            "exposure": (1, 500, 10.0),
             "gain": (0, 10, 1.0)
         }
 
@@ -232,14 +234,15 @@ class CameraApp(QWidget):
         layout.addLayout(controls_layout)
         
         # Botones para guardar y cargar parámetros
-        self.save_preview_button = QPushButton("Guardar Parámetros de Preview")
-        self.save_preview_button.clicked.connect(self.save_preview_parameters)
-        controls_layout.addWidget(self.save_preview_button)
-
+        self.save_settings_button = QPushButton("Guardar Parámetros")
+        self.save_settings_button.clicked.connect(self.save_parameters)
+        
         self.load_settings_button = QPushButton("Cargar Parámetros")
         self.load_settings_button.clicked.connect(self.load_parameters)
         
+        controls_layout.addWidget(self.save_settings_button)
         controls_layout.addWidget(self.load_settings_button)
+
         self.apply_default_slider_values_to_camera()
 
         self.preview_tab.setLayout(layout)
@@ -316,6 +319,10 @@ class CameraApp(QWidget):
         capture_settings_layout.addWidget(blur_box)
         capture_settings_box.setLayout(capture_settings_layout)
         controls_layout.addWidget(capture_settings_box)
+        
+        # Ganancia y offset para fondo
+        gain_offset_box = QGroupBox("Fondo: Ganancia y Offset")
+        gain_offset_layout = QVBoxLayout()
     
         # Botones
         self.capture_button = QPushButton("Capturar Imagen")
@@ -334,6 +341,39 @@ class CameraApp(QWidget):
         toggle_background_layout.addWidget(toggle_background_label)
         toggle_background_layout.addWidget(self.toggle_background_selector)
         controls_layout.addLayout(toggle_background_layout)
+        
+        # Ganancia
+        gain_layout = QHBoxLayout()
+        gain_layout.addWidget(QLabel("Ganancia (a):"))
+        self.gain_slider = QSlider(Qt.Orientation.Horizontal)
+        self.gain_slider.setMinimum(0)
+        self.gain_slider.setMaximum(10000)
+        self.gain_slider.setValue(100)
+        self.gain_slider.valueChanged.connect(lambda v: self.update_gain(v / 100))
+        gain_layout.addWidget(self.gain_slider)
+        self.gain_input = QLineEdit("1.0")
+        self.gain_input.setFixedWidth(50)
+        self.gain_input.editingFinished.connect(lambda: self.set_gain_from_input())
+        gain_layout.addWidget(self.gain_input)
+        
+        # Offset
+        offset_layout = QHBoxLayout()
+        offset_layout.addWidget(QLabel("Offset (b):"))
+        self.offset_slider = QSlider(Qt.Orientation.Horizontal)
+        self.offset_slider.setMinimum(-255)
+        self.offset_slider.setMaximum(255)
+        self.offset_slider.setValue(0)
+        self.offset_slider.valueChanged.connect(lambda v: self.update_offset(v))
+        offset_layout.addWidget(self.offset_slider)
+        self.offset_input = QLineEdit("0")
+        self.offset_input.setFixedWidth(50)
+        self.offset_input.editingFinished.connect(lambda: self.set_offset_from_input())
+        offset_layout.addWidget(self.offset_input)
+        
+        gain_offset_layout.addLayout(gain_layout)
+        gain_offset_layout.addLayout(offset_layout)
+        gain_offset_box.setLayout(gain_offset_layout)
+        controls_layout.addWidget(gain_offset_box)
     
         self.save_button = QPushButton("Guardar Imagen")
         self.save_button.clicked.connect(self.save_image)
@@ -345,10 +385,9 @@ class CameraApp(QWidget):
         self.toggle_preview_button.setEnabled(False)
         controls_layout.addWidget(self.toggle_preview_button)
     
-        self.save_capture_button = QPushButton("Guardar Parámetros de Captura")
-        self.save_capture_button.clicked.connect(self.save_capture_parameters)
-        controls_layout.addWidget(self.save_capture_button)
-
+        self.save_settings_button = QPushButton("Guardar Parámetros")
+        self.save_settings_button.clicked.connect(self.save_parameters)
+        controls_layout.addWidget(self.save_settings_button)
     
         self.load_settings_button = QPushButton("Cargar Parámetros")
         self.load_settings_button.clicked.connect(self.load_parameters)
@@ -361,19 +400,15 @@ class CameraApp(QWidget):
         self.capture_tab.setLayout(layout)
 
     def apply_default_slider_values_to_camera(self):
-        for prop, (min_val, max_val, default) in self.properties.items():
-            if self.camera:
-                self.camera.set_properties(**{prop: default})
-
+            for prop, (min_val, max_val, default) in self.properties.items():
+                if self.camera:
+                    self.camera.set_properties(**{prop: default})
+    
     def update_property(self, prop, value):
         if self.camera:
             self.camera.set_properties(**{prop: value})
-        self.sliders[prop].blockSignals(True)
-        self.sliders[prop].setValue(int(value * 10))
-        self.sliders[prop].blockSignals(False)
         self.inputs[prop].setText(f"{value:.1f}")
         self.log_message(f"Se actualizó '{prop}' a {value:.1f}")
-
     
     def set_property_from_input(self, prop, field):
         try:
@@ -399,6 +434,32 @@ class CameraApp(QWidget):
                 self.blur_input.setText(str(self.blur_slider.value()))
         except ValueError:
             self.blur_input.setText(str(self.blur_slider.value()))
+            
+    def update_gain(self, value):
+        self.background_gain = value
+        self.gain_input.setText(f"{value:.2f}")
+        self.log_message(f"Ganancia del fondo ajustada a {value:.2f}")
+    
+    def set_gain_from_input(self):
+        try:
+            value = float(self.gain_input.text())
+            self.background_gain = value
+            self.gain_slider.setValue(int(value * 100))
+        except ValueError:
+            self.gain_input.setText(f"{self.background_gain:.2f}")
+    
+    def update_offset(self, value):
+        self.background_offset = value
+        self.offset_input.setText(str(value))
+        self.log_message(f"Offset del fondo ajustado a {value}")
+    
+    def set_offset_from_input(self):
+        try:
+            value = int(self.offset_input.text())
+            self.background_offset = value
+            self.offset_slider.setValue(value)
+        except ValueError:
+            self.offset_input.setText(str(self.background_offset))
     
     def change_capture_mode(self, mode):
         self.capture_mode = mode
@@ -468,12 +529,16 @@ class CameraApp(QWidget):
         if (self.background_enabled and
                 self.background_image is not None and
                 self.background_image.shape == image.shape):
-            image_int16 = image.astype(np.int16)
-            background_int16 = self.background_image.astype(np.int16)
-            diff = image_int16 - background_int16
-            diff_shifted = diff + 255
-            diff_normalized = np.clip((diff_shifted / 2), 0, 255).astype(np.uint8)
-            result = diff_normalized
+            
+            a = self.background_gain
+            b = self.background_offset
+            
+            image_float = image.astype(np.float32)
+            background_float = self.background_image.astype(np.float32)
+            
+            diff = a*(image_float - background_float + b)
+            diff_centered = diff + 128
+            result = np.clip(diff_centered, 0, 255).astype(np.uint8)
             tipo_guardado = "resta"
         else:
             result = image.copy()
@@ -514,34 +579,17 @@ class CameraApp(QWidget):
             cv2.imwrite(file_path, self.captured_image)
             self.log_message(f"Imagen guardada manualmente en: {file_path}")
     
-    def save_preview_parameters(self):
+    def save_parameters(self):
         params = {prop: self.sliders[prop].value() / 10 for prop in self.properties}
-        file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros de Preview", "", "JSON (*.json)")
+        params['blur'] = self.blur_slider.value()
+        params['num_images'] = self.num_images_spinbox.value()
+        params['capture_mode'] = self.capture_mode_selector.currentText()
+        file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros", "", "JSON (*.json)")
         if file_path:
-            try:
-                with open(file_path, 'w') as f:
-                    json.dump(params, f, indent=4)
-                self.log_message(f"Parámetros de Preview guardados en {file_path}")
-            except Exception as e:
-                self.log_message(f"[ERROR] No se pudieron guardar parámetros de Preview: {e}")
-
-
-    def save_capture_parameters(self):
-        params = {
-            "blur": self.blur_slider.value(),
-            "num_images": self.num_images_spinbox.value(),
-            "capture_mode": self.capture_mode_selector.currentText()
-        }
-        file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros de Captura", "", "JSON (*.json)")
-        if file_path:
-            try:
-                with open(file_path, 'w') as f:
-                    json.dump(params, f, indent=4)
-                self.log_message(f"Parámetros de Captura guardados en {file_path}")
-            except Exception as e:
-                self.log_message(f"[ERROR] No se pudieron guardar parámetros de Captura: {e}")
-
-
+            with open(file_path, 'w') as f:
+                json.dump(params, f, indent=4)
+            self.log_message(f"Parámetros guardados en archivo: {file_path}")
+    
     def load_parameters(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Cargar Parámetros", "", "JSON (*.json)")
         if file_path:
@@ -626,3 +674,6 @@ if __name__ == "__main__":
     window.show()
     sys.exit(app.exec())
     
+
+
+
