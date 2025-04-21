@@ -35,6 +35,7 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
 from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread
 
+
 class SimulatedCamera:
     """
     Fallback camera implementation used when Lucam is unavailable.
