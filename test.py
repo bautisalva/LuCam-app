@@ -510,8 +510,8 @@ class CameraApp(QWidget):
             self.save_image_automatically(image, "fondo")
     
     def toggle_background(self, text):
-        self.background_enabled = (text == "No")
-        estado = "desactivada" if self.background_enabled else "activada"
+        self.background_enabled = (text == "Sí")
+        estado = "activada" if self.background_enabled else "desactivada"
         self.log_message(f"Restar fondo {estado}")
     
     def capture_image(self):
