@@ -36,7 +36,12 @@ python test.py
 ---
 
 ## Missing
+- asegurarse de capturar y procesar en 16bits
 - Arreglar el problema de las rayas en las imagenes
+- Profundizar el analisis de imagenes (ver [Link](https://biapol.github.io/Image-data-science-with-Python-and-Napari-EPFL2022/day2c_Image_Filters/09_Filters.html))
+  - noise reduction para capturar las imagenes: moving average, gaussian, median
+  - mejorar el contraste de la imagen restada: filtrar con una tangente, rolling ball algorithm, tophat filter, otro gaussian blur o gaussian difference
+    
 ---
 
 
