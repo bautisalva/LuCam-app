@@ -677,3 +677,14 @@
 [14:44:13] Captura de imagen simulada.
 [14:44:13] Iniciando captura de imagen...
 [14:44:13] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 21/04/2025 a las 11:41:32 ===
+[11:41:43] Captura de imagen simulada.
+[11:41:43] Iniciando captura de imagen...
+[11:41:43] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 21/04/2025 a las 11:42:20 ===
+[11:42:26] Captura de imagen simulada.
+[11:42:26] Iniciando captura de imagen...
+[11:42:26] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:42:28] Iniciando captura de fondo...
+[11:42:28] Fondo capturado correctamente.
+[11:42:31] Preview reanudado.
