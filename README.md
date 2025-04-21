@@ -29,33 +29,10 @@ You can also install all at once with:
 pip install -r requirements.txt
 ```
 ---
-## 🧑‍💻 Usage
+## Usage
 ```bash
 python test.py
 ```
----
-
-## 📊 Capture Modes
-
-| Mode      | Description                          |
-|-----------|--------------------------------------|
-| Promedio  | Computes the pixel-wise average      |
-| Mediana   | Computes the pixel-wise median       |
-
----
-
-## 🧠 Background Subtraction
-
-The app performs subtraction using:
-
-    result = clip(a * (I - B + b) + 128, 0, 255)
-
-Where:
-- I : captured image  
-- B : background image  
-- a : gain (scaling factor)  
-- b : offset (bias)
-
 ---
 
 ## Missing
