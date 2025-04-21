@@ -4,7 +4,7 @@
 
 ## Description
 
-A Python application for **acquiring and processiong images from Lumenera cameras** using the LuCam API. Features a graphical user interface.
+A Python application for **acquiring and processiong images from Lumenera cameras** using the LuCam API by [Christoph Gohlke](https://github.com/cgohlke). Features a graphical user interface.
 
 ---
 
@@ -57,11 +57,9 @@ Where:
 - b : offset (bias)
 
 ---
----
+
 ## Missing
-- tener cuidado con la branch de toto porque saca los botones separados de guardar parametros de preview y captura. Fijarse de agregar la branch de toto con el offset sin borrar esos botones (y que ningun otro cambio borre algo)
-- manejo del guardado de fotos (carpetas, guardar el raw de las fotos y eso, etc.)
-- revisar el tema del ‘toggle_background’ que parece que anda mal el botón
+- Arreglar el problema de las rayas en las imagenes
 ---
 
 
