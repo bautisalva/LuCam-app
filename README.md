@@ -19,7 +19,7 @@ A Python application for **acquiring and processiong images from Lumenera camera
 
 - Python ≥ 3.8
 - [NumPy](https://numpy.org/)
-- [OpenCV (cv2)](https://opencv.org/)
+- [scikit-image](https://scikit-image.org/)
 - [PyQt6](https://pypi.org/project/PyQt6/)
 - (plus [Lumenera USB camera and drivers 5.0](https://www.lumenera.com/))
 
@@ -36,7 +36,6 @@ python test.py
 ---
 
 ## Missing
-- asegurarse de capturar y procesar en 16bits
 - Arreglar el problema de las rayas en las imagenes
 - Profundizar el analisis de imagenes (ver [Link](https://biapol.github.io/Image-data-science-with-Python-and-Napari-EPFL2022/day2c_Image_Filters/09_Filters.html))
   - noise reduction para capturar las imagenes: moving average, gaussian, median
