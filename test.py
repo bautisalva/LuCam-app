@@ -871,7 +871,7 @@ class CameraApp(QWidget):
     
         self.captured_image = result
     
-        # ⚠️ MUY IMPORTANTE: mostrar la imagen procesada de 16 bits
+        #Mostrar la imagen procesada
         self.display_captured_image_in_tab(result)
     
         self.save_button.setEnabled(True)
@@ -900,7 +900,7 @@ class CameraApp(QWidget):
         resized_image = resize(image, (new_height, new_width), preserve_range=True).astype(np.uint16)
         image_8bit = to_8bit_for_preview(resized_image)
     
-        # ✅ Aseguramos que el array sea contiguo en memoria
+        #Aseguramos que el array sea contiguo en memoria
         image_8bit = np.ascontiguousarray(image_8bit)
     
         bytes_per_line = image_8bit.shape[1]
