@@ -1,10 +1,10 @@
-# LuCam Python Image Acquisition Software
+# Lumanera Camera Python Image Acquisition Software
 
 ---
 
 ## Description
 
-A Python application for **acquiring and processiong images from Lumenera cameras** using the LuCam API. Features a graphical user interface.
+A Python application for **acquiring and processiong images from Lumenera cameras** using the LuCam API by [Christoph Gohlke](https://github.com/cgohlke). Features a graphical user interface.
 
 ---
 
@@ -17,15 +17,10 @@ A Python application for **acquiring and processiong images from Lumenera camera
 
 ## Requirements
 
-Install the following Python packages:
-
-```bash
-pip install numpy opencv-python PyQt6
-```
-
-- `numpy`
-- `opencv-python`
-- `PyQt6`
+- Python ≥ 3.8
+- [NumPy](https://numpy.org/)
+- [OpenCV (cv2)](https://opencv.org/)
+- [PyQt6](https://pypi.org/project/PyQt6/)
 - (plus [Lumenera USB camera and drivers 5.0](https://www.lumenera.com/))
 
 You can also install all at once with:
@@ -34,17 +29,21 @@ You can also install all at once with:
 pip install -r requirements.txt
 ```
 ---
+## Usage
+```bash
+python test.py
+```
+---
+
 ## Missing
-- manejo del guardado de fotos (carpetas, guardar el raw de las fotos y eso, etc.)
-- revisar el tema del ‘toggle_background’ que parece que anda mal el botón
+- asegurarse de capturar y procesar en 16bits
+- Arreglar el problema de las rayas en las imagenes
+- Profundizar el analisis de imagenes (ver [Link](https://biapol.github.io/Image-data-science-with-Python-and-Napari-EPFL2022/day2c_Image_Filters/09_Filters.html))
+  - noise reduction para capturar las imagenes: moving average, gaussian, median
+  - mejorar el contraste de la imagen restada: filtrar con una tangente, rolling ball algorithm, tophat filter, otro gaussian blur o gaussian difference
+    
 ---
 
-## 📝 Notes
-
-- If the `lucam` module is not found (camera disconnected or driver missing), the application automatically **falls back to a simulated camera** for testing.
-- More notes
-
----
 
 ## 🔗 References
 

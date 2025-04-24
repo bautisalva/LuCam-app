@@ -67,6 +67,7 @@ def to_8bit_for_preview(image_16bit):
     scaled = ((image_16bit - min_val) / (max_val - min_val) * 255).astype(np.uint8)
     return scaled
 
+
 class SimulatedCamera:
     """
     Fallback camera implementation used when Lucam is unavailable.
@@ -218,7 +219,6 @@ class CameraApp(QWidget):
     """
     def __init__(self):
         super().__init__()
-    
         # Try initializing Lucam camera; fallback to simulation
         try:
             self.camera = Lucam()
@@ -242,7 +242,7 @@ class CameraApp(QWidget):
         start_message = f"=== Se inició la app el día {now.strftime('%d/%m/%Y')} a las {now.strftime('%H:%M:%S')} ==="
         self.log_file.write(start_message + "\n")
         self.log_file.flush()
-    
+        
         # Start preview worker thread
         self.preview_worker = PreviewWorker(self.camera)
         self.preview_thread = QThread()
@@ -250,7 +250,7 @@ class CameraApp(QWidget):
         self.preview_worker.new_frame.connect(self.display_preview_image)
         self.preview_thread.started.connect(self.preview_worker.run)
         self.preview_thread.start()
-    
+
         # Initialize GUI widgets and internal state variables
         self.preview_label_preview = QLabel("Preview en vivo")
         self.preview_label_preview.setFixedSize(640, 480)
@@ -263,7 +263,7 @@ class CameraApp(QWidget):
     
         self.console_capture = QPlainTextEdit()
         self.console_capture.setReadOnly(True)
-    
+
         # Internal states for background subtraction and UI control
         self.background_gain = 1.0
         self.background_offset = 0.0
@@ -273,7 +273,7 @@ class CameraApp(QWidget):
         self.blur_strength = 0
         self.background_image = None
         self.background_enabled = True
-    
+
         # Properties to be controlled by UI sliders
         self.properties = {
             "brightness": (0, 100, 10.0),
@@ -282,7 +282,7 @@ class CameraApp(QWidget):
             "hue": (-180, 180, 0.0),
             "gamma": (1, 50, 10),
             "exposure": (1, 500, 10.0),
-            "gain": (0, 10, 1.0),
+            "gain": (0, 10, 1.0)
         }
     
         #self.camera.SetProperty(168,10)
@@ -299,7 +299,7 @@ class CameraApp(QWidget):
     
         self.work_dir = ""
         self.auto_save = False
-    
+
         # Launch full GUI setup
         self.initUI()
 
@@ -347,7 +347,7 @@ class CameraApp(QWidget):
         left_layout.addWidget(self.console_preview)
     
         layout.addLayout(left_layout)
-    
+
         controls_layout = QVBoxLayout()
         self.sliders = {}
         self.inputs = {}
@@ -396,6 +396,7 @@ class CameraApp(QWidget):
             self.sliders[prop] = slider
             self.inputs[prop] = input_field
     
+
         # Save/load parameter buttons
         self.save_preview_button = QPushButton("Guardar Parámetros de Preview")
         self.save_preview_button.clicked.connect(self.save_preview_parameters)
@@ -529,10 +530,12 @@ class CameraApp(QWidget):
         offset_layout = QHBoxLayout()
         offset_layout.addWidget(QLabel("Offset (b):"))
         self.offset_slider = QSlider(Qt.Orientation.Horizontal)
+
         self.offset_slider.setMinimum(-100)
         self.offset_slider.setMaximum(100)
         self.offset_slider.setValue(0)
         self.offset_slider.valueChanged.connect(lambda v: self.update_offset(v / 100))
+
         offset_layout.addWidget(self.offset_slider)
         self.offset_input = QLineEdit("0")
         self.offset_input.setFixedWidth(50)
@@ -700,9 +703,11 @@ class CameraApp(QWidget):
         Parameters:
             value (int): pixel-wise bias to subtract before scaling.
         """
+
         self.background_offset = value * 32768  # Mapear de [-1,1] a [-32768,32768]
         self.offset_input.setText(f"{value:.2f}")
         self.log_message(f"Offset del fondo ajustado a {self.background_offset:.0f} (escalado: {value:.2f})")
+
 
     def set_offset_from_input(self):
         """
@@ -710,6 +715,7 @@ class CameraApp(QWidget):
         If invalid, reverts to current value.
         """
         try:
+
             value = float(self.offset_input.text())
             if -1.0 <= value <= 1.0:
                 self.background_offset = value * 32768
@@ -718,6 +724,7 @@ class CameraApp(QWidget):
                 self.offset_input.setText(f"{self.background_offset / 32768:.2f}")
         except ValueError:
             self.offset_input.setText(f"{self.background_offset / 32768:.2f}")
+
             
     def change_capture_mode(self, mode):
         """
@@ -851,6 +858,7 @@ class CameraApp(QWidget):
             diff = a * (image_float - background_float + b)
             diff_centered = diff + 32768
             result = np.clip(diff_centered, 0, 65535).astype(np.uint16)
+
             tipo_guardado = "resta"
         else:
             result = image.copy()
@@ -858,7 +866,7 @@ class CameraApp(QWidget):
     
         self.captured_image = result
     
-        # ⚠️ MUY IMPORTANTE: mostrar la imagen procesada de 16 bits
+        #MUY IMPORTANTE: mostrar la imagen procesada de 16 bits
         self.display_captured_image_in_tab(result)
     
         self.save_button.setEnabled(True)
@@ -866,17 +874,27 @@ class CameraApp(QWidget):
         self.log_message("Imagen capturada y mostrada en pestaña 'Captura'.")
     
         if self.auto_save:
+            # Save processed image
             self.save_image_automatically(result, tipo_guardado)
-            # Guardar RAW también
+
             raw_folder = os.path.join(self.work_dir, "raw")
             os.makedirs(raw_folder, exist_ok=True)
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"cruda_{timestamp}.tif"
             raw_path = os.path.join(raw_folder, filename)
             imsave(raw_path, image)
+
             self.log_message(f"Imagen cruda guardada en: {raw_path}")
 
     def display_captured_image_in_tab(self, image, scale_factor=1):
+        """
+        Updates capture tab preview display with given image.
+
+        Parameters:
+            image (np.ndarray): grayscale image to show.
+            scale_factor (float): scaling for preview size.
+        """
+        
         if len(image.shape) == 3:
             image = (rgb2gray(image) * 65535).astype(np.uint16)
     
@@ -884,14 +902,16 @@ class CameraApp(QWidget):
         new_width = int(width * scale_factor)
         new_height = int(height * scale_factor)
     
+
         resized_image = resize(image, (new_height, new_width), preserve_range=True).astype(np.uint16)
         image_8bit = to_8bit_for_preview(resized_image)
     
-        # ✅ Aseguramos que el array sea contiguo en memoria
+        # Aseguramos que el array sea contiguo en memoria
         image_8bit = np.ascontiguousarray(image_8bit)
     
         bytes_per_line = image_8bit.shape[1]
         qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0], bytes_per_line, QImage.Format.Format_Grayscale8)
+
         self.preview_label_capture.setPixmap(QPixmap.fromImage(qimage))
 
 
@@ -926,6 +946,7 @@ class CameraApp(QWidget):
             self.log_message(f"[WARNING] Could not save FPS: {e}")
     
         file_path, _ = QFileDialog.getSaveFileName(self, "Save Preview Parameters", "", "JSON (*.json)")
+
         if file_path:
             try:
                 with open(file_path, 'w') as f:
@@ -933,8 +954,6 @@ class CameraApp(QWidget):
                 self.log_message(f"Preview parameters saved to {file_path}")
             except Exception as e:
                 self.log_message(f"[ERROR] Could not save preview parameters: {e}")
-
-
 
     def save_capture_parameters(self):
         """
@@ -1024,6 +1043,13 @@ class CameraApp(QWidget):
         self.log_message("Preview reanudado.")
 
     def display_preview_image(self, image, scale_factor=1):
+        """
+        Displays a new preview image in the preview tab.
+
+        Parameters:
+            image (np.ndarray): grayscale image to display.
+            scale_factor (float): optional resize scale factor.
+        """
         if len(image.shape) == 3:
             image = (rgb2gray(image) * 65535).astype(np.uint16)
     
@@ -1036,6 +1062,7 @@ class CameraApp(QWidget):
     
         bytes_per_line = image_8bit.shape[1]
         qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0], bytes_per_line, QImage.Format.Format_Grayscale8)
+
         self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
 
 
@@ -1055,12 +1082,16 @@ class CameraApp(QWidget):
         new_width = int(width * scale_factor)
         new_height = int(height * scale_factor)
     
+
         resized_image = resize(image, (new_height, new_width), preserve_range=True).astype(np.uint16)
         image_8bit = to_8bit_for_preview(resized_image)
     
         bytes_per_line = image_8bit.shape[1]
         qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0], bytes_per_line, QImage.Format.Format_Grayscale8)
     
+
+        #Updates previews
+
         self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
         self.preview_label_capture.setPixmap(QPixmap.fromImage(qimage))
 

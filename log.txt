@@ -677,3 +677,112 @@
 [14:44:13] Captura de imagen simulada.
 [14:44:13] Iniciando captura de imagen...
 [14:44:13] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 21/04/2025 a las 11:41:32 ===
+[11:41:43] Captura de imagen simulada.
+[11:41:43] Iniciando captura de imagen...
+[11:41:43] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 21/04/2025 a las 11:42:20 ===
+[11:42:26] Captura de imagen simulada.
+[11:42:26] Iniciando captura de imagen...
+[11:42:26] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:42:28] Iniciando captura de fondo...
+[11:42:28] Fondo capturado correctamente.
+[11:42:31] Preview reanudado.
+=== Se inició la app el día 21/04/2025 a las 11:57:19 ===
+[11:57:23] Iniciando captura de imagen...
+[11:57:25] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:57:34] Preview reanudado.
+[11:57:37] Se actualizó 'saturation' a 10.3
+[11:57:37] Se actualizó 'saturation' a 19.6
+[11:57:37] Se actualizó 'saturation' a 20.1
+[11:57:37] Se actualizó 'saturation' a 20.6
+[11:57:37] Se actualizó 'saturation' a 21.1
+[11:57:37] Se actualizó 'saturation' a 21.6
+[11:57:39] Se actualizó 'contrast' a 1.1
+[11:57:39] Se actualizó 'contrast' a 1.3
+[11:57:39] Se actualizó 'contrast' a 1.5
+[11:57:39] Se actualizó 'contrast' a 1.7
+[11:57:39] Se actualizó 'contrast' a 1.9
+[11:57:39] Se actualizó 'contrast' a 2.1
+[11:57:39] Se actualizó 'contrast' a 2.2
+[11:57:39] Se actualizó 'contrast' a 2.4
+[11:57:39] Se actualizó 'contrast' a 2.5
+[11:57:39] Se actualizó 'contrast' a 3.4
+[11:57:39] Se actualizó 'contrast' a 3.5
+[11:57:39] Se actualizó 'contrast' a 3.6
+[11:57:41] Se actualizó 'contrast' a 3.5
+[11:57:41] Se actualizó 'contrast' a 3.4
+[11:57:41] Se actualizó 'contrast' a 3.3
+[11:57:41] Se actualizó 'contrast' a 3.2
+[11:57:41] Se actualizó 'contrast' a 3.0
+[11:57:41] Se actualizó 'contrast' a 2.9
+[11:57:41] Se actualizó 'contrast' a 2.8
+[11:57:41] Se actualizó 'contrast' a 2.6
+[11:57:41] Se actualizó 'contrast' a 2.5
+[11:57:41] Se actualizó 'contrast' a 2.4
+[11:57:41] Se actualizó 'contrast' a 1.7
+[11:57:41] Se actualizó 'contrast' a 1.6
+[11:57:43] Se actualizó 'brightness' a 10.8
+[11:57:43] Se actualizó 'brightness' a 23.2
+[11:57:43] Se actualizó 'brightness' a 26.8
+[11:57:43] Se actualizó 'brightness' a 30.9
+[11:57:43] Se actualizó 'brightness' a 36.6
+[11:57:43] Se actualizó 'brightness' a 39.7
+[11:57:43] Se actualizó 'brightness' a 42.3
+[11:57:43] Se actualizó 'brightness' a 44.3
+[11:57:43] Se actualizó 'brightness' a 45.9
+[11:57:43] Se actualizó 'brightness' a 46.4
+[11:57:43] Se actualizó 'brightness' a 46.9
+[11:57:43] Se actualizó 'brightness' a 47.9
+[11:57:44] Se actualizó 'brightness' a 47.4
+[11:57:44] Se actualizó 'brightness' a 45.4
+[11:57:44] Se actualizó 'brightness' a 42.3
+[11:57:44] Se actualizó 'brightness' a 40.2
+[11:57:44] Se actualizó 'brightness' a 38.1
+[11:57:44] Se actualizó 'brightness' a 36.6
+[11:57:44] Se actualizó 'brightness' a 35.6
+[11:57:44] Se actualizó 'brightness' a 34.5
+[11:57:44] Se actualizó 'brightness' a 34.0
+[11:57:44] Se actualizó 'brightness' a 33.5
+[11:57:44] Se actualizó 'brightness' a 33.0
+[11:57:44] Se actualizó 'brightness' a 32.5
+[11:57:45] Se actualizó 'brightness' a 32.0
+[11:57:45] Se actualizó 'brightness' a 31.4
+[11:57:45] Se actualizó 'brightness' a 30.4
+[11:57:45] Se actualizó 'brightness' a 29.4
+[11:57:45] Se actualizó 'brightness' a 25.3
+[11:57:45] Se actualizó 'brightness' a 24.2
+[11:57:45] Se actualizó 'brightness' a 23.7
+[11:57:45] Se actualizó 'brightness' a 22.7
+[11:57:45] Se actualizó 'brightness' a 21.6
+[11:57:45] Se actualizó 'brightness' a 21.1
+[11:57:45] Se actualizó 'brightness' a 20.1
+[11:57:45] Se actualizó 'brightness' a 19.6
+[11:57:47] Se actualizó 'brightness' a 19.1
+[11:57:47] Se actualizó 'brightness' a 15.5
+[11:57:47] Se actualizó 'brightness' a 14.4
+[11:57:47] Se actualizó 'brightness' a 13.9
+[11:57:47] Se actualizó 'brightness' a 12.9
+[11:57:47] Se actualizó 'brightness' a 12.4
+[11:57:51] Se actualizó 'brightness' a 11.9
+[11:57:51] Se actualizó 'brightness' a 11.3
+[11:57:51] Se actualizó 'brightness' a 10.8
+[11:57:51] Se actualizó 'brightness' a 10.3
+[11:57:51] Se actualizó 'brightness' a 9.8
+[11:57:51] Se actualizó 'brightness' a 9.3
+[11:58:01] Iniciando captura de imagen...
+=== Se inició la app el día 21/04/2025 a las 12:14:17 ===
+=== Se inició la app el día 21/04/2025 a las 12:14:34 ===
+=== Se inició la app el día 21/04/2025 a las 12:16:02 ===
+=== Se inició la app el día 21/04/2025 a las 12:16:09 ===
+=== Se inició la app el día 21/04/2025 a las 12:26:24 ===
+=== Se inició la app el día 21/04/2025 a las 12:26:50 ===
+=== Se inició la app el día 21/04/2025 a las 12:26:54 ===
+=== Se inició la app el día 21/04/2025 a las 12:27:28 ===
+=== Se inició la app el día 21/04/2025 a las 12:29:01 ===
+=== Se inició la app el día 21/04/2025 a las 12:29:06 ===
+=== Se inició la app el día 21/04/2025 a las 12:30:14 ===
+=== Se inició la app el día 21/04/2025 a las 12:32:27 ===
+=== Se inició la app el día 21/04/2025 a las 12:33:07 ===
+=== Se inició la app el día 21/04/2025 a las 12:34:40 ===
+=== Se inició la app el día 21/04/2025 a las 12:38:16 ===
