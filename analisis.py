@@ -1,111 +1,162 @@
-import os
+#%%
+
+from skimage.io import imread
+from skimage.filters import threshold_otsu, gaussian
+from skimage.measure import find_contours, regionprops, label
+from scipy.ndimage import uniform_filter
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage.io import imread
-from skimage.filters import gaussian, sobel, threshold_otsu, median
-from skimage.morphology import disk
-from skimage.restoration import rolling_ball
-from skimage.morphology import white_tophat
-from scipy.ndimage import uniform_filter
-from IPython import get_ipython
 
-# Activar modo gráfico externo
-get_ipython().run_line_magic('matplotlib', 'qt5')
+# Parámetros ajustables
+ruta_imagen = "D:/Labos 6-7 2025/Baut+Toto/Resta-P8139-150Oe-50ms-88.tif"
+sigma_background = 200   # Suavizado para estimar fondo
+alpha = 1                # Peso de la sustracción de fondo
+ganancia_gauss = -0.0001    # Ganancia más chica
+ganancia_tanh = 0.05     # Ganancia más grande
+suavizado_pre = 3     # Tamaño del filtro uniform_filter
+
+# ------------------ Procesamiento ------------------
 
 # Cargar imagen
-carpeta = r"C:\Users\Marina\Documents\Labo 6\LuCam-app\test\test fotos"
-nombre_imagen = "Resta-P8139-150Oe-50ms-89.tif"
-ruta_imagen = os.path.join(carpeta, nombre_imagen)
 image = imread(ruta_imagen)
 
-#---------------------- Procesamientos ----------------------
+# Estimar fondo
+background = gaussian(image.astype(np.float32), sigma=sigma_background, preserve_range=True)
 
-# Filtros para reducción de ruido
-gaussian_noise = gaussian(image, sigma=2, preserve_range=True)
-median_noise = median(image, footprint=disk(4))
+# Sustracción parcial del fondo
+corrected = image.astype(np.float32) - alpha * background
+corrected = np.clip(corrected, 0, None)
 
-# Remoción de fondo
-background_rolling = rolling_ball(image, radius=50)
-image_rolling = image - background_rolling
+corrected_smooth = gaussian(corrected, sigma=suavizado_pre)
 
-background_tophat = white_tophat(image, footprint=disk(50))
+# Realce con dos tangentes hiperbólicas
+delta = corrected_smooth - 255/2
+enhanced = np.exp(ganancia_gauss*(delta)**2)
 
-background_gaussian = gaussian(image, sigma=50, preserve_range=True)
-image_background_gauss = image - background_gaussian
 
-# Aumento de contraste
-norm_image = (image - np.min(image)) / (np.max(image) - np.min(image))
-contrast_tanh = np.tanh(4 * (norm_image - 0.5))
-contrast_tanh = ((contrast_tanh + 1) / 2 * 255).astype(np.uint8)
+# Normalizar a [0, 1]
+enhanced_norm = (enhanced - enhanced.min()) / (enhanced.max() - enhanced.min())
 
-contrast_sigmoid = 2 / (1 + np.exp(-4 * (norm_image - 0.5))) - 1
-contrast_sigmoid = ((contrast_sigmoid + 1) / 2 * 255).astype(np.uint8)
+# Reescalar a 8 bits
+enhanced_uint8 = (enhanced_norm * 255).astype(np.uint8)
 
-# Binarización
-thresh_original = threshold_otsu(image)
-binary_original = (image > thresh_original).astype(np.uint8) * 255
 
-thresh_sigmoid = threshold_otsu(contrast_sigmoid)
-binary_sigmoid = (contrast_sigmoid > thresh_sigmoid).astype(np.uint8) * 255
+delta2 = enhanced_uint8 - 255/2
+enhanced2 = 0.5 * (np.tanh(ganancia_tanh * delta2) + 1)
 
-#---------------------- Gráfico Final ----------------------
 
-fig = plt.figure(figsize=(30, 18))  # <<< MÁS GRANDE
-grid = plt.GridSpec(6, 6, wspace=0.4, hspace=0.4)
+# Normalizar a [0, 1]
+enhanced2_norm = (enhanced2 - enhanced2.min()) / (enhanced2.max() - enhanced2.min())
 
-# Imagen original grande (ocupa toda la primera columna)
-ax_orig = fig.add_subplot(grid[:, 0])
-ax_orig.imshow(image, cmap='gray')
-ax_orig.set_title("Imagen Original", fontsize=20)
-ax_orig.axis('off')
+# Reescalar a 8 bits
+enhanced2_uint8 = (enhanced2_norm * 255).astype(np.uint8)
 
-# Noise Reduction
-ax1 = fig.add_subplot(grid[0, 1])
-ax1.imshow(gaussian_noise, cmap='gray')
-ax1.set_title("Gaussiano (σ=2)", fontsize=16)
-ax1.axis('off')
 
-ax2 = fig.add_subplot(grid[1, 1])
-ax2.imshow(median_noise, cmap='gray')
-ax2.set_title("Mediana (r=4)", fontsize=16)
-ax2.axis('off')
+# Umbral automático con Otsu
+threshold = threshold_otsu(enhanced2_uint8)
 
-# Background Removal
-ax3 = fig.add_subplot(grid[0, 2])
-ax3.imshow(image_rolling, cmap='gray')
-ax3.set_title("Rolling Ball", fontsize=16)
-ax3.axis('off')
+# Binarizar
+binary = (enhanced2_uint8 > threshold).astype(np.uint8) * 255
 
-ax4 = fig.add_subplot(grid[1, 2])
-ax4.imshow(background_tophat, cmap='gray')
-ax4.set_title("Top-Hat", fontsize=16)
-ax4.axis('off')
+from skimage.morphology import opening, disk, closing
 
-ax5 = fig.add_subplot(grid[2, 2])
-ax5.imshow(image_background_gauss, cmap='gray')
-ax5.set_title("Fondo Gaussiano", fontsize=16)
-ax5.axis('off')
+binary = opening(binary, disk(3))
+binary = closing(binary, disk(3))
 
-# Contrast Enhancement
-ax6 = fig.add_subplot(grid[0, 3])
-ax6.imshow(contrast_tanh, cmap='gray')
-ax6.set_title("Contraste Tanh", fontsize=16)
-ax6.axis('off')
+# ------------------ Encontrar y filtrar contornos ------------------
 
-ax7 = fig.add_subplot(grid[1, 3])
-ax7.imshow(contrast_sigmoid, cmap='gray')
-ax7.set_title("Contraste Sigmoide", fontsize=16)
-ax7.axis('off')
+# Encontrar contornos
+contours = find_contours(binary, level=0.5)
 
-# Binarización
-ax8 = fig.add_subplot(grid[0, 4])
-ax8.imshow(binary_original, cmap='gray')
-ax8.set_title(f"Binarización Original\n(Otsu={thresh_original:.2f})", fontsize=16)
-ax8.axis('off')
+def area_contorno(contour):
+    x = contour[:, 1]
+    y = contour[:, 0]
+    return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
 
-ax9 = fig.add_subplot(grid[1, 4])
-ax9.imshow(binary_sigmoid, cmap='gray')
-ax9.set_title(f"Binarización Sigmoide\n(Otsu={thresh_sigmoid:.2f})", fontsize=16)
-ax9.axis('off')
+# Calcular áreas de los contornos
+areas_contornos = np.array([area_contorno(c) for c in contours])
 
+# Definir percentil mínimo
+percentil = 90
+area_umbral = np.percentile(areas_contornos, percentil)
+
+# Filtrar contornos grandes
+contours_filtrados = [c for c, area in zip(contours, areas_contornos) if area >= area_umbral]
+
+# ------------------ Mostrar resultados ------------------
+
+plt.figure(figsize=(20, 5))
+
+plt.subplot(1, 6, 1)
+plt.imshow(image, cmap='gray')
+for contours_filtrados in contours_filtrados:
+    plt.plot(contours_filtrados[:, 1], contours_filtrados[:, 0], linewidth=1, color='cyan')
+plt.title(f"Original + contornos")
+plt.axis('off')
+
+plt.subplot(1, 6, 2)
+plt.imshow(corrected_smooth, cmap='gray')
+plt.title("Fondo restado y filtrado")
+plt.axis('off')
+
+plt.subplot(1, 6, 3)
+plt.imshow(enhanced_uint8, cmap='gray')
+plt.title(f"Gaussiana")
+plt.axis('off')
+
+plt.subplot(1, 6, 4)
+plt.imshow(enhanced2_uint8, cmap='gray')
+plt.title(f"Tanh")
+plt.axis('off')
+
+
+plt.subplot(1, 6, 5)
+plt.imshow(binary, cmap='gray')
+for contours_filtrados in contours_filtrados:
+    plt.plot(contours_filtrados[:, 1], contours_filtrados[:, 0], linewidth=1, color='cyan')
+plt.title(f"Contornos ({len(contours)} detectados)")
+plt.axis('off')
+
+plt.tight_layout()
 plt.show()
+
+
+#%%
+import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_gaussian_and_tanh(ganancia_gaussiana, ganancia_tanh, x_min=0, x_max=255, puntos=1000):
+    """
+    Plotea:
+    - Una gaussiana invertida (exp(-ganancia_gaussiana*(x-127.5)^2))
+    - Una tangente hiperbólica centrada en 127.5
+    
+    Parámetros:
+    - ganancia_gaussiana: float (negativa para que decaiga)
+    - ganancia_tanh: float
+    - x_min, x_max: rango del eje x
+    - puntos: cantidad de puntos
+    """
+    # Crear eje x
+    x = np.linspace(x_min, x_max, puntos)
+    
+    # Delta centrado en la mitad (127.5)
+    delta = x - (x_max / 2)
+    
+    # Calcular funciones
+    y_gauss = np.exp(ganancia_gaussiana * (delta)**2)
+    y_tanh = 0.5 * (np.tanh(ganancia_tanh * delta) + 1)
+    
+    # Plot
+    plt.figure(figsize=(8, 5))
+    plt.plot(x, y_gauss, label=f'Gaussiana invertida (ganancia={ganancia_gaussiana})', color='blue')
+    plt.plot(x, y_tanh, label=f'Tanh (ganancia={ganancia_tanh})', color='red')
+    plt.title('Funciones: Gaussiana Invertida y Tanh')
+    plt.xlabel('Intensidad (x)')
+    plt.ylabel('Valor de la función')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+# Ejemplo de uso:
+plot_gaussian_and_tanh(ganancia_gaussiana=-0.0005, ganancia_tanh=0.03)
