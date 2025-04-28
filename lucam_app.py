@@ -11,11 +11,6 @@ Classes:
     - PreviewWorker: Manages real-time frame preview.
     - CameraApp: Main application window and GUI logic.
 
-Dependencies:
-    - PyQt6
-    - NumPy
-    - OpenCV (cv2)
-    - lucam (optional)
 
 Author: Tomás Rodriguez Bouhier, Bautista Salvatierra Pérez
 Repository: https://github.com/bautisalva/LuCam-app
