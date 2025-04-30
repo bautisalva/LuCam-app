@@ -1042,3 +1042,288 @@
 [13:39:29] Se actualizó 'exposure' a 24.1
 [13:39:29] Se actualizó 'exposure' a 39.6
 [13:39:29] Se actualizó 'exposure' a 42.2
+=== Se inició la app el día 30/04/2025 a las 10:08:00 ===
+[10:08:01] FPS cambiado a 15.00
+=== Se inició la app el día 30/04/2025 a las 10:09:25 ===
+[10:09:25] FPS cambiado a 15.00
+=== Se inició la app el día 30/04/2025 a las 10:09:51 ===
+[10:09:51] FPS cambiado a 15.00
+[10:09:54] Se actualizó 'hue' a 2.7
+[10:09:54] Se actualizó 'hue' a 4.5
+[10:09:54] Se actualizó 'hue' a 6.3
+[10:09:54] Se actualizó 'hue' a 8.1
+[10:09:54] Se actualizó 'hue' a 9.9
+[10:09:54] Se actualizó 'hue' a 11.8
+[10:09:54] Se actualizó 'hue' a 13.6
+[10:09:54] Se actualizó 'hue' a 15.4
+[10:09:54] Se actualizó 'hue' a 19.0
+[10:09:54] Se actualizó 'hue' a 20.8
+[10:09:54] Se actualizó 'hue' a 22.6
+[10:09:54] Se actualizó 'hue' a 24.4
+[10:09:54] Se actualizó 'hue' a 26.2
+[10:09:54] Se actualizó 'hue' a 28.0
+[10:09:54] Se actualizó 'hue' a 31.7
+[10:09:54] Se actualizó 'hue' a 33.5
+[10:09:54] Se actualizó 'hue' a 35.3
+[10:09:54] Se actualizó 'hue' a 37.1
+[10:09:55] Se actualizó 'hue' a 35.3
+[10:09:55] Se actualizó 'hue' a 29.8
+[10:09:55] Se actualizó 'hue' a 28.0
+[10:09:55] Se actualizó 'hue' a 26.2
+[10:09:55] Se actualizó 'hue' a 22.6
+[10:09:55] Se actualizó 'hue' a 20.8
+[10:09:55] Se actualizó 'hue' a 19.0
+[10:09:55] Se actualizó 'hue' a 17.2
+[10:09:55] Se actualizó 'hue' a 13.6
+[10:09:55] Se actualizó 'hue' a 11.8
+[10:09:55] Se actualizó 'hue' a 9.9
+[10:09:55] Se actualizó 'hue' a 8.1
+[10:09:55] Se actualizó 'hue' a 6.3
+[10:09:55] Se actualizó 'hue' a 4.5
+[10:09:55] Se actualizó 'hue' a 2.7
+[10:09:55] Se actualizó 'hue' a 0.9
+[10:09:55] Se actualizó 'hue' a -0.9
+[10:09:55] Se actualizó 'hue' a -2.7
+[10:09:55] Se actualizó 'hue' a -4.5
+[10:09:55] Se actualizó 'hue' a -6.3
+[10:09:55] Se actualizó 'hue' a -8.1
+[10:09:55] Se actualizó 'hue' a -9.9
+[10:09:55] Se actualizó 'hue' a -11.8
+[10:09:55] Se actualizó 'hue' a -13.6
+[10:09:55] Se actualizó 'hue' a -15.4
+[10:09:55] Se actualizó 'hue' a -17.2
+[10:09:55] Se actualizó 'hue' a -19.0
+[10:09:55] Se actualizó 'hue' a -20.8
+[10:09:55] Se actualizó 'hue' a -22.6
+[10:09:55] Se actualizó 'hue' a -24.4
+[10:09:55] Se actualizó 'hue' a -26.2
+[10:09:55] Se actualizó 'hue' a -28.0
+[10:09:55] Se actualizó 'hue' a -29.8
+[10:09:55] Se actualizó 'hue' a -31.7
+[10:09:55] Se actualizó 'hue' a -33.5
+[10:09:55] Se actualizó 'hue' a -35.3
+[10:09:55] Se actualizó 'hue' a -38.9
+[10:09:55] Se actualizó 'hue' a -42.5
+[10:09:55] Se actualizó 'hue' a -44.3
+[10:09:57] Se actualizó 'saturation' a 10.4
+[10:09:57] Se actualizó 'saturation' a 11.9
+[10:09:57] Se actualizó 'saturation' a 13.5
+[10:09:57] Se actualizó 'saturation' a 18.7
+[10:09:57] Se actualizó 'saturation' a 25.4
+[10:09:57] Se actualizó 'saturation' a 31.6
+[10:09:57] Se actualizó 'saturation' a 35.2
+[10:09:57] Se actualizó 'saturation' a 39.9
+[10:09:57] Se actualizó 'saturation' a 43.0
+[10:09:57] Se actualizó 'saturation' a 46.1
+[10:09:57] Se actualizó 'saturation' a 48.2
+[10:09:57] Se actualizó 'saturation' a 50.3
+[10:09:57] Se actualizó 'saturation' a 51.8
+[10:09:57] Se actualizó 'saturation' a 53.4
+[10:09:57] Se actualizó 'saturation' a 53.9
+[10:09:57] Se actualizó 'saturation' a 54.4
+[10:09:57] Se actualizó 'saturation' a 54.9
+[10:09:57] Se actualizó 'saturation' a 55.4
+[10:09:57] Se actualizó 'saturation' a 56.0
+[10:09:57] Se actualizó 'saturation' a 56.5
+[10:09:57] Se actualizó 'saturation' a 57.0
+[10:09:58] Se actualizó 'contrast' a 1.1
+[10:09:58] Se actualizó 'contrast' a 1.3
+[10:09:58] Se actualizó 'contrast' a 1.6
+[10:09:58] Se actualizó 'contrast' a 2.0
+[10:09:58] Se actualizó 'contrast' a 2.6
+[10:09:58] Se actualizó 'contrast' a 3.3
+[10:09:58] Se actualizó 'contrast' a 4.1
+[10:09:58] Se actualizó 'contrast' a 4.6
+[10:09:58] Se actualizó 'contrast' a 5.3
+[10:09:58] Se actualizó 'contrast' a 5.7
+[10:09:58] Se actualizó 'contrast' a 6.1
+[10:09:58] Se actualizó 'contrast' a 6.3
+[10:09:58] Se actualizó 'contrast' a 6.5
+[10:09:58] Se actualizó 'contrast' a 6.8
+[10:09:58] Se actualizó 'contrast' a 6.9
+[10:09:58] Se actualizó 'contrast' a 7.0
+[10:09:58] Se actualizó 'contrast' a 7.1
+=== Se inició la app el día 30/04/2025 a las 10:15:52 ===
+[10:15:52] FPS cambiado a 15.00
+[10:15:57] Captura de imagen simulada.
+[10:15:57] Iniciando captura de imagen...
+[10:15:57] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 10:46:55 ===
+[10:46:55] FPS cambiado a 15.00
+[10:47:00] ROI actualizado a 272x232 desde (152,136)
+[10:47:00] ROI aplicado: x=152, y=136, w=272, h=232
+[10:47:00] ROI seleccionado con mouse: x=152, y=136, w=272, h=232
+=== Se inició la app el día 30/04/2025 a las 10:47:42 ===
+[10:47:42] FPS cambiado a 7.50
+[10:47:48] Iniciando captura de imagen...
+[10:48:07] Iniciando captura de imagen...
+[10:48:09] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:48:14] ROI actualizado a 264x200 desde (184,104)
+[10:48:14] ROI aplicado: x=184, y=104, w=264, h=200
+[10:48:14] ROI seleccionado con mouse: x=184, y=104, w=264, h=200
+[10:48:17] ROI actualizado a 312x112 desde (112,64)
+[10:48:17] ROI aplicado: x=112, y=64, w=312, h=112
+[10:48:17] ROI seleccionado con mouse: x=112, y=64, w=312, h=112
+[10:48:19] Iniciando captura de imagen...
+[10:48:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:48:47] ROI actualizado a 312x112 desde (112,64)
+[10:48:47] ROI aplicado: x=112, y=64, w=312, h=112
+[10:48:50] Iniciando captura de imagen...
+[10:48:52] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 10:58:23 ===
+[10:58:23] FPS cambiado a 7.50
+[10:58:29] Iniciando captura de imagen...
+[10:58:33] Iniciando captura de imagen...
+[10:58:47] [ERROR] No se pudo aplicar ROI: <lucam.Lucam object at 0x000001D3D6309C60>
+[10:58:47] ROI aplicado: x=0, y=0, w=8, h=8
+[10:58:50] Iniciando captura de imagen...
+=== Se inició la app el día 30/04/2025 a las 10:59:04 ===
+[10:59:04] FPS cambiado a 7.50
+[10:59:08] Iniciando captura de imagen...
+=== Se inició la app el día 30/04/2025 a las 11:00:00 ===
+[11:00:00] FPS cambiado a 7.50
+=== Se inició la app el día 30/04/2025 a las 11:00:18 ===
+[11:00:18] FPS cambiado a 7.50
+[11:00:21] Iniciando captura de imagen...
+[11:00:23] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:00:36] Iniciando captura de imagen...
+[11:00:38] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:00:41] ROI actualizado a 352x216 desde (80,112)
+[11:00:41] ROI aplicado: x=80, y=112, w=352, h=216
+[11:00:42] ROI seleccionado con mouse: x=80, y=112, w=352, h=216
+=== Se inició la app el día 30/04/2025 a las 11:00:55 ===
+[11:00:55] FPS cambiado a 7.50
+=== Se inició la app el día 30/04/2025 a las 11:02:41 ===
+[11:02:41] FPS cambiado a 7.50
+[11:02:45] Iniciando captura de imagen...
+[11:02:47] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 11:04:52 ===
+[11:04:52] FPS cambiado a 7.50
+[11:04:55] Iniciando captura de imagen...
+[11:04:59] Iniciando captura de imagen...
+[11:05:01] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 11:06:19 ===
+[11:06:19] FPS cambiado a 7.50
+[11:06:30] Iniciando captura de imagen...
+[11:06:32] [DEBUG] ROI solicitado: x=0, y=0, w=8, h=8
+[11:06:32] [DEBUG] Tamaño imagen: (1024, 1280)
+[11:06:32] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:06:35] Uso de ROI desactivado
+[11:06:38] Iniciando captura de imagen...
+[11:06:40] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:06:43] Uso de ROI activado
+[11:06:46] ROI actualizado a 160x128 desde (272,128)
+[11:06:46] ROI aplicado: x=272, y=128, w=160, h=128
+[11:06:46] ROI seleccionado con mouse: x=272, y=128, w=160, h=128
+[11:06:49] Iniciando captura de imagen...
+[11:06:51] [DEBUG] ROI solicitado: x=272, y=128, w=160, h=128
+[11:06:51] [DEBUG] Tamaño imagen: (128, 160)
+[11:06:51] [ERROR] ROI fuera de límites o inválido. Mostrando imagen completa.
+[11:06:51] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:06:55] Uso de ROI desactivado
+[11:06:56] Iniciando captura de imagen...
+[11:06:58] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:07:02] Iniciando captura de imagen...
+[11:07:04] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 11:12:39 ===
+[11:12:39] FPS cambiado a 7.50
+[11:12:51] Iniciando captura de imagen...
+[11:12:56] Iniciando captura de imagen...
+[11:12:58] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:13:04] ROI seleccionado con mouse: x=16, y=40, w=576, h=216
+[11:13:23] ROI definido manualmente: x=16, y=40, w=576, h=216 (no aplicado hasta que actives)
+[11:13:33] Uso de ROI activado
+[11:13:40] Iniciando captura de imagen...
+[11:13:42] [DEBUG] ROI solicitado: x=16, y=40, w=576, h=216
+[11:13:42] [DEBUG] Tamaño imagen: (1024, 1280)
+[11:13:42] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 11:25:44 ===
+[11:25:44] FPS cambiado a 7.50
+[11:25:48] Iniciando captura de imagen...
+[11:25:59] Iniciando captura de imagen...
+[11:26:01] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:26:09] ROI seleccionado con mouse: x=64, y=32, w=408, h=184
+[11:26:15] Iniciando captura de imagen...
+[11:26:17] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 12:34:34 ===
+[12:34:34] FPS cambiado a 15.00
+[12:34:39] Captura de imagen simulada.
+[12:34:39] Iniciando captura de imagen...
+[12:34:39] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:34:42] ROI seleccionado con mouse: x=24, y=120, w=416, h=232
+[12:34:46] Uso de ROI activado
+=== Se inició la app el día 30/04/2025 a las 12:35:19 ===
+[12:35:19] FPS cambiado a 15.00
+=== Se inició la app el día 30/04/2025 a las 12:35:23 ===
+[12:35:23] FPS cambiado a 7.50
+[12:35:28] Iniciando captura de imagen...
+[12:35:30] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:35:36] ROI seleccionado con mouse: x=40, y=80, w=520, h=64
+[12:35:43] Uso de ROI activado
+[12:35:52] Iniciando captura de imagen...
+[12:35:54] [DEBUG] ROI solicitado: x=40, y=80, w=520, h=64
+[12:35:54] [DEBUG] Tamaño imagen: (1024, 1280)
+[12:35:54] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 12:36:22 ===
+[12:36:22] FPS cambiado a 7.50
+[12:36:27] Iniciando captura de imagen...
+[12:36:36] Iniciando captura de imagen...
+[12:36:38] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:36:41] ROI seleccionado con mouse: x=80, y=72, w=456, h=136
+[12:36:43] Uso de ROI activado
+[12:36:48] Iniciando captura de imagen...
+[12:36:50] [DEBUG] ROI solicitado: x=80, y=72, w=456, h=136
+[12:36:50] [DEBUG] Tamaño imagen: (1024, 1280)
+[12:36:50] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 12:41:32 ===
+[12:41:32] FPS cambiado a 7.50
+[12:41:36] Iniciando captura de imagen...
+[12:41:39] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:41:49] ROI seleccionado con mouse: x=88, y=80, w=296, h=64
+[12:41:53] Uso de ROI activado
+[12:41:55] Uso de ROI desactivado
+[12:41:59] Uso de ROI activado
+[12:42:02] Uso de ROI desactivado
+[12:42:09] ROI seleccionado con mouse: x=24, y=80, w=616, h=152
+[12:42:16] Uso de ROI activado
+[12:42:29] Uso de ROI desactivado
+[12:42:33] ROI seleccionado con mouse: x=248, y=8, w=40, h=464
+[12:42:35] Uso de ROI activado
+[12:43:05] Uso de ROI desactivado
+=== Se inició la app el día 30/04/2025 a las 12:44:21 ===
+[12:44:21] FPS cambiado a 7.50
+[12:44:25] Iniciando captura de imagen...
+[12:44:27] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:44:39] Imagen guardada manualmente en: C:/Users/Marina/Downloads/prueba.tif
+[12:44:42] ROI seleccionado con mouse: x=152, y=16, w=232, h=200
+[12:44:45] Uso de ROI activado
+[12:44:49] Imagen guardada manualmente en: C:/Users/Marina/Downloads/prueba1.tif
+[12:45:23] Uso de ROI desactivado
+[12:45:26] ROI seleccionado con mouse: x=88, y=176, w=456, h=40
+[12:45:29] Uso de ROI activado
+[12:45:33] Uso de ROI desactivado
+[12:45:36] ROI seleccionado con mouse: x=240, y=8, w=16, h=464
+[12:45:41] Uso de ROI activado
+[12:45:48] Imagen guardada manualmente en: C:/Users/Marina/Downloads/prueba2.tif
+[12:46:11] Directorio de trabajo establecido: C:/Users/Marina/Downloads
+[12:46:15] Uso de ROI desactivado
+[12:46:19] Guardado automático activado
+[12:46:21] Iniciando captura de imagen...
+[12:46:23] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:46:23] Imagen guardada automáticamente en: C:/Users/Marina/Downloads\normal_20250430_124623.tif
+[12:46:23] Imagen cruda guardada en: C:/Users/Marina/Downloads\raw\cruda_20250430_124623.tif
+[12:46:31] ROI seleccionado con mouse: x=232, y=16, w=16, h=464
+[12:46:34] Uso de ROI activado
+[12:46:36] Iniciando captura de imagen...
+[12:46:38] [DEBUG] ROI solicitado: x=232, y=16, w=16, h=464
+[12:46:38] [DEBUG] Tamaño imagen: (1024, 1280)
+[12:46:38] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:46:38] Imagen guardada automáticamente en: C:/Users/Marina/Downloads\normal_20250430_124638.tif
+[12:46:38] Imagen cruda guardada en: C:/Users/Marina/Downloads\raw\cruda_20250430_124638.tif
+=== Se inició la app el día 30/04/2025 a las 12:48:46 ===
+[12:48:46] FPS cambiado a 7.50
+[12:48:53] Iniciando captura de imagen...
+[12:48:55] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:49:42] Preview reanudado.
+=== Se inició la app el día 30/04/2025 a las 12:51:45 ===
+[12:51:45] FPS cambiado a 7.50

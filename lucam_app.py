@@ -29,12 +29,12 @@ from skimage.io import imsave
 from skimage.color import rgb2gray
 from scipy.ndimage import gaussian_filter
 from PIL import Image, ImageDraw, ImageFont
-from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
+from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
                              QSpinBox, QComboBox, QFileDialog,
                              QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
-from PyQt6.QtGui import QPixmap, QImage
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 
 
 def blur_uint16(image, sigma):
@@ -73,6 +73,14 @@ def rescale_to_full_uint16(image):
     scaled = ((image - p_low) / (p_high - p_low) * 65535).clip(0, 65535).astype(np.uint16)
     return scaled
 
+class SimulatedFrameFormat:
+    def __init__(self):
+        self.pixelFormat = None
+        self.width = 640
+        self.height = 480
+        self.xOffset = 0
+        self.yOffset = 0
+
 class SimulatedCamera:
     """
     Fallback camera implementation used when Lucam is unavailable.
@@ -94,6 +102,19 @@ class SimulatedCamera:
     def set_properties(self, **kwargs):
         # Placeholder to mimic API compatibility with real Lucam camera.
         pass
+    def GetFormat(self):
+        return SimulatedFrameFormat(), 15.0  # Devuelve un formato dummy y 15 fps
+    
+    def SetFormat(self, frameformat, fps):
+        # Ignorado en simulación
+        pass
+    
+    def ContinuousAutoExposureDisable(self):
+        # Ignorado en simulación
+        pass
+    
+    def EnumAvailableFrameRates(self):
+        return [7.5, 15.0, 30.0]  # Algunos valores típicos para simular
 
 
 # Try to import Lucam
@@ -209,6 +230,53 @@ class PreviewWorker(QObject):
         """Resume frame acquisition."""
         self.paused = False
 
+class ROILabel(QLabel):
+    roi_selected = pyqtSignal(int, int, int, int)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setMouseTracking(True)
+        self.start_pos = None
+        self.end_pos = None
+        self.drawing = False
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.start_pos = event.pos()
+            self.drawing = True
+            self.end_pos = self.start_pos
+            self.update()
+
+    def mouseMoveEvent(self, event):
+        if self.drawing:
+            self.end_pos = event.pos()
+            self.update()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton and self.drawing:
+            self.drawing = False
+            self.end_pos = event.pos()
+            self.update()
+
+            x1 = min(self.start_pos.x(), self.end_pos.x())
+            y1 = min(self.start_pos.y(), self.end_pos.y())
+            x2 = max(self.start_pos.x(), self.end_pos.x())
+            y2 = max(self.start_pos.y(), self.end_pos.y())
+
+            width = x2 - x1
+            height = y2 - y1
+
+            self.roi_selected.emit(x1, y1, width, height)
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if self.drawing and self.start_pos and self.end_pos:
+            painter = QPainter(self)
+            pen = QPen(Qt.red, 2, Qt.DashLine)
+            painter.setPen(pen)
+            rect = QRect(self.start_pos, self.end_pos)
+            painter.drawRect(rect)
+
 
 class CameraApp(QWidget):
     """
@@ -234,7 +302,10 @@ class CameraApp(QWidget):
             print(f"[WARNING] No se pudo inicializar Lucam. Se usará SimulatedCamera. Error: {e}")
             self.camera = SimulatedCamera()
             self.simulation = True
-        
+
+        self.roi_enabled = False
+        self.last_full_image = None  # Guarda imagen sin ROI
+
         # Configuración del formato del frame
         frameformat, fps = self.camera.GetFormat()
         frameformat.pixelFormat = API.LUCAM_PF_16
@@ -261,7 +332,8 @@ class CameraApp(QWidget):
         self.preview_label_preview = QLabel("Preview en vivo")
         self.preview_label_preview.setFixedSize(640, 480)
     
-        self.preview_label_capture = QLabel("Preview captura")
+        self.preview_label_capture = ROILabel()
+        self.preview_label_capture.roi_selected.connect(self.set_roi_from_mouse)
         self.preview_label_capture.setFixedSize(640, 480)
     
         self.console_preview = QPlainTextEdit()
@@ -568,12 +640,84 @@ class CameraApp(QWidget):
         self.load_settings_button = QPushButton("Cargar Parámetros")
         self.load_settings_button.clicked.connect(self.load_parameters)
         controls_layout.addWidget(self.load_settings_button)
-    
+        
+        # ROI manual
+        roi_box = QGroupBox("Región de Interés (ROI)")
+        roi_layout = QGridLayout()
+        
+        self.roi_x_input = QSpinBox()
+        self.roi_x_input.setRange(0, 640)
+        self.roi_y_input = QSpinBox()
+        self.roi_y_input.setRange(0, 480)
+        self.roi_width_input = QSpinBox()
+        self.roi_width_input.setRange(8, 640)
+        self.roi_height_input = QSpinBox()
+        self.roi_height_input.setRange(8, 480)
+        
+        roi_layout.addWidget(QLabel("X:"), 0, 0)
+        roi_layout.addWidget(self.roi_x_input, 0, 1)
+        roi_layout.addWidget(QLabel("Y:"), 0, 2)
+        roi_layout.addWidget(self.roi_y_input, 0, 3)
+        roi_layout.addWidget(QLabel("Ancho:"), 1, 0)
+        roi_layout.addWidget(self.roi_width_input, 1, 1)
+        roi_layout.addWidget(QLabel("Alto:"), 1, 2)
+        roi_layout.addWidget(self.roi_height_input, 1, 3)
+
+        roi_box.setLayout(roi_layout)
+        controls_layout.addWidget(roi_box)
+
+        # Toggle ROI
+        toggle_roi_layout = QHBoxLayout()
+        toggle_roi_label = QLabel("Aplicar ROI:")
+        self.toggle_roi_selector = QComboBox()
+        self.toggle_roi_selector.addItems(["Sí", "No"])
+        self.toggle_roi_selector.setCurrentIndex(1)  # "No"
+
+        self.toggle_roi_selector.currentTextChanged.connect(self.toggle_roi)
+        toggle_roi_layout.addWidget(toggle_roi_label)
+        toggle_roi_layout.addWidget(self.toggle_roi_selector)
+        controls_layout.addLayout(toggle_roi_layout)
+
         controls_layout.addStretch()
     
         layout.addLayout(controls_layout)
     
         self.capture_tab.setLayout(layout)
+        
+    def toggle_roi(self, text):
+        self.roi_enabled = (text == "Sí")
+        estado = "activado" if self.roi_enabled else "desactivado"
+        self.log_message(f"Uso de ROI {estado}")
+    
+        # Mostrar inmediatamente la imagen con o sin ROI
+        if self.last_full_image is not None:
+            if self.roi_enabled:
+                x = self.roi_x_input.value()
+                y = self.roi_y_input.value()
+                w = self.roi_width_input.value()
+                h = self.roi_height_input.value()
+                image = self.last_full_image[y:y+h, x:x+w]
+            else:
+                image = self.last_full_image.copy()
+            self.display_captured_image_in_tab(image)
+
+
+    def apply_roi_from_inputs(self):
+        """
+        Guarda los valores del ROI definidos manualmente,
+        pero no los aplica a la cámara ni recorta la imagen hasta que se active el ROI.
+        """
+        x = self.roi_x_input.value()
+        y = self.roi_y_input.value()
+        width = self.roi_width_input.value()
+        height = self.roi_height_input.value()
+    
+        if width % 8 != 0 or height % 8 != 0:
+            self.log_message("[ERROR] El ancho y alto deben ser múltiplos de 8.")
+            return
+    
+        self.log_message(f"ROI definido manualmente: x={x}, y={y}, w={width}, h={height} (no aplicado hasta que actives)")
+
 
     def apply_default_slider_values_to_camera(self):
             """
@@ -632,7 +776,28 @@ class CameraApp(QWidget):
         except Exception as e:
             self.log_message(f"[ERROR] No se pudo cambiar el FPS: {e}")
 
+    def set_roi_from_mouse(self, x, y, w, h):
+        """
+        Callback triggered when user selects a region with the mouse.
+        Updates the spinboxes and applies the ROI to the camera.
+        """
+        # Ajustar escala si hace falta (en este ejemplo asumimos preview 1:1)
+        # Si hacés resize, agregamos un factor
     
+        # Redondear ancho y alto a múltiplos de 8
+        w = (w // 8) * 8
+        h = (h // 8) * 8
+        x = (x // 8) * 8
+        y = (y // 8) * 8
+    
+        self.roi_x_input.setValue(x)
+        self.roi_y_input.setValue(y)
+        self.roi_width_input.setValue(max(w, 8))
+        self.roi_height_input.setValue(max(h, 8))
+    
+        
+        self.log_message(f"ROI seleccionado con mouse: x={x}, y={y}, w={w}, h={h}")
+
     def set_property_from_input(self, prop, field):
         """
         Parses a float from the input field and updates the associated property.
@@ -864,10 +1029,32 @@ class CameraApp(QWidget):
             result = image.copy()
             tipo_guardado = "normal"
     
-        self.captured_image = result
-    
-        #Mostrar la imagen procesada
-        self.display_captured_image_in_tab(result)
+        if self.roi_enabled:
+            x = self.roi_x_input.value()
+            y = self.roi_y_input.value()
+            w = self.roi_width_input.value()
+            h = self.roi_height_input.value()
+
+            self.log_message(f"[DEBUG] ROI solicitado: x={x}, y={y}, w={w}, h={h}")
+            self.log_message(f"[DEBUG] Tamaño imagen: {result.shape}")
+
+            # Validar si ROI está dentro de los límites
+            if (x + w > result.shape[1]) or (y + h > result.shape[0]) or w <= 0 or h <= 0:
+                self.log_message("[ERROR] ROI fuera de límites o inválido. Mostrando imagen completa.")
+                result_roi = result.copy()
+            else:
+                result_roi = result[y:y+h, x:x+w]
+        else:
+            result_roi = result.copy()
+
+
+        self.last_full_image = result.copy()
+        self.captured_image = result_roi
+
+
+        # Mostrar la imagen con ROI
+        self.display_captured_image_in_tab(result_roi)
+
     
         self.save_button.setEnabled(True)
         self.toggle_preview_button.setEnabled(True)
@@ -888,21 +1075,19 @@ class CameraApp(QWidget):
         if len(image.shape) == 3:
             image = (rgb2gray(image) * 65535).astype(np.uint16)
     
+
         height, width = image.shape
         new_width = int(width * scale_factor)
         new_height = int(height * scale_factor)
     
         resized_image = resize(image, (new_height, new_width), preserve_range=True).astype(np.uint16)
         image_8bit = to_8bit_for_preview(resized_image)
-    
-        #Aseguramos que el array sea contiguo en memoria
         image_8bit = np.ascontiguousarray(image_8bit)
     
         bytes_per_line = image_8bit.shape[1]
         qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0], bytes_per_line, QImage.Format.Format_Grayscale8)
         self.preview_label_capture.setPixmap(QPixmap.fromImage(qimage))
-
-
+    
 
     def save_image(self):
         """
@@ -953,7 +1138,11 @@ class CameraApp(QWidget):
             "num_images": self.num_images_spinbox.value(),
             "capture_mode": self.capture_mode,
             "background_gain": self.background_gain,
-            "background_offset": self.background_offset
+            "background_offset": self.background_offset,
+            "roi_x": self.roi_x_input.value(),
+            "roi_y": self.roi_y_input.value(),
+            "roi_width": self.roi_width_input.value(),
+            "roi_height": self.roi_height_input.value(),
         }
         file_path, _ = QFileDialog.getSaveFileName(self, "Guardar Parámetros de Captura", "", "JSON (*.json)")
         if file_path:
@@ -1018,7 +1207,18 @@ class CameraApp(QWidget):
                 index = self.capture_mode_selector.findText(params['capture_mode'])
                 if index != -1:
                     self.capture_mode_selector.setCurrentIndex(index)
-    
+                    
+            if 'roi_x' in params:
+                self.roi_x_input.setValue(params['roi_x'])
+            if 'roi_y' in params:
+                self.roi_y_input.setValue(params['roi_y'])
+            if 'roi_width' in params:
+                self.roi_width_input.setValue(params['roi_width'])
+            if 'roi_height' in params:
+                self.roi_height_input.setValue(params['roi_height'])
+            self.apply_roi_from_inputs()
+
+
             self.log_message(f"Parámetros cargados desde archivo: {file_path}")
 
     
