@@ -1042,3 +1042,109 @@
 [13:39:29] Se actualizó 'exposure' a 24.1
 [13:39:29] Se actualizó 'exposure' a 39.6
 [13:39:29] Se actualizó 'exposure' a 42.2
+=== Se inició la app el día 30/04/2025 a las 10:08:00 ===
+[10:08:01] FPS cambiado a 15.00
+=== Se inició la app el día 30/04/2025 a las 10:09:25 ===
+[10:09:25] FPS cambiado a 15.00
+=== Se inició la app el día 30/04/2025 a las 10:09:51 ===
+[10:09:51] FPS cambiado a 15.00
+[10:09:54] Se actualizó 'hue' a 2.7
+[10:09:54] Se actualizó 'hue' a 4.5
+[10:09:54] Se actualizó 'hue' a 6.3
+[10:09:54] Se actualizó 'hue' a 8.1
+[10:09:54] Se actualizó 'hue' a 9.9
+[10:09:54] Se actualizó 'hue' a 11.8
+[10:09:54] Se actualizó 'hue' a 13.6
+[10:09:54] Se actualizó 'hue' a 15.4
+[10:09:54] Se actualizó 'hue' a 19.0
+[10:09:54] Se actualizó 'hue' a 20.8
+[10:09:54] Se actualizó 'hue' a 22.6
+[10:09:54] Se actualizó 'hue' a 24.4
+[10:09:54] Se actualizó 'hue' a 26.2
+[10:09:54] Se actualizó 'hue' a 28.0
+[10:09:54] Se actualizó 'hue' a 31.7
+[10:09:54] Se actualizó 'hue' a 33.5
+[10:09:54] Se actualizó 'hue' a 35.3
+[10:09:54] Se actualizó 'hue' a 37.1
+[10:09:55] Se actualizó 'hue' a 35.3
+[10:09:55] Se actualizó 'hue' a 29.8
+[10:09:55] Se actualizó 'hue' a 28.0
+[10:09:55] Se actualizó 'hue' a 26.2
+[10:09:55] Se actualizó 'hue' a 22.6
+[10:09:55] Se actualizó 'hue' a 20.8
+[10:09:55] Se actualizó 'hue' a 19.0
+[10:09:55] Se actualizó 'hue' a 17.2
+[10:09:55] Se actualizó 'hue' a 13.6
+[10:09:55] Se actualizó 'hue' a 11.8
+[10:09:55] Se actualizó 'hue' a 9.9
+[10:09:55] Se actualizó 'hue' a 8.1
+[10:09:55] Se actualizó 'hue' a 6.3
+[10:09:55] Se actualizó 'hue' a 4.5
+[10:09:55] Se actualizó 'hue' a 2.7
+[10:09:55] Se actualizó 'hue' a 0.9
+[10:09:55] Se actualizó 'hue' a -0.9
+[10:09:55] Se actualizó 'hue' a -2.7
+[10:09:55] Se actualizó 'hue' a -4.5
+[10:09:55] Se actualizó 'hue' a -6.3
+[10:09:55] Se actualizó 'hue' a -8.1
+[10:09:55] Se actualizó 'hue' a -9.9
+[10:09:55] Se actualizó 'hue' a -11.8
+[10:09:55] Se actualizó 'hue' a -13.6
+[10:09:55] Se actualizó 'hue' a -15.4
+[10:09:55] Se actualizó 'hue' a -17.2
+[10:09:55] Se actualizó 'hue' a -19.0
+[10:09:55] Se actualizó 'hue' a -20.8
+[10:09:55] Se actualizó 'hue' a -22.6
+[10:09:55] Se actualizó 'hue' a -24.4
+[10:09:55] Se actualizó 'hue' a -26.2
+[10:09:55] Se actualizó 'hue' a -28.0
+[10:09:55] Se actualizó 'hue' a -29.8
+[10:09:55] Se actualizó 'hue' a -31.7
+[10:09:55] Se actualizó 'hue' a -33.5
+[10:09:55] Se actualizó 'hue' a -35.3
+[10:09:55] Se actualizó 'hue' a -38.9
+[10:09:55] Se actualizó 'hue' a -42.5
+[10:09:55] Se actualizó 'hue' a -44.3
+[10:09:57] Se actualizó 'saturation' a 10.4
+[10:09:57] Se actualizó 'saturation' a 11.9
+[10:09:57] Se actualizó 'saturation' a 13.5
+[10:09:57] Se actualizó 'saturation' a 18.7
+[10:09:57] Se actualizó 'saturation' a 25.4
+[10:09:57] Se actualizó 'saturation' a 31.6
+[10:09:57] Se actualizó 'saturation' a 35.2
+[10:09:57] Se actualizó 'saturation' a 39.9
+[10:09:57] Se actualizó 'saturation' a 43.0
+[10:09:57] Se actualizó 'saturation' a 46.1
+[10:09:57] Se actualizó 'saturation' a 48.2
+[10:09:57] Se actualizó 'saturation' a 50.3
+[10:09:57] Se actualizó 'saturation' a 51.8
+[10:09:57] Se actualizó 'saturation' a 53.4
+[10:09:57] Se actualizó 'saturation' a 53.9
+[10:09:57] Se actualizó 'saturation' a 54.4
+[10:09:57] Se actualizó 'saturation' a 54.9
+[10:09:57] Se actualizó 'saturation' a 55.4
+[10:09:57] Se actualizó 'saturation' a 56.0
+[10:09:57] Se actualizó 'saturation' a 56.5
+[10:09:57] Se actualizó 'saturation' a 57.0
+[10:09:58] Se actualizó 'contrast' a 1.1
+[10:09:58] Se actualizó 'contrast' a 1.3
+[10:09:58] Se actualizó 'contrast' a 1.6
+[10:09:58] Se actualizó 'contrast' a 2.0
+[10:09:58] Se actualizó 'contrast' a 2.6
+[10:09:58] Se actualizó 'contrast' a 3.3
+[10:09:58] Se actualizó 'contrast' a 4.1
+[10:09:58] Se actualizó 'contrast' a 4.6
+[10:09:58] Se actualizó 'contrast' a 5.3
+[10:09:58] Se actualizó 'contrast' a 5.7
+[10:09:58] Se actualizó 'contrast' a 6.1
+[10:09:58] Se actualizó 'contrast' a 6.3
+[10:09:58] Se actualizó 'contrast' a 6.5
+[10:09:58] Se actualizó 'contrast' a 6.8
+[10:09:58] Se actualizó 'contrast' a 6.9
+[10:09:58] Se actualizó 'contrast' a 7.0
+[10:09:58] Se actualizó 'contrast' a 7.1
+=== Se inició la app el día 30/04/2025 a las 10:15:52 ===
+[10:15:52] FPS cambiado a 15.00
+[10:15:57] Captura de imagen simulada.
+[10:15:57] Iniciando captura de imagen...
+[10:15:57] Imagen capturada y mostrada en pestaña 'Captura'.
