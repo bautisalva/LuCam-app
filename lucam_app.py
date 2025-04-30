@@ -33,7 +33,8 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
                              QSpinBox, QComboBox, QFileDialog,
                              QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
+
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread
 
 
@@ -230,6 +231,53 @@ class PreviewWorker(QObject):
         """Resume frame acquisition."""
         self.paused = False
 
+class ROILabel(QLabel):
+    roi_selected = pyqtSignal(int, int, int, int)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setMouseTracking(True)
+        self.start_pos = None
+        self.end_pos = None
+        self.drawing = False
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.start_pos = event.pos()
+            self.drawing = True
+            self.end_pos = self.start_pos
+            self.update()
+
+    def mouseMoveEvent(self, event):
+        if self.drawing:
+            self.end_pos = event.pos()
+            self.update()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton and self.drawing:
+            self.drawing = False
+            self.end_pos = event.pos()
+            self.update()
+
+            x1 = min(self.start_pos.x(), self.end_pos.x())
+            y1 = min(self.start_pos.y(), self.end_pos.y())
+            x2 = max(self.start_pos.x(), self.end_pos.x())
+            y2 = max(self.start_pos.y(), self.end_pos.y())
+
+            width = x2 - x1
+            height = y2 - y1
+
+            self.roi_selected.emit(x1, y1, width, height)
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if self.drawing and self.start_pos and self.end_pos:
+            painter = QPainter(self)
+            pen = QPen(Qt.red, 2, Qt.DashLine)
+            painter.setPen(pen)
+            rect = QRect(self.start_pos, self.end_pos)
+            painter.drawRect(rect)
+
 
 class CameraApp(QWidget):
     """
@@ -283,7 +331,8 @@ class CameraApp(QWidget):
         self.preview_label_preview = QLabel("Preview en vivo")
         self.preview_label_preview.setFixedSize(640, 480)
     
-        self.preview_label_capture = QLabel("Preview captura")
+        self.preview_label_capture = ROILabel()
+        self.preview_label_capture.roi_selected.connect(self.set_roi_from_mouse)
         self.preview_label_capture.setFixedSize(640, 480)
     
         self.console_preview = QPlainTextEdit()
@@ -701,7 +750,28 @@ class CameraApp(QWidget):
         except Exception as e:
             self.log_message(f"[ERROR] No se pudo cambiar el FPS: {e}")
 
+    def set_roi_from_mouse(self, x, y, w, h):
+        """
+        Callback triggered when user selects a region with the mouse.
+        Updates the spinboxes and applies the ROI to the camera.
+        """
+        # Ajustar escala si hace falta (en este ejemplo asumimos preview 1:1)
+        # Si hacés resize, agregamos un factor
     
+        # Redondear ancho y alto a múltiplos de 8
+        w = (w // 8) * 8
+        h = (h // 8) * 8
+        x = (x // 8) * 8
+        y = (y // 8) * 8
+    
+        self.roi_x_input.setValue(x)
+        self.roi_y_input.setValue(y)
+        self.roi_width_input.setValue(max(w, 8))
+        self.roi_height_input.setValue(max(h, 8))
+    
+        self.apply_roi_from_inputs()
+        self.log_message(f"ROI seleccionado con mouse: x={x}, y={y}, w={w}, h={h}")
+
     def set_property_from_input(self, prop, field):
         """
         Parses a float from the input field and updates the associated property.

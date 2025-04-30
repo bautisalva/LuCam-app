@@ -1148,3 +1148,25 @@
 [10:15:57] Captura de imagen simulada.
 [10:15:57] Iniciando captura de imagen...
 [10:15:57] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 30/04/2025 a las 10:46:55 ===
+[10:46:55] FPS cambiado a 15.00
+[10:47:00] ROI actualizado a 272x232 desde (152,136)
+[10:47:00] ROI aplicado: x=152, y=136, w=272, h=232
+[10:47:00] ROI seleccionado con mouse: x=152, y=136, w=272, h=232
+=== Se inició la app el día 30/04/2025 a las 10:47:42 ===
+[10:47:42] FPS cambiado a 7.50
+[10:47:48] Iniciando captura de imagen...
+[10:48:07] Iniciando captura de imagen...
+[10:48:09] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:48:14] ROI actualizado a 264x200 desde (184,104)
+[10:48:14] ROI aplicado: x=184, y=104, w=264, h=200
+[10:48:14] ROI seleccionado con mouse: x=184, y=104, w=264, h=200
+[10:48:17] ROI actualizado a 312x112 desde (112,64)
+[10:48:17] ROI aplicado: x=112, y=64, w=312, h=112
+[10:48:17] ROI seleccionado con mouse: x=112, y=64, w=312, h=112
+[10:48:19] Iniciando captura de imagen...
+[10:48:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:48:47] ROI actualizado a 312x112 desde (112,64)
+[10:48:47] ROI aplicado: x=112, y=64, w=312, h=112
+[10:48:50] Iniciando captura de imagen...
+[10:48:52] Imagen capturada y mostrada en pestaña 'Captura'.
