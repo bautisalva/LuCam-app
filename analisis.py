@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import find_contours
 from scipy.ndimage import uniform_filter
+from scipy.signal import find_peaks
 
 class ImageEnhancer:
-    def __init__(self, imagen, sigma_background=1000, alpha=1):
+    def __init__(self, imagen, sigma_background=100, alpha=0):
         self.image = imagen
         self.sigma_background = sigma_background
         self.alpha = alpha
@@ -13,34 +14,15 @@ class ImageEnhancer:
     def _subtract_background(self):
         background = gaussian(self.image.astype(np.float32), sigma=self.sigma_background, preserve_range=True)
         corrected = self.image.astype(np.float32) - self.alpha * background
-        return np.clip(corrected, 0, None)
+        return corrected
 
-    def _enhance(self, corrected, metodo="chi2", k=4, escala=40, ganancia1=0.1, ganancia2=0.01):
-        if metodo == "chi2":
-            delta = np.clip(corrected - np.mean(corrected), 1e-3, None)
-            delta_rescaled = delta / escala
-            enhanced = (delta_rescaled ** (k / 2 - 1)) * np.exp(-delta_rescaled / 2)
-        elif metodo == "gaussiana":
-            delta = corrected - 255/2 + np.mean(corrected)
-            ganancia = 2 * np.std(corrected)
-            enhanced = np.exp(-(delta / ganancia) ** 2)
-        elif metodo == "tanh_diff":
-            enhanced = self._enhance_tanh_diff(corrected, ganancia1=ganancia1, ganancia2=ganancia2)
-        elif metodo == "tanh_diff2":
-            enhanced = self._enhance_tanh_diff2(corrected, ganancia1=ganancia1, ganancia2=ganancia2)
-        else:
-            raise ValueError("Método inválido. Usar 'chi2', 'gaussiana' o 'tanh_diff'.")
-        return enhanced
 
-    def _enhance_tanh_diff(self, corrected, ganancia1=0.1, ganancia2=0.01):
-        delta = corrected - np.mean(corrected)
-        return 0.5 * (np.tanh(ganancia1 * delta) - np.tanh(ganancia2 * delta) + 1)
-    
-    def _enhance_tanh_diff2(self, corrected, ganancia1=0.1, ganancia2=0.01):
-        delta = corrected - 255/2
-        return np.exp(-(delta / 400) ** 2) * 0.5 * (np.tanh(ganancia1 * delta) - np.tanh(ganancia2 * delta) + 1)
+    def _enhance(self, corrected):
+        mu, sigma = self._calcular_parametros_histograma(plotear=True)
+        delta = corrected - mu
+        return np.exp(-0.5 * (delta / sigma) ** 2) * delta
 
-    def _apply_tanh(self, image, ganancia=0.1):
+    def _apply_tanh(self, image, ganancia=1):
         delta = image - np.mean(image)
         return 0.5 * (np.tanh(ganancia * delta) + 1)
 
@@ -56,9 +38,41 @@ class ImageEnhancer:
         umbral = np.percentile(areas, percentil)
         return [c for c, a in zip(contours, areas) if a >= umbral]
 
-    def procesar(self, metodo="chi2", k=4, escala=5, suavizado=2, ganancia_tanh=0.1, ganancia1=0.1, ganancia2=0.01, mostrar=True):
+    def _calcular_parametros_histograma(self, plotear=False):
+        hist, _ = np.histogram(self.image.ravel(), bins=256, range=(0, 255))
+        hist[:5] = 0  # eliminar intensidades muy bajas
+
+        hist_suavizado = uniform_filter(hist.astype(float), size=5)
+        picos, _ = find_peaks(hist_suavizado, distance=10)
+
+        if len(picos) < 2:
+            raise ValueError("No se encontraron al menos dos picos en el histograma.")
+
+        alturas = hist_suavizado[picos]
+        indices_top2 = np.argsort(alturas)[-2:]
+        picos_top2 = np.sort(picos[indices_top2])
+
+        max1, max2 = picos_top2
+        mu = (max1 + max2) / 2
+        sigma = abs(max1 - mu)
+
+        if plotear:
+            plt.figure(figsize=(10, 4))
+            plt.plot(hist_suavizado, label="Histograma suavizado")
+            plt.plot(picos, hist_suavizado[picos], "x", label="Todos los picos")
+            plt.plot([max1, max2], hist_suavizado[[max1, max2]], "ro", label="Picos seleccionados")
+            plt.title("Histograma de intensidades")
+            plt.xlabel("Intensidad")
+            plt.ylabel("Frecuencia")
+            plt.legend()
+            plt.grid(True)
+            plt.show()
+
+        return mu, sigma
+
+    def procesar(self, metodo="tanh_diff2", k=4, escala=5, suavizado=2, ganancia_tanh=0.1, ganancia1=0.1, ganancia2=0.01, mostrar=True):
         corrected = self._subtract_background()
-        enhanced = self._enhance(corrected, metodo=metodo, k=k, escala=escala, ganancia1=ganancia1, ganancia2=ganancia2)
+        enhanced = self._enhance(corrected)
         enhanced_norm = (enhanced - enhanced.min()) / (enhanced.max() - enhanced.min())
         enhanced_uint8 = (enhanced_norm * 255).astype(np.uint8)
 
@@ -79,14 +93,6 @@ class ImageEnhancer:
         return binary, contornos
 
     def _mostrar_resultados(self, corrected, enhanced_uint8, smooth, enhanced2_uint8, binary, contornos, metodo, k):
-        if metodo == "chi2":
-            titulo = f"Chi² (k={k})"
-        elif metodo == "gaussiana":
-            titulo = "Gaussiana"
-        elif metodo == "tanh_diff":
-            titulo = "Tanh diferencia"
-        else:
-            titulo = metodo
 
         plt.figure(figsize=(18, 12))
 
@@ -104,7 +110,7 @@ class ImageEnhancer:
 
         plt.subplot(2, 3, 3)
         plt.imshow(enhanced_uint8, cmap='gray')
-        plt.title(titulo)
+        plt.title("Función de realce")
         plt.axis('off')
 
         plt.subplot(2, 3, 4)
@@ -131,6 +137,63 @@ class ImageEnhancer:
 
 from skimage.io import imread
 
-imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]  # lo recortás vos
+imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
 enhancer = ImageEnhancer(imagen=imagen)
-binary, contornos = enhancer.procesar(metodo="tanh_diff", k=4 , escala=40 , ganancia1=0.1, ganancia2=0.01, suavizado=6)
+binary, contornos = enhancer.procesar(ganancia_tanh=1, suavizado=5)
+
+#%%
+
+import matplotlib.pyplot as plt
+from matplotlib.widgets import RectangleSelector
+from imageio.v2 import imread
+
+# Cargar y recortar imagen
+imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
+
+
+#background = gaussian(im.astype(np.float32), sigma=1000, preserve_range=True)
+#corrected = im.astype(np.float32) - background
+#corrected_norm = (corrected - corrected.min()) / (corrected.max() - corrected.min())
+#imagen = (corrected_norm * 255).astype(np.uint8)
+
+fig, (ax_img, ax_hist) = plt.subplots(1, 2, figsize=(10, 5))
+
+# Mostrar la imagen
+ax_img.imshow(imagen, cmap='gray')
+ax_img.set_title("Seleccioná una zona")
+ax_img.axis('off')
+
+# Histograma vacío al inicio
+hist_plot = ax_hist.hist([], bins=256, color='gray')
+ax_hist.set_title("Histograma de la zona")
+ax_hist.set_xlabel("Intensidad")
+ax_hist.set_ylabel("Frecuencia")
+
+# Función que se ejecuta cuando se selecciona una zona
+def onselect(eclick, erelease):
+    x1, y1 = int(eclick.xdata), int(eclick.ydata)
+    x2, y2 = int(erelease.xdata), int(erelease.ydata)
+    
+    xmin, xmax = sorted([x1, x2])
+    ymin, ymax = sorted([y1, y2])
+
+    zona = imagen[ymin:ymax, xmin:xmax]
+    
+    ax_hist.cla()  # limpiar histograma anterior
+    ax_hist.hist(zona.ravel(), bins=256, color='gray')
+    ax_hist.set_title(f"Histograma zona ({xmin}:{xmax}, {ymin}:{ymax})")
+    ax_hist.set_xlabel("Intensidad")
+    ax_hist.set_ylabel("Frecuencia")
+    
+    fig.canvas.draw_idle()
+
+# Activar el selector
+selector = RectangleSelector(ax_img, onselect,
+                             useblit=True,
+                             button=[1],
+                             minspanx=5, minspany=5,
+                             spancoords='pixels',
+                             interactive=True)
+
+plt.tight_layout()
+plt.show()
