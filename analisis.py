@@ -6,27 +6,44 @@ from scipy.ndimage import uniform_filter
 from scipy.signal import find_peaks
 
 class ImageEnhancer:
-    def __init__(self, imagen, sigma_background=100, alpha=0):
+    def __init__(self, imagen, sigma_background=100, alpha=0, percentil_contornos=99.9):
         self.image = imagen
         self.sigma_background = sigma_background
         self.alpha = alpha
+        self.percentil_contornos = percentil_contornos
 
     def _subtract_background(self):
         background = gaussian(self.image.astype(np.float32), sigma=self.sigma_background, preserve_range=True)
         corrected = self.image.astype(np.float32) - self.alpha * background
         return corrected
 
+    def _detect_histogram_peaks(self, image, min_intensity=5, min_dist=30):
+        hist, bins = np.histogram(image[image > min_intensity], bins=256, range=(0, 255))
+        peaks, _ = find_peaks(hist, distance=min_dist)
+        peak_vals = hist[peaks]
 
-    def _enhance(self, corrected):
-        mu, sigma = self._calcular_parametros_histograma(plotear=True)
-        delta = corrected - mu
+        if len(peaks) < 2:
+            raise ValueError("No se detectaron dos picos suficientemente separados en el histograma.")
+
+        # Tomar los dos picos más altos
+        sorted_indices = np.argsort(peak_vals)[-2:]
+        top_peaks = peaks[sorted_indices]
+        top_peaks.sort()
+
+        centro = (top_peaks[0] + top_peaks[1]) / 2
+        sigma = abs(top_peaks[0] - centro)
+
+        return centro, sigma, hist, top_peaks
+
+    def _enhance_tanh_diff2(self, corrected, centro, sigma):
+        delta = corrected - centro
         return np.exp(-0.5 * (delta / sigma) ** 2) * delta
 
     def _apply_tanh(self, image, ganancia=1):
         delta = image - np.mean(image)
         return 0.5 * (np.tanh(ganancia * delta) + 1)
 
-    def _find_large_contours(self, binary, percentil=99.9):
+    def _find_large_contours(self, binary):
         contours = find_contours(binary, level=0.5)
 
         def area_contorno(contour):
@@ -35,44 +52,14 @@ class ImageEnhancer:
             return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
 
         areas = np.array([area_contorno(c) for c in contours])
-        umbral = np.percentile(areas, percentil)
+        umbral = np.percentile(areas, self.percentil_contornos)
         return [c for c, a in zip(contours, areas) if a >= umbral]
 
-    def _calcular_parametros_histograma(self, plotear=False):
-        hist, _ = np.histogram(self.image.ravel(), bins=256, range=(0, 255))
-        hist[:5] = 0  # eliminar intensidades muy bajas
-
-        hist_suavizado = uniform_filter(hist.astype(float), size=5)
-        picos, _ = find_peaks(hist_suavizado, distance=10)
-
-        if len(picos) < 2:
-            raise ValueError("No se encontraron al menos dos picos en el histograma.")
-
-        alturas = hist_suavizado[picos]
-        indices_top2 = np.argsort(alturas)[-2:]
-        picos_top2 = np.sort(picos[indices_top2])
-
-        max1, max2 = picos_top2
-        mu = (max1 + max2) / 2
-        sigma = abs(max1 - mu)
-
-        if plotear:
-            plt.figure(figsize=(10, 4))
-            plt.plot(hist_suavizado, label="Histograma suavizado")
-            plt.plot(picos, hist_suavizado[picos], "x", label="Todos los picos")
-            plt.plot([max1, max2], hist_suavizado[[max1, max2]], "ro", label="Picos seleccionados")
-            plt.title("Histograma de intensidades")
-            plt.xlabel("Intensidad")
-            plt.ylabel("Frecuencia")
-            plt.legend()
-            plt.grid(True)
-            plt.show()
-
-        return mu, sigma
-
-    def procesar(self, metodo="tanh_diff2", k=4, escala=5, suavizado=2, ganancia_tanh=0.1, ganancia1=0.1, ganancia2=0.01, mostrar=True):
+    def procesar(self, suavizado=5, ganancia_tanh=0.1, mostrar=True, percentil_contornos=None, min_dist_picos=30):
         corrected = self._subtract_background()
-        enhanced = self._enhance(corrected)
+        centro, sigma, hist, top_peaks = self._detect_histogram_peaks(corrected)
+
+        enhanced = self._enhance_tanh_diff2(corrected, centro, sigma)
         enhanced_norm = (enhanced - enhanced.min()) / (enhanced.max() - enhanced.min())
         enhanced_uint8 = (enhanced_norm * 255).astype(np.uint8)
 
@@ -84,62 +71,63 @@ class ImageEnhancer:
 
         threshold = threshold_otsu(enhanced2_uint8)
         binary = (enhanced2_uint8 > threshold).astype(np.uint8) * 255
-
         contornos = self._find_large_contours(binary)
 
         if mostrar:
-            self._mostrar_resultados(corrected, enhanced_uint8, smooth, enhanced2_uint8, binary, contornos, metodo, k)
+            self._mostrar_resultados(enhanced_uint8, smooth, enhanced2_uint8, binary, contornos, hist, top_peaks)
 
         return binary, contornos
 
-    def _mostrar_resultados(self, corrected, enhanced_uint8, smooth, enhanced2_uint8, binary, contornos, metodo, k):
-
-        plt.figure(figsize=(18, 12))
+    def _mostrar_resultados(self, enhanced_uint8, smooth, enhanced2_uint8, binary, contornos, hist, top_peaks):
+        plt.figure(figsize=(18, 10))
 
         plt.subplot(2, 3, 1)
         plt.imshow(self.image, cmap='gray')
         for c in contornos:
             plt.scatter(c[:, 1], c[:, 0], s=1, c='cyan')
-        plt.title("Original + contornos (píxeles)")
+        plt.title("Original + contornos")
         plt.axis('off')
 
         plt.subplot(2, 3, 2)
-        plt.imshow(corrected, cmap='gray')
-        plt.title("Con fondo restado")
+        plt.imshow(enhanced_uint8, cmap='gray')
+        plt.title("Realce (tanh_diff2)")
         plt.axis('off')
 
         plt.subplot(2, 3, 3)
-        plt.imshow(enhanced_uint8, cmap='gray')
-        plt.title("Función de realce")
+        plt.imshow(smooth, cmap='gray')
+        plt.title("Suavizado")
         plt.axis('off')
 
         plt.subplot(2, 3, 4)
-        plt.imshow(smooth, cmap='gray')
-        plt.title("Suavizado (media móvil)")
+        plt.imshow(enhanced2_uint8, cmap='gray')
+        plt.title("Tanh final")
         plt.axis('off')
 
         plt.subplot(2, 3, 5)
-        plt.imshow(enhanced2_uint8, cmap='gray')
-        plt.title("Tanh")
-        plt.axis('off')
-
-        plt.subplot(2, 3, 6)
         plt.imshow(binary, cmap='gray')
         for c in contornos:
             plt.scatter(c[:, 1], c[:, 0], s=1, c='cyan')
-        plt.title(f"Contornos ({len(contornos)} detectados)")
+        plt.title("Binarizada + contornos")
         plt.axis('off')
+
+        plt.subplot(2, 3, 6)
+        plt.plot(hist, color='gray')
+        plt.scatter(top_peaks, hist[top_peaks], color='red')
+        plt.title("Histograma + Picos seleccionados")
+        plt.xlabel("Intensidad")
+        plt.ylabel("Frecuencia")
 
         plt.tight_layout()
         plt.show()
+
 
 #%%
 
 from skimage.io import imread
 
-imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
+imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/2000.tif")
 enhancer = ImageEnhancer(imagen=imagen)
-binary, contornos = enhancer.procesar(ganancia_tanh=1, suavizado=5)
+binary, contornos = enhancer.procesar(ganancia_tanh=1, suavizado=5, percentil_contornos=0, min_dist_picos=20)
 
 #%%
 
