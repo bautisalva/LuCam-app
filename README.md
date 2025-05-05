@@ -37,10 +37,19 @@ python test.py
 
 ## Missing
 - Arreglar el problema de las rayas en las imagenes
-- Profundizar el analisis de imagenes (ver [Link](https://biapol.github.io/Image-data-science-with-Python-and-Napari-EPFL2022/day2c_Image_Filters/09_Filters.html))
-  - noise reduction para capturar las imagenes: moving average, gaussian, median
-  - mejorar el contraste de la imagen restada: filtrar con una tangente, rolling ball algorithm, tophat filter, otro gaussian blur o gaussian difference
-    
+    - ver si funciona apagando y prendiendo la camara
+    - ver si funciona yendo linea por linea y restandole la media
+
+
+- arreglar el problema en el guardado de imagenes que se guardan distinto con y sin ROI. La cruda tambien se ve distinta
+- pasar el limpio todos los codigos de analisis de imagenes y documentar todo
+- agregrar un mini histograma en la secion de 'captura'
+- probar el analisis de distintas imagenes para ver si anda
+- ver que hacemos con las manchas cuando quedan en el borde del dominio, las guardamos? inventamos los puntos despues? que hacemos con eso
+- nos quedamos finalmente con la diferencia de tangentes con la gaussiana y la lineal
+    - necesitamos agregar para que se identifiquen los maximos del histograma automaticamente asi no hay que ponerle a mano los parametros a la funcion
+- al final no vamos a restar el fondo, asi que borrrar eso
+- acordarse que todo el analisis esta hecho en 8bits pero tenemos que pasarlo todo a 16bits para las proximas imagenes
 ---
 
 
