@@ -1327,3 +1327,49 @@
 [12:49:42] Preview reanudado.
 === Se inició la app el día 30/04/2025 a las 12:51:45 ===
 [12:51:45] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 09:59:42 ===
+[09:59:44] FPS cambiado a 7.50
+[09:59:55] Iniciando captura de imagen...
+[10:00:18] Iniciando captura de imagen...
+[10:00:20] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:00:32] ROI seleccionado con mouse: x=352, y=24, w=184, h=128
+[10:00:42] Uso de ROI activado
+[10:01:09] Uso de ROI desactivado
+[10:01:13] ROI seleccionado con mouse: x=40, y=0, w=96, h=472
+[10:01:18] Uso de ROI activado
+[10:02:20] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test
+[10:02:23] Guardado automático activado
+[10:02:24] Iniciando captura de imagen...
+[10:02:54] Iniciando captura de imagen...
+[10:03:12] Uso de ROI desactivado
+[10:03:16] Iniciando captura de imagen...
+[10:03:24] Iniciando captura de imagen...
+[10:03:51] Iniciando captura de imagen...
+[10:04:00] Iniciando captura de imagen...
+=== Se inició la app el día 07/05/2025 a las 10:04:10 ===
+[10:04:10] FPS cambiado a 7.50
+[10:04:19] Guardado automático activado
+[10:04:30] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos
+[10:04:37] Iniciando captura de imagen...
+[10:04:39] Iniciando captura de imagen...
+[10:04:40] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:04:40] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\normal_20250507_100440.tif
+[10:04:40] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\raw\cruda_20250507_100440.tif
+[10:05:19] ROI seleccionado con mouse: x=176, y=88, w=296, h=160
+[10:05:24] Uso de ROI activado
+[10:05:29] Iniciando captura de imagen...
+[10:05:31] [DEBUG] ROI solicitado: x=176, y=88, w=296, h=160
+[10:05:31] [DEBUG] Tamaño imagen: (1024, 1280)
+[10:05:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:05:31] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\normal_20250507_100531.tif
+[10:05:31] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\raw\cruda_20250507_100531.tif
+[10:06:09] Uso de ROI desactivado
+[10:06:15] ROI seleccionado con mouse: x=0, y=16, w=640, h=16
+[10:06:18] Uso de ROI activado
+[10:06:20] Iniciando captura de imagen...
+[10:06:21] [DEBUG] ROI solicitado: x=0, y=16, w=640, h=16
+[10:06:21] [DEBUG] Tamaño imagen: (1024, 1280)
+[10:06:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:06:22] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\normal_20250507_100621.tif
+[10:06:22] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\raw\cruda_20250507_100622.tif
+[10:07:36] Preview reanudado.
