@@ -20,7 +20,7 @@ A Python application for **acquiring and processiong images from Lumenera camera
 - Python ≥ 3.8
 - [NumPy](https://numpy.org/)
 - [scikit-image](https://scikit-image.org/)
-- [PyQt6](https://pypi.org/project/PyQt6/)
+- [PyQt5](https://pypi.org/project/PyQt6/)
 - (plus [Lumenera USB camera and drivers 5.0](https://www.lumenera.com/))
 
 You can also install all at once with:
