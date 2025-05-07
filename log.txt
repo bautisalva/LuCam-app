@@ -2102,3 +2102,102 @@
 [12:44:52] Se actualizó 'contrast' a 2.9
 [12:44:53] Se actualizó 'contrast' a 1.5
 [12:44:53] Se actualizó 'contrast' a 1.2
+=== Se inició la app el día 07/05/2025 a las 12:49:59 ===
+[12:49:59] FPS cambiado a 7.50
+[12:50:02] Iniciando captura de imagen...
+[12:50:06] Iniciando captura de imagen...
+[12:50:08] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:50:08] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:50:11] Uso de ROI activado
+[12:50:11] [WARNING] ROI inválido en preview. Mostrando imagen completa.
+=== Se inició la app el día 07/05/2025 a las 12:53:57 ===
+[12:53:57] FPS cambiado a 7.50
+[12:53:59] Se actualizó 'brightness' a 10.4
+[12:54:00] Se actualizó 'brightness' a 29.5
+=== Se inició la app el día 07/05/2025 a las 12:54:16 ===
+[12:54:16] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 13:07:10 ===
+[13:07:11] FPS cambiado a 7.50
+[13:07:21] Iniciando captura de imagen...
+[13:07:23] [INFO] ROI desactivado. Mostrando imagen completa.
+[13:07:23] Imagen capturada y mostrada en pestaña 'Captura'.
+[13:07:41] Guardado automático activado
+[13:07:42] Iniciando captura de imagen...
+[13:07:44] [INFO] ROI desactivado. Mostrando imagen completa.
+[13:07:44] Imagen capturada y mostrada en pestaña 'Captura'.
+[13:07:44] [ERROR] No se definió directorio de trabajo para guardar imagen.
+[13:07:44] Imagen cruda guardada en: raw\cruda_20250507_130744.tif
+[13:07:49] ROI selected: x=736, y=592, w=0, h=0
+[13:07:56] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[13:07:59] Iniciando captura de imagen...
+[13:08:01] [INFO] ROI desactivado. Mostrando imagen completa.
+[13:08:01] Imagen capturada y mostrada en pestaña 'Captura'.
+[13:08:01] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_130801.tif
+[13:08:01] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_130801.tif
+[13:08:08] ROI selected: x=728, y=352, w=0, h=0
+[13:08:12] Se actualizó 'brightness' a 10.9
+[13:08:12] Se actualizó 'brightness' a 18.7
+[13:08:16] Preview reanudado.
+[13:08:20] Se actualizó 'brightness' a 19.2
+[13:08:20] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x000001EF7C474190>
+[13:08:20] Se actualizó 'brightness' a 21.8
+[13:08:20] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x000001EF7C474190>
+[13:08:20] Se actualizó 'brightness' a 22.3
+[13:08:20] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x000001EF7C474190>
+[13:08:21] Se actualizó 'brightness' a 22.8
+[13:08:21] Se actualizó 'brightness' a 24.4
+[13:08:21] Se actualizó 'brightness' a 36.3
+[13:08:22] Se actualizó 'brightness' a 37.3
+[13:08:25] Se actualizó 'contrast' a 1.1
+[13:08:25] Se actualizó 'contrast' a 2.1
+[13:08:26] Se actualizó 'contrast' a 2.6
+[13:08:26] Se actualizó 'contrast' a 3.1
+[13:08:26] Se actualizó 'contrast' a 3.6
+[13:08:27] Se actualizó 'contrast' a 4.6
+[13:08:29] Se actualizó 'contrast' a 4.5
+[13:08:30] Se actualizó 'contrast' a 2.1
+[13:08:31] Se actualizó 'contrast' a 3.1
+[13:08:32] Se actualizó 'contrast' a 2.9
+[13:08:35] Se actualizó 'contrast' a 3.0
+[13:08:35] Se actualizó 'contrast' a 3.5
+[13:08:36] Se actualizó 'contrast' a 3.7
+[13:08:36] Se actualizó 'contrast' a 4.0
+[13:08:37] Se actualizó 'contrast' a 4.2
+[13:08:40] Se actualizó 'contrast' a 4.1
+[13:08:40] Se actualizó 'contrast' a 3.9
+[13:08:40] Se actualizó 'contrast' a 3.7
+[13:08:47] Se actualizó 'contrast' a 4.7
+[13:08:51] Iniciando captura de imagen...
+[13:08:53] [INFO] ROI desactivado. Mostrando imagen completa.
+[13:08:53] Imagen capturada y mostrada en pestaña 'Captura'.
+[13:08:53] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_130853.tif
+[13:08:53] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_130853.tif
+[13:09:19] Se actualizó 'exposure' a 13.9
+[13:09:20] Se actualizó 'exposure' a 355.2
+[13:09:20] Se actualizó 'exposure' a 456.0
+[13:09:21] Se actualizó 'exposure' a 463.8
+[13:09:22] Se actualizó 'exposure' a 466.4
+[13:09:22] Se actualizó 'exposure' a 484.5
+[13:09:24] Se actualizó 'exposure' a 487.1
+[13:09:25] Se actualizó 'exposure' a 500.0
+[13:09:29] Iniciando captura de imagen...
+[13:09:31] [INFO] ROI desactivado. Mostrando imagen completa.
+[13:09:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[13:09:31] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_130931.tif
+[13:09:31] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_130931.tif
+=== Se inició la app el día 07/05/2025 a las 13:10:07 ===
+[13:10:07] FPS cambiado a 7.50
+[13:10:15] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[13:10:16] Iniciando captura de imagen...
+[13:10:19] Iniciando captura de imagen...
+[13:10:20] [INFO] ROI desactivado. Mostrando imagen completa.
+[13:10:20] Imagen capturada y mostrada en pestaña 'Captura'.
+[13:10:30] Guardado automático activado
+[13:10:32] Iniciando captura de fondo...
+[13:10:34] Fondo capturado correctamente.
+[13:10:34] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\fondo_20250507_131034.tif
+[13:10:36] Iniciando captura de imagen...
+[13:10:38] [INFO] ROI desactivado. Mostrando imagen completa.
+[13:10:38] Imagen capturada y mostrada en pestaña 'Captura'.
+[13:10:38] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250507_131038.tif
+[13:10:38] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_131038.tif

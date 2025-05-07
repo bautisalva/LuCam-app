@@ -740,19 +740,29 @@ class CameraApp(QWidget):
         """
         Updates a given camera property both in the camera object
         and synchronizes the value across the GUI slider and input field.
-
+    
         Parameters:
             prop (str): property name (e.g., 'brightness').
             value (float): new value to assign.
         """
         if self.camera:
             self.camera.set_properties(**{prop: value})
+    
+        # Actualiza sliders y textbox
         self.sliders[prop].blockSignals(True)
         self.sliders[prop].setValue(int(value * 10))
         self.sliders[prop].blockSignals(False)
         self.inputs[prop].setText(f"{value:.1f}")
         self.log_message(f"Se actualizó '{prop}' a {value:.1f}")
-        
+    
+        #Captura una imagen nueva inmediatamente para reflejar el cambio
+        if self.preview_mode:
+            try:
+                image = self.camera.TakeSnapshot()
+                self.display_preview_image(image)
+            except Exception as e:
+                self.log_message(f"[ERROR] No se pudo actualizar el preview tras cambiar {prop}: {e}")
+
     def set_roi(self, width, height, x_offset=0, y_offset=0):
         """
         Reduces the ROI (Region of Interest) by setting a smaller width and height.
@@ -1263,28 +1273,29 @@ class CameraApp(QWidget):
         self.log_message("Preview reanudado.")
 
     def display_preview_image(self, image, scale_factor=1):
-        """Optimized image display with caching"""
-
-        
-        # Convert to 8-bit if needed
+        """
+        Displays a live preview image in the preview panel.
+        Converts to 8-bit, scales if needed.
+        """
+        # Convert to grayscale if needed
         if len(image.shape) == 3:
             image = (rgb2gray(image) * 65535).astype(np.uint16)
-            
-        # Scale if needed
+    
+        # Resize if needed
         if scale_factor != 1:
             height, width = image.shape
             new_width = int(width * scale_factor)
             new_height = int(height * scale_factor)
-            image = resize(image, (new_height, new_width), 
-                          preserve_range=True).astype(np.uint16)
-        
-        # Convert to QImage
+            image = resize(image, (new_height, new_width), preserve_range=True).astype(np.uint16)
+    
+        # Convert to 8-bit for display
         image_8bit = to_8bit_for_preview(image)
-        qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0], 
-                       image_8bit.shape[1], QImage.Format_Grayscale8)
-        
-        # Update display
+        qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0],
+                        image_8bit.shape[1], QImage.Format_Grayscale8)
+    
+        # Update preview display
         self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
+
 
     def display_image(self, image, scale_factor=1):
         """
