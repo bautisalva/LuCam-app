@@ -1373,3 +1373,732 @@
 [10:06:22] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\normal_20250507_100621.tif
 [10:06:22] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test fotos\raw\cruda_20250507_100622.tif
 [10:07:36] Preview reanudado.
+=== Se inició la app el día 07/05/2025 a las 10:10:14 ===
+[10:10:14] FPS cambiado a 7.50
+[10:10:19] Iniciando captura de imagen...
+[10:10:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:10:31] Uso de ROI activado
+[10:10:34] Uso de ROI desactivado
+[10:10:36] Guardado automático activado
+[10:10:40] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[10:10:44] Iniciando captura de imagen...
+[10:10:46] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:10:46] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_101046.tif
+[10:10:46] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_101046.tif
+[10:11:15] ROI seleccionado con mouse: x=456, y=72, w=144, h=200
+=== Se inició la app el día 07/05/2025 a las 10:14:59 ===
+[10:14:59] FPS cambiado a 7.50
+[10:15:05] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[10:15:07] Guardado automático activado
+[10:15:10] Iniciando captura de imagen...
+[10:15:31] Iniciando captura de imagen...
+[10:15:33] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:15:33] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_101533.tif
+[10:15:33] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_101533.tif
+[10:16:37] ROI seleccionado con mouse: x=488, y=408, w=0, h=0
+=== Se inició la app el día 07/05/2025 a las 10:16:40 ===
+[10:16:40] FPS cambiado a 7.50
+[10:16:46] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[10:16:48] Iniciando captura de imagen...
+[10:16:55] Iniciando captura de imagen...
+[10:16:57] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:17:02] Guardado automático activado
+[10:17:03] Iniciando captura de imagen...
+[10:17:05] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:17:05] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_101705.tif, 0
+[10:17:05] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_101705.tif
+=== Se inició la app el día 07/05/2025 a las 10:21:50 ===
+[10:21:50] FPS cambiado a 7.50
+[10:22:01] Iniciando captura de imagen...
+[10:22:02] Iniciando captura de imagen...
+[10:22:04] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 07/05/2025 a las 10:22:32 ===
+[10:22:32] FPS cambiado a 7.50
+[10:22:36] Iniciando captura de imagen...
+[10:22:37] Iniciando captura de imagen...
+[10:22:38] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 07/05/2025 a las 10:40:55 ===
+[10:40:55] FPS cambiado a 15.00
+=== Se inició la app el día 07/05/2025 a las 10:41:03 ===
+[10:41:03] FPS cambiado a 15.00
+=== Se inició la app el día 07/05/2025 a las 10:41:17 ===
+[10:41:17] FPS cambiado a 15.00
+=== Se inició la app el día 07/05/2025 a las 10:41:24 ===
+[10:41:24] FPS cambiado a 15.00
+=== Se inició la app el día 07/05/2025 a las 10:41:28 ===
+[10:41:28] FPS cambiado a 7.50
+[10:41:33] Iniciando captura de imagen...
+[10:41:35] Iniciando captura de imagen...
+[10:41:37] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:41:42] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[10:41:44] Guardado automático activado
+[10:41:45] Iniciando captura de imagen...
+[10:41:47] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:41:47] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_104147.tif
+[10:41:47] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_104147.tif
+[10:41:49] ROI seleccionado con mouse: x=312, y=232, w=224, h=128
+[10:41:52] Uso de ROI activado
+[10:41:53] Iniciando captura de imagen...
+[10:41:55] [DEBUG] ROI solicitado: x=312, y=232, w=224, h=128
+[10:41:55] [DEBUG] Tamaño imagen: (1024, 1280)
+[10:41:55] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:41:55] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_104155.tif
+[10:41:55] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_104155.tif
+=== Se inició la app el día 07/05/2025 a las 10:47:38 ===
+[10:47:38] FPS cambiado a 7.50
+[10:47:43] Iniciando captura de imagen...
+[10:47:47] Iniciando captura de imagen...
+[10:47:50] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:47:51] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[10:47:55] Guardado automático activado
+[10:48:00] Uso de ROI activado
+[10:48:01] ROI seleccionado con mouse: x=176, y=104, w=264, h=208
+[10:48:03] Iniciando captura de imagen...
+[10:48:05] [DEBUG] ROI solicitado: x=176, y=104, w=264, h=208
+[10:48:05] [DEBUG] Tamaño imagen: (1024, 1280)
+[10:48:05] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:48:05] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_104805.tif
+[10:48:05] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_104805.tif
+[10:48:10] ROI seleccionado con mouse: x=24, y=152, w=176, h=112
+[10:48:11] Iniciando captura de imagen...
+[10:48:13] [DEBUG] ROI solicitado: x=24, y=152, w=176, h=112
+[10:48:13] [DEBUG] Tamaño imagen: (1024, 1280)
+[10:48:13] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:48:13] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_104813.tif
+[10:48:13] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_104813.tif
+=== Se inició la app el día 07/05/2025 a las 10:52:06 ===
+[10:52:06] FPS cambiado a 7.50
+[10:52:09] Iniciando captura de imagen...
+[10:52:11] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:52:11] Iniciando captura de imagen...
+[10:52:14] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:52:24] Imagen guardada manualmente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi/testyy.tif
+[10:52:43] Preview reanudado.
+[10:53:03] Se actualizó 'exposure' a 8.8
+[10:53:04] Se actualizó 'exposure' a 19.1
+[10:53:04] Se actualizó 'exposure' a 114.8
+[10:53:07] Se actualizó 'contrast' a 1.1
+[10:53:07] Se actualizó 'contrast' a 1.3
+[10:53:07] Se actualizó 'contrast' a 1.5
+[10:53:07] Se actualizó 'contrast' a 1.6
+[10:53:07] Se actualizó 'contrast' a 1.8
+[10:53:07] Se actualizó 'contrast' a 2.0
+[10:53:07] Se actualizó 'contrast' a 3.2
+[10:53:08] Se actualizó 'contrast' a 3.3
+[10:53:09] Se actualizó 'contrast' a 3.4
+[10:53:09] Se actualizó 'contrast' a 3.8
+[10:53:09] Se actualizó 'contrast' a 4.2
+[10:53:09] Se actualizó 'contrast' a 5.5
+[10:53:09] Se actualizó 'contrast' a 5.7
+[10:53:09] Se actualizó 'contrast' a 5.8
+[10:53:10] Se actualizó 'contrast' a 5.7
+[10:53:10] Se actualizó 'contrast' a 5.4
+[10:53:11] Se actualizó 'contrast' a 5.1
+[10:53:11] Se actualizó 'contrast' a 4.8
+[10:53:11] Se actualizó 'contrast' a 4.5
+[10:53:12] Se actualizó 'contrast' a 4.4
+[10:53:12] Se actualizó 'contrast' a 3.9
+[10:53:12] Se actualizó 'contrast' a 3.8
+[10:53:13] Se actualizó 'contrast' a 3.6
+[10:53:13] Se actualizó 'contrast' a 3.5
+[10:53:16] Se actualizó 'exposure' a 117.3
+[10:53:16] Se actualizó 'exposure' a 500.0
+[10:53:20] Se actualizó 'contrast' a 3.6
+[10:53:20] Se actualizó 'contrast' a 3.7
+[10:53:20] Se actualizó 'contrast' a 3.8
+[10:53:20] Se actualizó 'contrast' a 3.9
+[10:53:20] Se actualizó 'contrast' a 4.0
+[10:53:20] Se actualizó 'contrast' a 4.1
+[10:53:20] Se actualizó 'contrast' a 4.2
+[10:53:20] Se actualizó 'contrast' a 4.4
+[10:53:22] Se actualizó 'contrast' a 4.5
+[10:53:22] Se actualizó 'contrast' a 4.9
+[10:53:22] Se actualizó 'contrast' a 5.0
+[10:53:22] Se actualizó 'contrast' a 5.1
+[10:53:27] Iniciando captura de imagen...
+[10:53:30] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:53:37] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[10:53:39] Guardado automático activado
+[10:53:42] Iniciando captura de imagen...
+[10:53:45] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:53:45] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_105345.tif
+[10:53:45] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_105345.tif
+[10:53:49] Uso de ROI activado
+[10:53:52] ROI seleccionado con mouse: x=192, y=136, w=248, h=192
+[10:53:55] Uso de ROI desactivado
+[10:53:56] ROI seleccionado con mouse: x=224, y=160, w=240, h=128
+[10:53:58] ROI seleccionado con mouse: x=184, y=120, w=296, h=160
+[10:54:00] Iniciando captura de imagen...
+[10:54:03] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:54:03] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_105403.tif
+[10:54:03] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_105403.tif
+[10:54:05] ROI seleccionado con mouse: x=168, y=80, w=320, h=168
+[10:54:08] Uso de ROI activado
+[10:54:10] Iniciando captura de imagen...
+[10:54:12] [DEBUG] ROI solicitado: x=168, y=80, w=320, h=168
+[10:54:12] [DEBUG] Tamaño imagen: (1024, 1280)
+[10:54:12] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:54:12] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_105412.tif
+[10:54:12] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_105412.tif
+[10:55:11] Preview reanudado.
+[10:55:18] Se actualizó 'saturation' a 10.1
+[10:55:18] Se actualizó 'saturation' a 10.7
+[10:55:18] Se actualizó 'saturation' a 11.1
+[10:55:18] Se actualizó 'saturation' a 11.6
+[10:55:18] Se actualizó 'saturation' a 11.8
+[10:55:18] Se actualizó 'saturation' a 12.2
+[10:55:18] Se actualizó 'saturation' a 12.5
+[10:55:18] Se actualizó 'saturation' a 12.7
+[10:55:18] Se actualizó 'saturation' a 12.9
+[10:55:18] Se actualizó 'saturation' a 13.1
+[10:55:18] Se actualizó 'saturation' a 13.3
+[10:55:18] Se actualizó 'saturation' a 13.5
+[10:55:19] Se actualizó 'saturation' a 14.2
+[10:55:19] Se actualizó 'saturation' a 14.4
+[10:55:19] Se actualizó 'saturation' a 14.6
+[10:55:19] Se actualizó 'saturation' a 14.9
+[10:55:19] Se actualizó 'saturation' a 15.1
+[10:55:19] Se actualizó 'saturation' a 15.3
+[10:55:19] Se actualizó 'saturation' a 15.5
+[10:55:20] Se actualizó 'saturation' a 15.9
+[10:55:20] Se actualizó 'saturation' a 16.1
+[10:55:20] Se actualizó 'saturation' a 16.4
+[10:55:20] Se actualizó 'saturation' a 16.6
+[10:55:20] Se actualizó 'saturation' a 17.2
+[10:55:20] Se actualizó 'saturation' a 17.5
+[10:55:20] Se actualizó 'saturation' a 17.9
+[10:55:20] Se actualizó 'saturation' a 18.6
+[10:55:20] Se actualizó 'saturation' a 19.6
+[10:55:20] Se actualizó 'saturation' a 20.7
+[10:55:20] Se actualizó 'saturation' a 21.4
+[10:55:20] Se actualizó 'saturation' a 21.8
+[10:55:20] Se actualizó 'saturation' a 22.3
+[10:55:20] Se actualizó 'saturation' a 22.9
+[10:55:20] Se actualizó 'saturation' a 23.6
+[10:55:20] Se actualizó 'saturation' a 24.2
+[10:55:20] Se actualizó 'saturation' a 24.5
+[10:55:20] Se actualizó 'saturation' a 25.3
+[10:55:20] Se actualizó 'saturation' a 25.6
+[10:55:20] Se actualizó 'saturation' a 25.8
+[10:55:20] Se actualizó 'saturation' a 26.0
+[10:55:20] Se actualizó 'saturation' a 26.6
+[10:55:20] Se actualizó 'saturation' a 26.9
+[10:55:20] Se actualizó 'saturation' a 27.1
+[10:55:20] Se actualizó 'saturation' a 27.3
+[10:55:20] Se actualizó 'saturation' a 27.5
+[10:55:20] Se actualizó 'saturation' a 27.7
+[10:55:20] Se actualizó 'saturation' a 27.9
+[10:55:20] Se actualizó 'saturation' a 28.0
+[10:55:20] Se actualizó 'saturation' a 28.4
+[10:55:20] Se actualizó 'saturation' a 28.6
+[10:55:22] Se actualizó 'saturation' a 29.0
+[10:55:22] Se actualizó 'saturation' a 29.2
+[10:55:22] Se actualizó 'saturation' a 29.5
+[10:55:22] Se actualizó 'saturation' a 30.3
+[10:55:22] Se actualizó 'saturation' a 30.6
+[10:55:22] Se actualizó 'saturation' a 31.0
+[10:55:22] Se actualizó 'saturation' a 31.5
+[10:55:22] Se actualizó 'saturation' a 32.1
+[10:55:22] Se actualizó 'saturation' a 32.8
+[10:55:22] Se actualizó 'saturation' a 33.4
+[10:55:22] Se actualizó 'saturation' a 33.9
+[10:55:22] Se actualizó 'saturation' a 35.1
+[10:55:22] Se actualizó 'saturation' a 35.2
+[10:55:22] Se actualizó 'saturation' a 38.6
+[10:55:23] Se actualizó 'saturation' a 38.7
+[10:55:26] Se actualizó 'contrast' a 5.2
+[10:55:26] Se actualizó 'contrast' a 5.3
+[10:55:27] Se actualizó 'contrast' a 5.4
+[10:55:27] Se actualizó 'contrast' a 5.7
+[10:55:27] Se actualizó 'contrast' a 5.8
+[10:55:27] Se actualizó 'contrast' a 6.0
+[10:55:29] Se actualizó 'contrast' a 6.1
+[10:55:31] Se actualizó 'brightness' a 9.0
+[10:55:32] Se actualizó 'brightness' a 8.9
+[10:55:34] Se actualizó 'brightness' a 9.9
+[10:55:35] Se actualizó 'brightness' a 10.0
+[10:55:37] Se actualizó 'brightness' a 10.1
+[10:55:37] Se actualizó 'brightness' a 13.7
+[10:55:37] Se actualizó 'brightness' a 13.8
+[10:55:38] Se actualizó 'brightness' a 14.2
+[10:55:38] Se actualizó 'brightness' a 14.8
+[10:55:38] Se actualizó 'brightness' a 14.9
+[10:55:38] Se actualizó 'brightness' a 15.1
+[10:55:38] Se actualizó 'brightness' a 15.7
+[10:55:38] Se actualizó 'brightness' a 15.9
+[10:55:38] Se actualizó 'brightness' a 16.6
+[10:55:38] Se actualizó 'brightness' a 16.8
+[10:55:38] Se actualizó 'brightness' a 17.3
+[10:55:38] Se actualizó 'brightness' a 18.1
+[10:55:38] Se actualizó 'brightness' a 18.6
+[10:55:38] Se actualizó 'brightness' a 19.2
+[10:55:40] Se actualizó 'brightness' a 19.0
+[10:55:40] Se actualizó 'brightness' a 18.5
+[10:55:40] Se actualizó 'brightness' a 18.1
+[10:55:40] Se actualizó 'brightness' a 17.7
+[10:55:40] Se actualizó 'brightness' a 17.3
+[10:55:40] Se actualizó 'brightness' a 15.7
+[10:55:40] Se actualizó 'brightness' a 15.5
+[10:55:40] Se actualizó 'brightness' a 15.3
+[10:55:40] Se actualizó 'brightness' a 15.1
+[10:55:40] Se actualizó 'brightness' a 14.8
+[10:55:40] Se actualizó 'brightness' a 14.6
+[10:55:41] Se actualizó 'brightness' a 14.4
+[10:55:41] Se actualizó 'brightness' a 13.7
+[10:55:42] Se actualizó 'brightness' a 10.7
+[10:55:42] Se actualizó 'brightness' a 10.0
+[10:55:42] Se actualizó 'brightness' a 9.6
+[10:55:43] Se actualizó 'brightness' a 8.7
+[10:55:43] Se actualizó 'brightness' a 6.8
+[10:55:43] Se actualizó 'brightness' a 6.6
+[10:55:43] Se actualizó 'brightness' a 6.5
+[10:55:43] Se actualizó 'brightness' a 6.1
+[10:55:43] Se actualizó 'brightness' a 5.7
+[10:55:43] Se actualizó 'brightness' a 5.4
+[10:55:44] Se actualizó 'brightness' a 5.5
+[10:55:45] Se actualizó 'brightness' a 6.3
+[10:55:45] Se actualizó 'brightness' a 7.6
+[10:55:45] Se actualizó 'brightness' a 8.1
+[10:55:45] Se actualizó 'brightness' a 10.0
+[10:55:45] Se actualizó 'brightness' a 10.3
+[10:55:45] Se actualizó 'brightness' a 10.5
+[10:55:45] Se actualizó 'brightness' a 10.7
+[10:55:45] Se actualizó 'brightness' a 10.9
+[10:55:48] Se actualizó 'gain' a 1.1
+[10:55:49] Se actualizó 'gain' a 1.2
+[10:55:50] Se actualizó 'gain' a 1.1
+[10:55:55] Iniciando captura de imagen...
+[10:55:58] Uso de ROI desactivado
+[10:56:06] Iniciando captura de imagen...
+[10:56:08] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:56:08] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_105608.tif
+[10:56:08] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_105608.tif
+[10:56:45] Iniciando captura de fondo...
+[10:56:48] Fondo capturado correctamente.
+[10:56:48] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\fondo_20250507_105648.tif
+[10:56:52] Iniciando captura de imagen...
+[10:56:55] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:56:55] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250507_105655.tif
+[10:56:55] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_105655.tif
+=== Se inició la app el día 07/05/2025 a las 10:59:07 ===
+[10:59:07] FPS cambiado a 7.50
+[11:01:26] Iniciando captura de imagen...
+[11:01:35] Iniciando captura de imagen...
+[11:01:37] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:01:41] Uso de ROI activado
+[11:01:54] Uso de ROI desactivado
+[11:01:57] Uso de ROI activado
+=== Se inició la app el día 07/05/2025 a las 11:03:33 ===
+[11:03:33] FPS cambiado a 7.50
+[11:03:42] Iniciando captura de imagen...
+[11:03:51] Iniciando captura de imagen...
+[11:03:53] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:04:03] Iniciando captura de imagen...
+[11:04:05] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 07/05/2025 a las 11:10:42 ===
+[11:10:42] FPS cambiado a 7.50
+[11:10:46] Iniciando captura de imagen...
+[11:10:48] Iniciando captura de imagen...
+[11:10:58] Iniciando captura de imagen...
+[11:11:06] Iniciando captura de imagen...
+[11:11:28] Iniciando captura de imagen...
+=== Se inició la app el día 07/05/2025 a las 11:12:24 ===
+[11:12:25] FPS cambiado a 7.50
+[11:12:28] Iniciando captura de imagen...
+[11:12:31] Iniciando captura de imagen...
+=== Se inició la app el día 07/05/2025 a las 11:15:55 ===
+[11:15:55] FPS cambiado a 7.50
+[11:15:58] Iniciando captura de imagen...
+[11:16:09] Iniciando captura de imagen...
+[11:16:11] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:16:11] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:16:18] Uso de ROI activado
+[11:16:20] Iniciando captura de imagen...
+[11:16:22] [WARNING] ROI inválido o trivial. Mostrando imagen completa.
+[11:16:22] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 07/05/2025 a las 11:16:59 ===
+[11:16:59] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:21:45 ===
+[11:21:45] FPS cambiado a 7.50
+[11:21:48] Iniciando captura de imagen...
+[11:22:00] Iniciando captura de imagen...
+[11:22:02] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:22:02] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:22:07] Uso de ROI activado
+[11:22:07] [WARNING] ROI inválido en preview. Mostrando imagen completa.
+=== Se inició la app el día 07/05/2025 a las 11:24:52 ===
+[11:24:52] [WARNING] No se pudo hacer captura dummy inicial: exception: access violation writing 0x0000016D61F2C520
+[11:24:52] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:27:30 ===
+[11:27:30] [WARNING] No se pudo hacer captura dummy inicial: <lucam.Lucam object at 0x0000016D572F2290>
+[11:27:30] FPS cambiado a 7.50
+[11:27:31] [WARNING] No se pudo hacer captura dummy inicial: exception: access violation writing 0x0000016D678A3E20
+=== Se inició la app el día 07/05/2025 a las 11:32:32 ===
+[11:32:32] [WARNING] No se pudo hacer captura dummy inicial: exception: access violation writing 0x0000016D61F2C220
+[11:32:32] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:33:02 ===
+[11:33:02] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:33:22 ===
+[11:33:22] FPS cambiado a 7.50
+[11:33:25] Iniciando captura de imagen...
+=== Se inició la app el día 07/05/2025 a las 11:35:10 ===
+[11:35:10] FPS cambiado a 7.50
+[11:35:14] Iniciando captura de imagen...
+[11:35:15] Iniciando captura de imagen...
+[11:35:17] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:35:17] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 07/05/2025 a las 11:40:11 ===
+[11:40:11] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:40:48 ===
+[11:40:48] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:48:48 ===
+[11:48:48] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:48:54 ===
+[11:48:54] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:54:25 ===
+[11:54:25] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:54:36 ===
+[11:54:36] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:56:10 ===
+=== Se inició la app el día 07/05/2025 a las 11:57:11 ===
+[11:57:11] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 11:57:52 ===
+[11:57:54] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 12:12:31 ===
+[12:12:31] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 12:16:16 ===
+[12:16:16] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 12:18:16 ===
+[12:18:16] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 12:18:27 ===
+[12:18:27] FPS cambiado a 7.50
+[12:18:29] Se actualizó 'saturation' a 9.8
+[12:18:29] Se actualizó 'saturation' a 23.3
+[12:18:29] Se actualizó 'saturation' a 24.9
+[12:18:29] Se actualizó 'saturation' a 25.4
+[12:18:29] Se actualizó 'saturation' a 25.9
+[12:18:29] Se actualizó 'saturation' a 26.9
+[12:18:29] Se actualizó 'saturation' a 27.5
+[12:18:29] Se actualizó 'saturation' a 28.0
+[12:18:31] Se actualizó 'contrast' a 1.1
+[12:18:31] Se actualizó 'contrast' a 3.0
+[12:18:32] Se actualizó 'contrast' a 2.9
+[12:18:32] Se actualizó 'contrast' a 2.8
+[12:18:32] Se actualizó 'contrast' a 2.6
+[12:18:32] Se actualizó 'contrast' a 2.3
+[12:18:32] Se actualizó 'contrast' a 2.1
+[12:18:32] Se actualizó 'contrast' a 1.6
+[12:18:32] Se actualizó 'contrast' a 1.4
+[12:18:32] Se actualizó 'contrast' a 1.3
+[12:18:32] Se actualizó 'contrast' a 1.2
+[12:18:32] Se actualizó 'contrast' a 1.1
+[12:18:32] Se actualizó 'contrast' a 1.0
+[12:18:32] Se actualizó 'contrast' a 0.9
+[12:18:32] Se actualizó 'contrast' a 0.8
+[12:18:35] Se actualizó 'brightness' a 10.4
+[12:18:35] Se actualizó 'brightness' a 11.4
+[12:18:35] Se actualizó 'brightness' a 14.5
+[12:18:35] Se actualizó 'brightness' a 16.1
+[12:18:35] Se actualizó 'brightness' a 18.1
+[12:18:35] Se actualizó 'brightness' a 18.7
+[12:18:35] Se actualizó 'brightness' a 20.2
+[12:18:35] Se actualizó 'brightness' a 21.2
+=== Se inició la app el día 07/05/2025 a las 12:18:50 ===
+[12:18:51] FPS cambiado a 7.50
+[12:18:52] Se actualizó 'brightness' a 9.0
+[12:18:53] Se actualizó 'brightness' a 6.7
+[12:18:54] Se actualizó 'brightness' a 7.7
+[12:18:54] Se actualizó 'brightness' a 8.7
+[12:18:54] Se actualizó 'brightness' a 11.4
+[12:18:56] Se actualizó 'brightness' a 11.9
+[12:18:56] Se actualizó 'brightness' a 13.0
+[12:18:56] Se actualizó 'brightness' a 15.0
+[12:18:56] Se actualizó 'brightness' a 16.6
+[12:18:57] Se actualizó 'brightness' a 18.7
+[12:18:57] Se actualizó 'brightness' a 20.7
+[12:18:57] Se actualizó 'brightness' a 21.2
+[12:18:57] Se actualizó 'brightness' a 21.8
+[12:18:57] Se actualizó 'brightness' a 22.3
+[12:18:57] Se actualizó 'brightness' a 22.8
+[12:18:57] Se actualizó 'brightness' a 23.3
+[12:18:59] Se actualizó 'brightness' a 24.4
+[12:18:59] Se actualizó 'brightness' a 31.6
+[12:18:59] Se actualizó 'brightness' a 34.2
+[12:18:59] Se actualizó 'brightness' a 35.8
+[12:18:59] Se actualizó 'brightness' a 36.8
+[12:18:59] Se actualizó 'brightness' a 37.8
+[12:18:59] Se actualizó 'brightness' a 38.3
+[12:18:59] Se actualizó 'brightness' a 38.9
+[12:19:02] Se actualizó 'contrast' a 1.1
+[12:19:02] Se actualizó 'contrast' a 1.2
+[12:19:02] Se actualizó 'contrast' a 1.5
+[12:19:02] Se actualizó 'contrast' a 1.7
+[12:19:02] Se actualizó 'contrast' a 1.9
+[12:19:03] Se actualizó 'contrast' a 2.0
+[12:19:03] Se actualizó 'contrast' a 2.6
+[12:19:05] Se actualizó 'contrast' a 2.7
+[12:19:05] Se actualizó 'contrast' a 3.3
+[12:19:05] Se actualizó 'contrast' a 3.8
+[12:19:05] Se actualizó 'contrast' a 4.0
+[12:19:05] Se actualizó 'contrast' a 4.1
+[12:19:05] Se actualizó 'contrast' a 4.8
+[12:19:07] Se actualizó 'contrast' a 5.8
+[12:19:08] Se actualizó 'contrast' a 5.2
+=== Se inició la app el día 07/05/2025 a las 12:19:16 ===
+[12:19:16] FPS cambiado a 7.50
+[12:19:18] Se actualizó 'brightness' a 10.4
+[12:19:18] Se actualizó 'brightness' a 14.0
+[12:19:18] Se actualizó 'brightness' a 18.1
+[12:19:18] Se actualizó 'brightness' a 22.3
+[12:19:18] Se actualizó 'brightness' a 25.4
+[12:19:18] Se actualizó 'brightness' a 33.2
+[12:19:20] Se actualizó 'brightness' a 33.7
+[12:19:20] Se actualizó 'brightness' a 35.8
+[12:19:20] Se actualizó 'brightness' a 37.8
+[12:19:20] Se actualizó 'brightness' a 39.9
+[12:19:20] Se actualizó 'brightness' a 42.0
+[12:19:20] Se actualizó 'brightness' a 45.1
+[12:19:20] Se actualizó 'brightness' a 47.2
+[12:19:20] Se actualizó 'brightness' a 48.7
+[12:19:20] Se actualizó 'brightness' a 49.7
+[12:19:20] Se actualizó 'brightness' a 51.3
+[12:19:20] Se actualizó 'brightness' a 51.8
+[12:19:20] Se actualizó 'brightness' a 52.8
+[12:19:20] Se actualizó 'brightness' a 53.4
+=== Se inició la app el día 07/05/2025 a las 12:19:53 ===
+[12:19:53] FPS cambiado a 7.50
+[12:19:55] Se actualizó 'brightness' a 11.0
+[12:19:55] Se actualizó 'brightness' a 13.0
+[12:19:57] Se actualizó 'brightness' a 13.5
+[12:19:57] Se actualizó 'brightness' a 15.5
+[12:19:57] Se actualizó 'brightness' a 16.1
+[12:19:57] Se actualizó 'brightness' a 22.3
+[12:19:57] Se actualizó 'brightness' a 30.6
+[12:19:57] Se actualizó 'brightness' a 32.1
+[12:19:57] Se actualizó 'brightness' a 32.6
+[12:19:57] Se actualizó 'brightness' a 33.7
+[12:19:57] Se actualizó 'brightness' a 35.2
+=== Se inició la app el día 07/05/2025 a las 12:20:23 ===
+[12:20:23] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 12:20:44 ===
+[12:20:45] FPS cambiado a 7.50
+[12:20:49] Se actualizó 'brightness' a 10.4
+[12:20:49] Se actualizó 'brightness' a 13.5
+[12:20:49] Se actualizó 'brightness' a 14.5
+[12:20:49] Se actualizó 'brightness' a 22.8
+[12:20:49] Se actualizó 'brightness' a 24.9
+[12:20:49] Se actualizó 'brightness' a 29.0
+[12:20:51] Se actualizó 'contrast' a 1.3
+[12:20:51] Se actualizó 'contrast' a 1.8
+[12:20:51] Se actualizó 'contrast' a 2.1
+[12:20:51] Se actualizó 'contrast' a 2.5
+[12:20:51] Se actualizó 'contrast' a 2.7
+[12:20:51] Se actualizó 'contrast' a 2.8
+[12:20:51] Se actualizó 'contrast' a 3.0
+[12:20:51] Se actualizó 'contrast' a 3.1
+[12:20:51] Se actualizó 'contrast' a 3.2
+[12:20:52] Se actualizó 'contrast' a 3.3
+[12:20:59] Iniciando captura de imagen...
+[12:21:00] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:21:01] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:21:12] Imagen guardada manualmente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi/bla.tif
+=== Se inició la app el día 07/05/2025 a las 12:22:05 ===
+[12:22:05] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 12:22:17 ===
+=== Se inició la app el día 07/05/2025 a las 12:23:12 ===
+[12:23:13] FPS cambiado a 7.50
+[12:23:17] Se actualizó 'brightness' a 10.4
+[12:23:17] Se actualizó 'brightness' a 11.9
+[12:23:17] Se actualizó 'brightness' a 13.5
+[12:23:17] Se actualizó 'brightness' a 15.5
+[12:23:17] Se actualizó 'brightness' a 17.6
+[12:23:17] Se actualizó 'brightness' a 19.2
+[12:23:17] Se actualizó 'brightness' a 20.7
+[12:23:17] Se actualizó 'brightness' a 21.8
+[12:23:17] Se actualizó 'brightness' a 22.3
+[12:23:17] Se actualizó 'brightness' a 22.8
+[12:23:18] Se actualizó 'brightness' a 23.8
+[12:23:19] Se actualizó 'contrast' a 1.1
+[12:23:19] Se actualizó 'contrast' a 1.3
+[12:23:19] Se actualizó 'contrast' a 1.6
+[12:23:19] Se actualizó 'contrast' a 2.0
+[12:23:19] Se actualizó 'contrast' a 2.3
+[12:23:19] Se actualizó 'contrast' a 2.6
+[12:23:19] Se actualizó 'contrast' a 2.7
+[12:23:19] Se actualizó 'contrast' a 2.8
+[12:23:19] Se actualizó 'contrast' a 2.9
+[12:23:19] Se actualizó 'contrast' a 3.0
+[12:23:19] Se actualizó 'contrast' a 3.1
+[12:23:20] Se actualizó 'contrast' a 3.2
+=== Se inició la app el día 07/05/2025 a las 12:23:33 ===
+[12:23:33] FPS cambiado a 7.50
+[12:23:36] Se actualizó 'brightness' a 10.9
+[12:23:36] Se actualizó 'brightness' a 15.0
+[12:23:37] Se actualizó 'brightness' a 16.1
+[12:23:37] Se actualizó 'brightness' a 17.6
+[12:23:37] Se actualizó 'brightness' a 18.7
+[12:23:37] Se actualizó 'brightness' a 19.2
+[12:23:37] Se actualizó 'brightness' a 19.7
+[12:23:38] Se actualizó 'brightness' a 21.2
+[12:23:38] Se actualizó 'brightness' a 29.0
+[12:23:38] Se actualizó 'brightness' a 35.8
+[12:23:38] Se actualizó 'brightness' a 39.4
+[12:23:38] Se actualizó 'brightness' a 40.9
+[12:23:38] Se actualizó 'brightness' a 42.0
+[12:23:38] Se actualizó 'brightness' a 44.0
+=== Se inició la app el día 07/05/2025 a las 12:24:53 ===
+[12:24:53] FPS cambiado a 7.50
+[12:24:57] Iniciando captura de imagen...
+[12:24:59] Iniciando captura de imagen...
+[12:24:59] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:24:59] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:25:00] ROI selected: x=448, y=376, w=360, h=224
+[12:25:03] Uso de ROI activado
+[12:25:03] [INFO] ROI aplicado en preview: x=448, y=376, w=360, h=224
+[12:25:04] Iniciando captura de imagen...
+[12:25:06] [INFO] ROI aplicado: x=448, y=376, w=360, h=224
+[12:25:06] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 07/05/2025 a las 12:29:33 ===
+[12:29:33] FPS cambiado a 7.50
+[12:29:42] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[12:29:44] Guardado automático activado
+[12:29:46] Iniciando captura de imagen...
+[12:29:48] Iniciando captura de imagen...
+[12:29:50] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:29:50] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:29:50] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_122950.tif
+[12:29:50] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_122950.tif
+[12:29:52] Iniciando captura de imagen...
+[12:29:54] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:29:54] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:29:54] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_122954.tif
+[12:29:54] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_122954.tif
+[12:29:57] Se actualizó 'brightness' a 9.8
+[12:29:57] Se actualizó 'brightness' a 16.6
+[12:29:57] Se actualizó 'brightness' a 22.8
+[12:29:57] Se actualizó 'brightness' a 28.0
+[12:29:57] Se actualizó 'brightness' a 29.5
+[12:29:57] Se actualizó 'brightness' a 31.1
+[12:29:57] Se actualizó 'brightness' a 31.6
+[12:29:57] Se actualizó 'brightness' a 32.6
+[12:30:01] Preview reanudado.
+[12:30:05] Se actualizó 'brightness' a 33.2
+[12:30:05] Se actualizó 'brightness' a 34.2
+[12:30:05] Se actualizó 'brightness' a 35.2
+[12:30:06] Se actualizó 'brightness' a 35.8
+[12:30:06] Se actualizó 'brightness' a 36.3
+[12:30:06] Se actualizó 'brightness' a 37.3
+[12:30:06] Se actualizó 'brightness' a 39.9
+[12:30:07] Se actualizó 'brightness' a 40.9
+[12:30:07] Se actualizó 'brightness' a 42.5
+[12:30:07] Se actualizó 'brightness' a 46.6
+[12:30:07] Se actualizó 'brightness' a 48.2
+[12:30:07] Se actualizó 'brightness' a 51.8
+[12:30:07] Se actualizó 'brightness' a 53.9
+[12:30:07] Se actualizó 'brightness' a 56.5
+[12:30:07] Se actualizó 'brightness' a 57.5
+[12:30:07] Se actualizó 'brightness' a 59.1
+[12:30:07] Se actualizó 'brightness' a 59.6
+[12:30:13] Iniciando captura de imagen...
+[12:30:14] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:30:15] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:30:15] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_123015.tif
+[12:30:15] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_123015.tif
+[12:30:33] ROI selected: x=624, y=384, w=0, h=0
+[12:30:35] Preview reanudado.
+[12:30:38] Se actualizó 'contrast' a 1.1
+[12:30:39] Se actualizó 'contrast' a 1.5
+[12:30:39] Se actualizó 'contrast' a 2.2
+[12:30:39] Se actualizó 'contrast' a 2.6
+[12:30:39] Se actualizó 'contrast' a 3.0
+[12:30:39] Se actualizó 'contrast' a 3.6
+[12:30:39] Se actualizó 'contrast' a 3.9
+[12:30:39] Se actualizó 'contrast' a 4.1
+[12:30:39] Se actualizó 'contrast' a 4.3
+[12:30:39] Se actualizó 'contrast' a 4.5
+[12:30:39] Se actualizó 'contrast' a 4.7
+[12:30:39] Se actualizó 'contrast' a 4.9
+[12:30:39] Se actualizó 'contrast' a 5.2
+[12:30:39] Se actualizó 'contrast' a 5.4
+[12:30:39] Se actualizó 'contrast' a 5.6
+[12:30:39] Se actualizó 'contrast' a 6.1
+[12:30:39] Se actualizó 'contrast' a 6.2
+[12:30:39] Se actualizó 'contrast' a 6.3
+[12:30:39] Se actualizó 'contrast' a 6.4
+[12:30:39] Se actualizó 'contrast' a 6.5
+[12:30:40] Se actualizó 'contrast' a 6.6
+[12:30:44] Iniciando captura de imagen...
+[12:30:45] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:30:46] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:30:46] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_123046.tif
+[12:30:46] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_123046.tif
+[12:30:57] Se actualizó 'contrast' a 6.8
+[12:30:57] Se actualizó 'contrast' a 8.5
+[12:30:57] Se actualizó 'contrast' a 9.6
+[12:30:57] Se actualizó 'contrast' a 9.8
+[12:30:57] Se actualizó 'contrast' a 9.9
+[12:30:58] Se actualizó 'contrast' a 10.0
+[12:30:59] Se actualizó 'brightness' a 57.0
+[12:30:59] Se actualizó 'brightness' a 32.6
+[12:30:59] Se actualizó 'brightness' a 13.0
+[12:30:59] Se actualizó 'brightness' a 5.2
+[12:30:59] Se actualizó 'brightness' a 2.1
+[12:30:59] Se actualizó 'brightness' a 0.5
+[12:30:59] Se actualizó 'brightness' a 0.0
+[12:31:04] Iniciando captura de imagen...
+[12:31:06] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:31:06] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:31:06] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250507_123106.tif
+[12:31:06] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_123106.tif
+=== Se inició la app el día 07/05/2025 a las 12:40:12 ===
+[12:40:12] FPS cambiado a 7.50
+[12:40:16] Se actualizó 'brightness' a 10.4
+[12:40:16] Se actualizó 'brightness' a 15.5
+[12:40:16] Se actualizó 'brightness' a 16.6
+[12:40:16] Se actualizó 'brightness' a 17.1
+[12:40:16] Se actualizó 'brightness' a 17.6
+[12:40:16] Se actualizó 'brightness' a 18.1
+[12:40:16] Se actualizó 'brightness' a 19.2
+[12:40:16] Se actualizó 'brightness' a 19.7
+[12:40:17] Se actualizó 'brightness' a 20.2
+[12:40:17] Se actualizó 'brightness' a 20.7
+[12:40:17] Se actualizó 'brightness' a 21.2
+[12:40:17] Se actualizó 'brightness' a 21.8
+=== Se inició la app el día 07/05/2025 a las 12:40:35 ===
+[12:40:35] FPS cambiado a 7.50
+=== Se inició la app el día 07/05/2025 a las 12:41:03 ===
+[12:41:05] FPS cambiado a 7.50
+[12:41:08] Se actualizó 'brightness' a 10.4
+[12:41:08] Se actualizó 'brightness' a 25.4
+[12:41:08] Se actualizó 'brightness' a 28.5
+[12:41:08] Se actualizó 'brightness' a 30.1
+[12:41:08] Se actualizó 'brightness' a 30.6
+[12:41:08] Se actualizó 'brightness' a 31.6
+[12:41:09] Se actualizó 'brightness' a 32.1
+=== Se inició la app el día 07/05/2025 a las 12:43:46 ===
+[12:43:46] FPS cambiado a 7.50
+[12:43:49] Se actualizó 'brightness' a 9.0
+[12:43:50] Se actualizó 'brightness' a 10.0
+[12:43:51] Se actualizó 'brightness' a 10.4
+[12:43:52] Se actualizó 'brightness' a 23.3
+[12:43:56] Se actualizó 'contrast' a 1.1
+[12:43:56] Se actualizó 'contrast' a 1.9
+[12:43:57] Se actualizó 'contrast' a 2.0
+[12:43:57] Se actualizó 'contrast' a 2.2
+=== Se inició la app el día 07/05/2025 a las 12:44:41 ===
+[12:44:41] FPS cambiado a 7.50
+[12:44:44] Se actualizó 'brightness' a 10.4
+[12:44:44] Se actualizó 'brightness' a 29.0
+[12:44:46] Se actualizó 'contrast' a 1.1
+[12:44:47] Se actualizó 'contrast' a 2.0
+[12:44:47] Se actualizó 'contrast' a 2.2
+[12:44:48] Se actualizó 'contrast' a 2.5
+[12:44:48] Se actualizó 'contrast' a 2.6
+[12:44:50] Se actualizó 'contrast' a 2.7
+[12:44:51] Se actualizó 'contrast' a 3.6
+[12:44:51] Se actualizó 'contrast' a 3.9
+[12:44:51] Se actualizó 'contrast' a 4.3
+[12:44:52] Se actualizó 'contrast' a 3.9
+[12:44:52] Se actualizó 'contrast' a 2.9
+[12:44:53] Se actualizó 'contrast' a 1.5
+[12:44:53] Se actualizó 'contrast' a 1.2
