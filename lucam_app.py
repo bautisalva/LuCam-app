@@ -62,16 +62,6 @@ def to_8bit_for_preview(image_16bit):
     scaled = ((image_16bit - min_val) / (max_val - min_val) * 255).astype(np.uint8)
     return scaled
 
-def rescale_to_full_uint16(image):
-    """
-    Rescala una imagen uint16 al rango completo [0–65535], usando percentiles
-    para evitar que outliers (líneas oscuras, picos) arruinen el contraste.
-    """
-    p_low, p_high = np.percentile(image, (1, 99))  # 1% y 99% para proteger extremos
-    if p_high == p_low:
-        return np.zeros_like(image, dtype=np.uint16)
-    scaled = ((image - p_low) / (p_high - p_low) * 65535).clip(0, 65535).astype(np.uint16)
-    return scaled
 
 class SimulatedFrameFormat:
     def __init__(self):
@@ -150,6 +140,8 @@ class Worker(QObject):
         self.num_images = num_images
         self.mode = mode
         self.blur_strength = blur_strength
+        self._lock = threading.Lock()  # Add thread lock
+        self._running = True  # Add running flag
 
     def run(self):
         try:
@@ -164,7 +156,6 @@ class Worker(QObject):
             if not images:
                 print("[ERROR] No se capturó ninguna imagen válida.")
                 return
-
             # Stack and process images based on the selected mode
             if self.mode == "Promedio":
                 stack = np.stack(images).astype(np.float32)
@@ -184,7 +175,9 @@ class Worker(QObject):
 
         except Exception:
             pass
-        
+            
+    def stop(self):
+        self._running = False
 class PreviewWorker(QObject):
     """
     Worker class for acquiring and emitting live preview frames.
@@ -380,6 +373,7 @@ class CameraApp(QWidget):
     
         # Launch full GUI setup
         self.initUI()
+
 
 
     def initUI(self):
@@ -691,14 +685,28 @@ class CameraApp(QWidget):
     
         # Mostrar inmediatamente la imagen con o sin ROI
         if self.last_full_image is not None:
-            if self.roi_enabled:
-                x = self.roi_x_input.value()
-                y = self.roi_y_input.value()
-                w = self.roi_width_input.value()
-                h = self.roi_height_input.value()
+            x = self.roi_x_input.value()
+            y = self.roi_y_input.value()
+            w = self.roi_width_input.value()
+            h = self.roi_height_input.value()
+    
+            roi_valid = (
+                self.roi_enabled and
+                w >= 16 and h >= 16 and
+                x + w <= self.last_full_image.shape[1] and
+                y + h <= self.last_full_image.shape[0]
+            )
+    
+            if roi_valid:
                 image = self.last_full_image[y:y+h, x:x+w]
+                self.log_message(f"[INFO] ROI aplicado en preview: x={x}, y={y}, w={w}, h={h}")
             else:
                 image = self.last_full_image.copy()
+                if self.roi_enabled:
+                    self.log_message("[WARNING] ROI inválido en preview. Mostrando imagen completa.")
+                else:
+                    self.log_message("[INFO] ROI desactivado. Mostrando imagen completa.")
+    
             self.display_captured_image_in_tab(image)
 
 
@@ -732,19 +740,29 @@ class CameraApp(QWidget):
         """
         Updates a given camera property both in the camera object
         and synchronizes the value across the GUI slider and input field.
-
+    
         Parameters:
             prop (str): property name (e.g., 'brightness').
             value (float): new value to assign.
         """
         if self.camera:
             self.camera.set_properties(**{prop: value})
+    
+        # Actualiza sliders y textbox
         self.sliders[prop].blockSignals(True)
         self.sliders[prop].setValue(int(value * 10))
         self.sliders[prop].blockSignals(False)
         self.inputs[prop].setText(f"{value:.1f}")
         self.log_message(f"Se actualizó '{prop}' a {value:.1f}")
-        
+    
+        #Captura una imagen nueva inmediatamente para reflejar el cambio
+        if self.preview_mode:
+            try:
+                image = self.camera.TakeSnapshot()
+                self.display_preview_image(image)
+            except Exception as e:
+                self.log_message(f"[ERROR] No se pudo actualizar el preview tras cambiar {prop}: {e}")
+
     def set_roi(self, width, height, x_offset=0, y_offset=0):
         """
         Reduces the ROI (Region of Interest) by setting a smaller width and height.
@@ -781,22 +799,39 @@ class CameraApp(QWidget):
         Callback triggered when user selects a region with the mouse.
         Updates the spinboxes and applies the ROI to the camera.
         """
-        # Ajustar escala si hace falta (en este ejemplo asumimos preview 1:1)
-        # Si hacés resize, agregamos un factor
-    
-        # Redondear ancho y alto a múltiplos de 8
+        # Get current camera format
+        frameformat, fps = self.camera.GetFormat()
+        max_width = frameformat.width
+        max_height = frameformat.height
+        
+        # Calculate scaling factor if preview is resized
+        scale_x = max_width / self.preview_label_capture.width()
+        scale_y = max_height / self.preview_label_capture.height()
+        
+        # Scale coordinates to camera resolution
+        x = int(x * scale_x)
+        y = int(y * scale_y)
+        w = int(w * scale_x)
+        h = int(h * scale_y)
+        
+        # Round to multiples of 8
         w = (w // 8) * 8
         h = (h // 8) * 8
         x = (x // 8) * 8
         y = (y // 8) * 8
-    
+        
+        # Validate bounds
+        x = max(0, min(x, max_width - 8))
+        y = max(0, min(y, max_height - 8))
+        w = min(w, max_width - x)
+        h = min(h, max_height - y)
+        
         self.roi_x_input.setValue(x)
         self.roi_y_input.setValue(y)
         self.roi_width_input.setValue(max(w, 8))
         self.roi_height_input.setValue(max(h, 8))
-    
         
-        self.log_message(f"ROI seleccionado con mouse: x={x}, y={y}, w={w}, h={h}")
+        self.log_message(f"ROI selected: x={x}, y={y}, w={w}, h={h}")
 
     def set_property_from_input(self, prop, field):
         """
@@ -938,8 +973,7 @@ class CameraApp(QWidget):
         filename = f"{tipo}_{timestamp}.tif"
         full_path = os.path.join(self.work_dir, filename)
         try:
-            image_to_save = rescale_to_full_uint16(image)
-            imsave(full_path, image_to_save)
+            imsave(full_path,image)
             self.log_message(f"Imagen guardada automáticamente en: {full_path}")
         except Exception as e:
             self.log_message(f"[ERROR] No se pudo guardar la imagen en: {full_path}. Detalle: {e}")
@@ -1007,10 +1041,11 @@ class CameraApp(QWidget):
         Handles the display of a newly captured image.
         Applies optional background subtraction with gain/offset
         and sets GUI buttons accordingly.
-
+    
         Parameters:
             image (np.ndarray): final processed image.
         """
+        # Fondo (si corresponde)
         if (self.background_enabled and
                 self.background_image is not None and
                 self.background_image.shape == image.shape):
@@ -1029,46 +1064,52 @@ class CameraApp(QWidget):
             result = image.copy()
             tipo_guardado = "normal"
     
-        if self.roi_enabled:
-            x = self.roi_x_input.value()
-            y = self.roi_y_input.value()
-            w = self.roi_width_input.value()
-            h = self.roi_height_input.value()
-
-            self.log_message(f"[DEBUG] ROI solicitado: x={x}, y={y}, w={w}, h={h}")
-            self.log_message(f"[DEBUG] Tamaño imagen: {result.shape}")
-
-            # Validar si ROI está dentro de los límites
-            if (x + w > result.shape[1]) or (y + h > result.shape[0]) or w <= 0 or h <= 0:
-                self.log_message("[ERROR] ROI fuera de límites o inválido. Mostrando imagen completa.")
-                result_roi = result.copy()
-            else:
-                result_roi = result[y:y+h, x:x+w]
+        # ROI (si corresponde)
+        x = self.roi_x_input.value()
+        y = self.roi_y_input.value()
+        w = self.roi_width_input.value()
+        h = self.roi_height_input.value()
+    
+        roi_valid = (
+            self.roi_enabled and
+            w >= 16 and h >= 16 and
+            x + w <= result.shape[1] and
+            y + h <= result.shape[0]
+        )
+    
+        if roi_valid:
+            result_roi = result[y:y+h, x:x+w]
+            self.log_message(f"[INFO] ROI aplicado: x={x}, y={y}, w={w}, h={h}")
         else:
             result_roi = result.copy()
-
-
+            if self.roi_enabled:
+                self.log_message("[WARNING] ROI inválido o trivial. Mostrando imagen completa.")
+            else:
+                self.log_message("[INFO] ROI desactivado. Mostrando imagen completa.")
+    
+        # Guardar estado interno
         self.last_full_image = result.copy()
         self.captured_image = result_roi
-
-
-        # Mostrar la imagen con ROI
-        self.display_captured_image_in_tab(result_roi)
-
     
+        # Mostrar en interfaz
+        self.display_captured_image_in_tab(result_roi)
+    
+        # Activar botones
         self.save_button.setEnabled(True)
         self.toggle_preview_button.setEnabled(True)
         self.log_message("Imagen capturada y mostrada en pestaña 'Captura'.")
     
+        # Guardado automático
         if self.auto_save:
             self.save_image_automatically(result, tipo_guardado)
-            # Guardar RAW también
+    
+            # Guardar RAW (con ROI pero sin fondo restado)
             raw_folder = os.path.join(self.work_dir, "raw")
             os.makedirs(raw_folder, exist_ok=True)
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"cruda_{timestamp}.tif"
             raw_path = os.path.join(raw_folder, filename)
-            imsave(raw_path, image)
+            imsave(raw_path, result_roi)
             self.log_message(f"Imagen cruda guardada en: {raw_path}")
 
     def display_captured_image_in_tab(self, image, scale_factor=1):
@@ -1232,20 +1273,28 @@ class CameraApp(QWidget):
         self.log_message("Preview reanudado.")
 
     def display_preview_image(self, image, scale_factor=1):
+        """
+        Displays a live preview image in the preview panel.
+        Converts to 8-bit, scales if needed.
+        """
+        # Convert to grayscale if needed
         if len(image.shape) == 3:
             image = (rgb2gray(image) * 65535).astype(np.uint16)
     
-        height, width = image.shape
-        new_width = int(width * scale_factor)
-        new_height = int(height * scale_factor)
+        # Resize if needed
+        if scale_factor != 1:
+            height, width = image.shape
+            new_width = int(width * scale_factor)
+            new_height = int(height * scale_factor)
+            image = resize(image, (new_height, new_width), preserve_range=True).astype(np.uint16)
     
-        resized_image = resize(image, (new_height, new_width), preserve_range=True).astype(np.uint16)
-        image_8bit = to_8bit_for_preview(resized_image)
+        # Convert to 8-bit for display
+        image_8bit = to_8bit_for_preview(image)
+        qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0],
+                        image_8bit.shape[1], QImage.Format_Grayscale8)
     
-        bytes_per_line = image_8bit.shape[1]
-        qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0], bytes_per_line, QImage.Format.Format_Grayscale8)
+        # Update preview display
         self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
-
 
 
     def display_image(self, image, scale_factor=1):
