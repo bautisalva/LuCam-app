@@ -758,10 +758,10 @@ class CameraApp(QWidget):
         #Captura una imagen nueva inmediatamente para reflejar el cambio
         if self.preview_mode:
             try:
-                image = self.camera.TakeSnapshot()
-                self.display_preview_image(image)
+                self.preview_worker.resume()
             except Exception as e:
                 self.log_message(f"[ERROR] No se pudo actualizar el preview tras cambiar {prop}: {e}")
+
 
     def set_roi(self, width, height, x_offset=0, y_offset=0):
         """
