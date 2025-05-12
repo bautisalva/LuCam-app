@@ -289,8 +289,11 @@ class CameraApp(QWidget):
         # Try initializing Lucam camera; fallback to simulation
         try:
             self.camera = Lucam()
+            self.camera.CameraClose()  # Cerrá por si quedó colgada
+            self.camera = Lucam()      # Volvé a abrirla limpia
             self.simulation = False
-            print("[INFO] Cámara Lucam inicializada correctamente.")
+            print("[INFO] Cámara Lucam reiniciada al iniciar.")
+
         except Exception as e:
             print(f"[WARNING] No se pudo inicializar Lucam. Se usará SimulatedCamera. Error: {e}")
             self.camera = SimulatedCamera()
@@ -1351,6 +1354,7 @@ class CameraApp(QWidget):
         if hasattr(self, "log_file") and self.log_file:
             self.log_file.close()
         event.accept()
+        
 
 # Main execution block
 if __name__ == "__main__":

@@ -2556,3 +2556,43 @@
 [11:20:16] Se actualizó 'contrast' a 1.6
 [11:20:17] Se actualizó 'contrast' a 1.5
 [11:20:17] Se actualizó 'contrast' a 1.4
+=== Se inició la app el día 12/05/2025 a las 11:20:54 ===
+[11:20:54] FPS cambiado a 7.50
+[11:21:01] Se actualizó 'brightness' a 20.0
+[11:21:01] Se actualizó 'brightness' a 20.0
+[11:21:01] Se actualizó 'contrast' a 3.9
+[11:21:01] Se actualizó 'contrast' a 3.9
+[11:21:01] Se actualizó 'saturation' a 10.0
+[11:21:01] Se actualizó 'hue' a 0.0
+[11:21:01] Se actualizó 'gamma' a 1.0
+[11:21:01] Se actualizó 'gamma' a 1.0
+[11:21:01] Se actualizó 'exposure' a 330.0
+[11:21:01] Se actualizó 'exposure' a 330.0
+[11:21:01] Se actualizó 'gain' a 3.8
+[11:21:01] Se actualizó 'gain' a 3.8
+[11:21:01] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:21:01] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+=== Se inició la app el día 12/05/2025 a las 11:21:25 ===
+[11:21:25] FPS cambiado a 15.00
+=== Se inició la app el día 12/05/2025 a las 11:21:33 ===
+[11:21:33] FPS cambiado a 15.00
+=== Se inició la app el día 12/05/2025 a las 11:21:42 ===
+[11:21:42] FPS cambiado a 7.50
+[11:21:49] Se actualizó 'brightness' a 20.0
+[11:21:49] Se actualizó 'brightness' a 20.0
+[11:21:49] Se actualizó 'contrast' a 3.9
+[11:21:49] Se actualizó 'contrast' a 3.9
+[11:21:49] Se actualizó 'saturation' a 10.0
+[11:21:49] Se actualizó 'hue' a 0.0
+[11:21:49] Se actualizó 'gamma' a 1.0
+[11:21:49] Se actualizó 'gamma' a 1.0
+[11:21:49] Se actualizó 'exposure' a 330.0
+[11:21:49] Se actualizó 'exposure' a 330.0
+[11:21:49] Se actualizó 'gain' a 3.8
+[11:21:49] Se actualizó 'gain' a 3.8
+[11:21:49] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:21:49] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+[11:21:59] Se actualizó 'brightness' a 10.0
+[11:21:59] Se actualizó 'brightness' a 10.0
+=== Se inició la app el día 12/05/2025 a las 11:33:03 ===
+[11:33:03] FPS cambiado a 7.50
