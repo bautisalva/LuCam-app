@@ -289,8 +289,11 @@ class CameraApp(QWidget):
         # Try initializing Lucam camera; fallback to simulation
         try:
             self.camera = Lucam()
+            self.camera.CameraClose()  # Cerrá por si quedó colgada
+            self.camera = Lucam()      # Volvé a abrirla limpia
             self.simulation = False
-            print("[INFO] Cámara Lucam inicializada correctamente.")
+            print("[INFO] Cámara Lucam reiniciada al iniciar.")
+
         except Exception as e:
             print(f"[WARNING] No se pudo inicializar Lucam. Se usará SimulatedCamera. Error: {e}")
             self.camera = SimulatedCamera()
@@ -758,10 +761,10 @@ class CameraApp(QWidget):
         #Captura una imagen nueva inmediatamente para reflejar el cambio
         if self.preview_mode:
             try:
-                image = self.camera.TakeSnapshot()
-                self.display_preview_image(image)
+                self.preview_worker.resume()
             except Exception as e:
                 self.log_message(f"[ERROR] No se pudo actualizar el preview tras cambiar {prop}: {e}")
+
 
     def set_roi(self, width, height, x_offset=0, y_offset=0):
         """
@@ -956,28 +959,39 @@ class CameraApp(QWidget):
         self.auto_save = (text == "Sí")
         estado = "activado" if self.auto_save else "desactivado"
         self.log_message(f"Guardado automático {estado}")
-        
     
-    def save_image_automatically(self, image, tipo):
-        """
-        Saves an image to disk using timestamped filename in working directory.
-
-        Parameters:
-            image (np.ndarray): image to save.
-            tipo (str): label prefix (e.g., 'fondo', 'resta').
-        """
-        if not self.work_dir:
-            self.log_message("[ERROR] No se definió directorio de trabajo para guardar imagen.")
-            return
+    def save_auto_images(self, full_image, roi_image, roi_coords):
+        x, y, w, h = roi_coords
+        """Save all automatic image versions"""
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{tipo}_{timestamp}.tif"
-        full_path = os.path.join(self.work_dir, filename)
-        try:
-            imsave(full_path,image)
-            self.log_message(f"Imagen guardada automáticamente en: {full_path}")
-        except Exception as e:
-            self.log_message(f"[ERROR] No se pudo guardar la imagen en: {full_path}. Detalle: {e}")
     
+        # 1. Save raw full image (no ROI, no processing)
+        raw_folder = os.path.join(self.work_dir, "raw")
+        os.makedirs(raw_folder, exist_ok=True)
+        raw_path = os.path.join(raw_folder, f"cruda_{timestamp}.tif")
+        imsave(raw_path, full_image)
+        self.log_message(f"Imagen cruda (completa) guardada en: {raw_path}")
+    
+        # 2. Save normal image (ROI + optional blur, NO background subtraction)
+        normal_image = roi_image
+        if self.blur_strength > 0:
+            normal_image = blur_uint16(normal_image, sigma=self.blur_strength)
+        
+        normal_path = os.path.join(self.work_dir, f"normal_{timestamp}.tif")
+        imsave(normal_path, normal_image)
+        self.log_message(f"Imagen normal (ROI + blur) guardada en: {normal_path}")
+    
+        # 3. Save resta image (ROI + blur + background subtraction)
+        if self.background_enabled and self.background_image is not None:
+            resta_image = self.apply_background_subtraction(
+                normal_image, x, y, w, h
+            )
+            resta_path = os.path.join(self.work_dir, f"resta_{timestamp}.tif")
+            imsave(resta_path, resta_image)
+            self.log_message(f"Imagen resta (ROI + blur + fondo) guardada en: {resta_path}")
+        else:
+            self.log_message("Fondo no activado o no disponible, imagen 'resta' no guardada.")
+            
     def capture_background(self):
         """
         Initiates the background image acquisition process.
@@ -1005,8 +1019,12 @@ class CameraApp(QWidget):
         self.background_image = image
         self.display_image(image)
         self.log_message("Fondo capturado correctamente.")
-        if self.auto_save:
-            self.save_image_automatically(image, "fondo")
+        if self.auto_save and self.work_dir:
+            fondo_path = os.path.join(self.work_dir, f"fondo_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.tif")
+            imsave(fondo_path, image)
+            self.log_message(f"Imagen de fondo guardada en: {fondo_path}")
+
+
     
     def toggle_background(self, text):
         """
@@ -1018,7 +1036,31 @@ class CameraApp(QWidget):
         self.background_enabled = (text == "Sí")
         estado = "activada" if self.background_enabled else "desactivada"
         self.log_message(f"Restar fondo {estado}")
+
+    def apply_background_subtraction(self, image_roi, x=0, y=0, w=None, h=None):
+        """
+        Applies background subtraction using a cropped ROI from the stored background.
+        """
+        if (
+            self.background_image is None or
+            w is None or h is None or
+            self.background_image.shape[0] < y + h or
+            self.background_image.shape[1] < x + w
+        ):
+            return image_roi
     
+        bg_roi = self.background_image[y:y+h, x:x+w]
+        a = self.background_gain
+        b = self.background_offset
+    
+        image_float = image_roi.astype(np.float32)
+        bg_float = bg_roi.astype(np.float32)
+    
+        diff = a * (image_float - bg_float + b)
+        diff_centered = diff + 32768
+        return np.clip(diff_centered, 0, 65535).astype(np.uint16)
+    
+
     def capture_image(self):
         """
         Starts the acquisition of the main image using Worker.
@@ -1035,7 +1077,7 @@ class CameraApp(QWidget):
         self.worker.image_captured.connect(self.display_captured_image)
         threading.Thread(target=self.worker.run, daemon=True).start()
         self.log_message("Iniciando captura de imagen...")
-    
+        
     def display_captured_image(self, image):
         """
         Handles the display of a newly captured image.
@@ -1045,26 +1087,10 @@ class CameraApp(QWidget):
         Parameters:
             image (np.ndarray): final processed image.
         """
-        # Fondo (si corresponde)
-        if (self.background_enabled and
-                self.background_image is not None and
-                self.background_image.shape == image.shape):
-    
-            a = self.background_gain
-            b = self.background_offset
-    
-            image_float = image.astype(np.float32)
-            background_float = self.background_image.astype(np.float32)
-    
-            diff = a * (image_float - background_float + b)
-            diff_centered = diff + 32768
-            result = np.clip(diff_centered, 0, 65535).astype(np.uint16)
-            tipo_guardado = "resta"
-        else:
-            result = image.copy()
-            tipo_guardado = "normal"
-    
-        # ROI (si corresponde)
+        # Store the original full image without any processing
+        self.last_full_image = image.copy()
+        
+        # Apply ROI if enabled
         x = self.roi_x_input.value()
         y = self.roi_y_input.value()
         w = self.roi_width_input.value()
@@ -1073,45 +1099,44 @@ class CameraApp(QWidget):
         roi_valid = (
             self.roi_enabled and
             w >= 16 and h >= 16 and
-            x + w <= result.shape[1] and
-            y + h <= result.shape[0]
+            x + w <= image.shape[1] and
+            y + h <= image.shape[0]
         )
     
         if roi_valid:
-            result_roi = result[y:y+h, x:x+w]
+            image_roi = image[y:y+h, x:x+w]
             self.log_message(f"[INFO] ROI aplicado: x={x}, y={y}, w={w}, h={h}")
         else:
-            result_roi = result.copy()
+            image_roi = image.copy()
             if self.roi_enabled:
                 self.log_message("[WARNING] ROI inválido o trivial. Mostrando imagen completa.")
             else:
                 self.log_message("[INFO] ROI desactivado. Mostrando imagen completa.")
     
-        # Guardar estado interno
-        self.last_full_image = result.copy()
-        self.captured_image = result_roi
+        # Store the ROI-applied image
+        self.captured_image = image_roi
     
-        # Mostrar en interfaz
-        self.display_captured_image_in_tab(result_roi)
+        # Apply background subtraction if needed (only for display)
+        if self.background_enabled and self.background_image is not None:
+            display_image = self.apply_background_subtraction(image_roi, x, y, w, h)
+        else:
+            display_image = image_roi
     
-        # Activar botones
+        # Show in interface
+        self.display_captured_image_in_tab(display_image)
         self.save_button.setEnabled(True)
         self.toggle_preview_button.setEnabled(True)
         self.log_message("Imagen capturada y mostrada en pestaña 'Captura'.")
     
-        # Guardado automático
+        # Auto-save different versions
         if self.auto_save:
-            self.save_image_automatically(result, tipo_guardado)
-    
-            # Guardar RAW (con ROI pero sin fondo restado)
-            raw_folder = os.path.join(self.work_dir, "raw")
-            os.makedirs(raw_folder, exist_ok=True)
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"cruda_{timestamp}.tif"
-            raw_path = os.path.join(raw_folder, filename)
-            imsave(raw_path, result_roi)
-            self.log_message(f"Imagen cruda guardada en: {raw_path}")
+            self.save_auto_images(
+                full_image=image.copy(),
+                roi_image=image_roi.copy(),
+                roi_coords=(x, y, w, h)
+            )
 
+            
     def display_captured_image_in_tab(self, image, scale_factor=1):
         if len(image.shape) == 3:
             image = (rgb2gray(image) * 65535).astype(np.uint16)
@@ -1351,6 +1376,7 @@ class CameraApp(QWidget):
         if hasattr(self, "log_file") and self.log_file:
             self.log_file.close()
         event.accept()
+        
 
 # Main execution block
 if __name__ == "__main__":

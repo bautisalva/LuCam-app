@@ -152,8 +152,8 @@ class ImageEnhancer:
 
 from skimage.io import imread
 
-#imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/2000.tif")
-imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
+imagen = imread(r"C:\Users\Marina\Documents\Labo 6\LuCam-app\test\test fotos\Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
+#imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
 enhancer = ImageEnhancer(imagen=imagen)
 binary, contornos = enhancer.procesar(
     suavizado=3,
@@ -169,7 +169,7 @@ from matplotlib.widgets import RectangleSelector
 from imageio.v2 import imread
 
 # Cargar y recortar imagen
-imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
+#imagen = imread("C:/Users/Tomas/Desktop/FACULTAD/LABO 6/Resta-P8139-150Oe-50ms-1000.tif")[400:700, 475:825]
 
 
 #background = gaussian(im.astype(np.float32), sigma=1000, preserve_range=True)
@@ -227,4 +227,5 @@ x = np.linspace(0,255,1000)
 y = (x-79)*(np.tanh((x-27)/(27-12))-np.tanh((x-131)/(131-117)))
 
 plt.plot(x,y)
+
 

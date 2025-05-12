@@ -2201,3 +2201,895 @@
 [13:10:38] Imagen capturada y mostrada en pestaña 'Captura'.
 [13:10:38] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250507_131038.tif
 [13:10:38] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_131038.tif
+=== Se inició la app el día 12/05/2025 a las 11:04:49 ===
+[11:04:49] FPS cambiado a 7.50
+[11:05:03] Se actualizó 'brightness' a 10.4
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 14.0
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 14.5
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 15.0
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 15.5
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 16.1
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 16.6
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:09] Se actualizó 'brightness' a 17.1
+[11:05:09] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:09] Se actualizó 'brightness' a 17.6
+[11:05:09] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:09] Se actualizó 'brightness' a 18.1
+[11:05:09] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 18.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 19.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 20.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 21.2
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 21.8
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 22.3
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 22.8
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 22.3
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 20.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 19.2
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 16.6
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 15.0
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 13.0
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 11.9
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 10.9
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 9.8
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 8.8
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 8.3
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 7.8
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 7.3
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 6.7
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 6.2
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 5.7
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 4.7
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 3.6
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 3.1
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 2.6
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 2.1
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 1.6
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 1.0
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 0.5
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 0.0
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 1.0
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 9.3
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 14.5
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 17.6
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 19.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 21.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 23.3
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 24.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 26.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 29.0
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 31.1
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 33.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 34.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 34.7
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 35.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 35.8
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 36.8
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 37.3
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 38.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 39.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 40.4
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:18] Se actualizó 'brightness' a 40.9
+[11:05:18] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:18] Se actualizó 'brightness' a 41.5
+[11:05:18] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:19] Se actualizó 'contrast' a 1.1
+[11:05:19] [ERROR] No se pudo actualizar el preview tras cambiar contrast: <lucam.Lucam object at 0x00000251F5277D90>
+=== Se inició la app el día 12/05/2025 a las 11:05:26 ===
+[11:05:26] FPS cambiado a 7.50
+=== Se inició la app el día 12/05/2025 a las 11:05:42 ===
+[11:05:42] FPS cambiado a 7.50
+[11:05:47] Se actualizó 'brightness' a 10.4
+[11:05:48] Se actualizó 'brightness' a 12.4
+[11:05:48] Se actualizó 'brightness' a 15.5
+[11:05:50] Se actualizó 'brightness' a 16.1
+[11:05:50] Se actualizó 'brightness' a 18.7
+[11:05:51] Se actualizó 'brightness' a 22.8
+[11:05:58] Se actualizó 'exposure' a 13.9
+[11:05:58] Se actualizó 'exposure' a 474.1
+[11:06:00] Se actualizó 'exposure' a 479.3
+[11:06:01] Se actualizó 'exposure' a 500.0
+[11:06:09] Se actualizó 'contrast' a 1.1
+[11:06:10] Se actualizó 'contrast' a 1.4
+[11:06:10] Se actualizó 'contrast' a 1.7
+[11:06:11] Se actualizó 'contrast' a 2.1
+[11:06:11] Se actualizó 'contrast' a 2.4
+[11:06:12] Se actualizó 'contrast' a 2.3
+[11:06:13] Se actualizó 'contrast' a 2.2
+[11:06:13] Se actualizó 'contrast' a 2.3
+[11:06:14] Se actualizó 'contrast' a 2.0
+[11:06:14] Se actualizó 'contrast' a 1.8
+[11:06:17] Se actualizó 'contrast' a 1.7
+[11:06:18] Se actualizó 'contrast' a 1.5
+[11:06:19] Se actualizó 'brightness' a 22.3
+[11:06:20] Se actualizó 'brightness' a 10.9
+[11:06:21] Se actualizó 'brightness' a 10.4
+[11:06:21] Se actualizó 'brightness' a 9.8
+[11:06:22] Se actualizó 'brightness' a 7.3
+[11:06:22] Se actualizó 'brightness' a 2.6
+[11:06:23] Se actualizó 'brightness' a 2.1
+[11:06:24] Se actualizó 'brightness' a 4.7
+[11:06:24] Se actualizó 'brightness' a 5.2
+[11:06:26] Se actualizó 'brightness' a 5.7
+[11:06:26] Se actualizó 'brightness' a 10.4
+[11:06:27] Se actualizó 'brightness' a 11.9
+[11:06:31] Se actualizó 'brightness' a 11.4
+[11:06:31] Se actualizó 'brightness' a 10.9
+[11:06:33] Se actualizó 'brightness' a 10.4
+[11:06:34] Se actualizó 'brightness' a 6.7
+[11:06:36] Se actualizó 'brightness' a 7.7
+[11:06:39] Se actualizó 'brightness' a 8.7
+[11:06:59] Se actualizó 'brightness' a 10.0
+[11:07:00] Se actualizó 'brightness' a 10.0
+[11:07:00] Se actualizó 'contrast' a 1.8
+[11:07:01] Se actualizó 'contrast' a 1.8
+[11:07:01] Se actualizó 'saturation' a 10.0
+[11:07:02] Se actualizó 'hue' a 0.0
+[11:07:02] Se actualizó 'gamma' a 10.0
+[11:07:03] Se actualizó 'exposure' a 10.0
+[11:07:03] Se actualizó 'exposure' a 10.0
+[11:07:03] Se actualizó 'gain' a 1.0
+[11:07:04] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:07:04] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_preview.json
+=== Se inició la app el día 12/05/2025 a las 11:07:26 ===
+[11:07:26] FPS cambiado a 7.50
+[11:07:40] Se actualizó 'brightness' a 1.0
+[11:07:40] Se actualizó 'brightness' a 1.0
+[11:07:43] Se actualizó 'brightness' a 1.0
+[11:07:45] Se actualizó 'contrast' a 1.4
+[11:07:46] Se actualizó 'contrast' a 1.4
+[11:07:48] Se actualizó 'contrast' a 1.4
+[11:07:55] Se actualizó 'gamma' a 1.0
+[11:07:55] Se actualizó 'gamma' a 1.0
+[11:07:57] Se actualizó 'gamma' a 1.0
+[11:07:59] Se actualizó 'exposure' a 13.9
+[11:07:59] Se actualizó 'exposure' a 500.0
+[11:08:06] Se actualizó 'gain' a 3.7
+[11:08:06] Se actualizó 'gain' a 3.7
+[11:08:15] Se actualizó 'gain' a 3.7
+[11:08:18] Se actualizó 'gain' a 3.7
+[11:08:33] Preview parameters saved to C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+[11:09:05] Se actualizó 'contrast' a 1.5
+[11:09:05] Se actualizó 'contrast' a 1.8
+[11:09:06] Se actualizó 'contrast' a 2.0
+[11:09:10] Se actualizó 'contrast' a 1.9
+[11:09:10] Se actualizó 'contrast' a 1.0
+=== Se inició la app el día 12/05/2025 a las 11:09:22 ===
+[11:09:22] FPS cambiado a 7.50
+[11:09:33] Se actualizó 'brightness' a 1.0
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'brightness' a 1.0
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'contrast' a 1.4
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar contrast: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'contrast' a 1.4
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar contrast: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'saturation' a 10.0
+[11:09:33] Se actualizó 'hue' a 0.0
+[11:09:34] Se actualizó 'gamma' a 1.0
+[11:09:34] Se actualizó 'gamma' a 1.0
+[11:09:35] Se actualizó 'exposure' a 500.0
+[11:09:35] Se actualizó 'exposure' a 500.0
+[11:09:36] Se actualizó 'gain' a 3.7
+[11:09:36] Se actualizó 'gain' a 3.7
+[11:09:37] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:09:37] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+[11:10:14] Iniciando captura de imagen...
+[11:10:17] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:17] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:17] Iniciando captura de imagen...
+[11:10:20] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:20] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:21] Preview reanudado.
+[11:10:29] Iniciando captura de imagen...
+[11:10:32] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:32] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:33] Iniciando captura de imagen...
+[11:10:36] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:36] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:37] Iniciando captura de imagen...
+[11:10:40] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:40] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:44] Iniciando captura de imagen...
+[11:10:47] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:47] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:52] Preview reanudado.
+[11:11:05] Iniciando captura de imagen...
+[11:11:07] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:07] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:10] Iniciando captura de imagen...
+[11:11:12] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:12] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:13] Iniciando captura de imagen...
+[11:11:15] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:16] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:19] Iniciando captura de imagen...
+[11:11:21] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:28] Iniciando captura de imagen...
+[11:11:30] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:33] Iniciando captura de imagen...
+[11:11:36] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:36] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:40] Iniciando captura de imagen...
+[11:11:42] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:42] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:57] Preview reanudado.
+[11:12:02] Se actualizó 'brightness' a 1.6
+[11:12:02] Se actualizó 'brightness' a 7.3
+[11:12:07] Se actualizó 'brightness' a 1.0
+[11:12:08] Se actualizó 'brightness' a 1.0
+[11:12:15] Se actualizó 'brightness' a 2.0
+[11:12:16] Se actualizó 'brightness' a 2.0
+[11:12:18] Se actualizó 'brightness' a 1.0
+[11:12:19] Se actualizó 'brightness' a 1.0
+[11:12:23] Se actualizó 'brightness' a 1.0
+[11:12:32] Iniciando captura de imagen...
+[11:12:35] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:12:35] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 12/05/2025 a las 11:13:17 ===
+[11:13:17] FPS cambiado a 7.50
+[11:13:22] Se actualizó 'brightness' a 11.0
+[11:13:22] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5099EA0>
+[11:13:25] Se actualizó 'brightness' a 12.0
+[11:13:31] Se actualizó 'brightness' a 12.4
+[11:13:32] Se actualizó 'brightness' a 15.5
+[11:13:32] Se actualizó 'brightness' a 22.8
+[11:13:40] Se actualizó 'exposure' a 13.9
+[11:13:40] Se actualizó 'exposure' a 277.6
+[11:13:41] Se actualizó 'exposure' a 481.9
+[11:13:41] Se actualizó 'exposure' a 500.0
+[11:13:50] Se actualizó 'gain' a 10.0
+[11:13:51] Se actualizó 'gain' a 375.0
+[11:13:59] Se actualizó 'gain' a 375.0
+[11:14:03] Se actualizó 'gain' a 3.7
+[11:14:03] Se actualizó 'gain' a 3.8
+[11:14:13] Se actualizó 'gain' a 3.8
+[11:14:13] Se actualizó 'gain' a 3.8
+[11:14:17] Se actualizó 'exposure' a 330.0
+[11:14:18] Se actualizó 'exposure' a 330.0
+[11:14:20] Se actualizó 'exposure' a 330.0
+[11:14:21] Se actualizó 'gamma' a 1.0
+[11:14:22] Se actualizó 'gamma' a 1.0
+[11:14:23] Se actualizó 'gamma' a 1.0
+[11:14:27] Se actualizó 'contrast' a 3.8
+[11:14:27] Se actualizó 'contrast' a 3.9
+[11:14:30] Se actualizó 'contrast' a 3.9
+[11:14:31] Se actualizó 'contrast' a 3.9
+[11:14:33] Se actualizó 'brightness' a 1.0
+[11:14:34] Se actualizó 'brightness' a 1.0
+[11:14:41] Se actualizó 'brightness' a 0.0
+[11:14:42] Se actualizó 'brightness' a 0.0
+[11:14:46] Se actualizó 'brightness' a 10.0
+[11:14:46] Se actualizó 'brightness' a 10.0
+[11:15:04] Se actualizó 'brightness' a 100.0
+[11:15:05] Se actualizó 'brightness' a 100.0
+[11:15:09] Se actualizó 'brightness' a 50.0
+[11:15:09] Se actualizó 'brightness' a 50.0
+[11:15:13] Se actualizó 'brightness' a 1.0
+[11:15:14] Se actualizó 'brightness' a 1.0
+[11:15:16] Se actualizó 'brightness' a 2.0
+[11:15:16] Se actualizó 'brightness' a 2.0
+[11:15:19] Se actualizó 'brightness' a 3.0
+[11:15:19] Se actualizó 'brightness' a 3.0
+[11:15:22] Se actualizó 'brightness' a 10.0
+[11:15:22] Se actualizó 'brightness' a 10.0
+[11:15:26] Se actualizó 'brightness' a 20.0
+[11:15:27] Se actualizó 'brightness' a 20.0
+[11:15:33] Se actualizó 'brightness' a 20.0
+[11:15:45] Preview parameters saved to C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+=== Se inició la app el día 12/05/2025 a las 11:20:12 ===
+[11:20:12] FPS cambiado a 7.50
+[11:20:15] Se actualizó 'contrast' a 1.1
+[11:20:15] Se actualizó 'contrast' a 1.3
+[11:20:15] Se actualizó 'contrast' a 1.5
+[11:20:15] Se actualizó 'contrast' a 1.7
+[11:20:15] Se actualizó 'contrast' a 1.9
+[11:20:15] Se actualizó 'contrast' a 2.2
+[11:20:15] Se actualizó 'contrast' a 2.5
+[11:20:15] Se actualizó 'contrast' a 2.8
+[11:20:16] Se actualizó 'contrast' a 2.7
+[11:20:16] Se actualizó 'contrast' a 2.1
+[11:20:16] Se actualizó 'contrast' a 1.9
+[11:20:16] Se actualizó 'contrast' a 1.8
+[11:20:16] Se actualizó 'contrast' a 1.6
+[11:20:17] Se actualizó 'contrast' a 1.5
+[11:20:17] Se actualizó 'contrast' a 1.4
+=== Se inició la app el día 12/05/2025 a las 11:20:54 ===
+[11:20:54] FPS cambiado a 7.50
+[11:21:01] Se actualizó 'brightness' a 20.0
+[11:21:01] Se actualizó 'brightness' a 20.0
+[11:21:01] Se actualizó 'contrast' a 3.9
+[11:21:01] Se actualizó 'contrast' a 3.9
+[11:21:01] Se actualizó 'saturation' a 10.0
+[11:21:01] Se actualizó 'hue' a 0.0
+[11:21:01] Se actualizó 'gamma' a 1.0
+[11:21:01] Se actualizó 'gamma' a 1.0
+[11:21:01] Se actualizó 'exposure' a 330.0
+[11:21:01] Se actualizó 'exposure' a 330.0
+[11:21:01] Se actualizó 'gain' a 3.8
+[11:21:01] Se actualizó 'gain' a 3.8
+[11:21:01] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:21:01] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+=== Se inició la app el día 12/05/2025 a las 11:21:25 ===
+[11:21:25] FPS cambiado a 15.00
+=== Se inició la app el día 12/05/2025 a las 11:21:33 ===
+[11:21:33] FPS cambiado a 15.00
+=== Se inició la app el día 12/05/2025 a las 11:21:42 ===
+[11:21:42] FPS cambiado a 7.50
+[11:21:49] Se actualizó 'brightness' a 20.0
+[11:21:49] Se actualizó 'brightness' a 20.0
+[11:21:49] Se actualizó 'contrast' a 3.9
+[11:21:49] Se actualizó 'contrast' a 3.9
+[11:21:49] Se actualizó 'saturation' a 10.0
+[11:21:49] Se actualizó 'hue' a 0.0
+[11:21:49] Se actualizó 'gamma' a 1.0
+[11:21:49] Se actualizó 'gamma' a 1.0
+[11:21:49] Se actualizó 'exposure' a 330.0
+[11:21:49] Se actualizó 'exposure' a 330.0
+[11:21:49] Se actualizó 'gain' a 3.8
+[11:21:49] Se actualizó 'gain' a 3.8
+[11:21:49] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:21:49] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+[11:21:59] Se actualizó 'brightness' a 10.0
+[11:21:59] Se actualizó 'brightness' a 10.0
+=== Se inició la app el día 12/05/2025 a las 11:33:03 ===
+[11:33:03] FPS cambiado a 7.50
+=== Se inició la app el día 12/05/2025 a las 11:37:31 ===
+[11:37:31] FPS cambiado a 7.50
+[11:37:42] Iniciando captura de imagen...
+[11:37:47] Iniciando captura de imagen...
+[11:37:49] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:37:49] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:37:51] Iniciando captura de imagen...
+[11:37:53] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:37:53] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 12/05/2025 a las 11:40:02 ===
+[11:40:02] FPS cambiado a 7.50
+[11:40:27] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[11:40:29] Iniciando captura de imagen...
+[11:40:38] Iniciando captura de imagen...
+[11:40:40] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:40:40] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:40:43] ROI selected: x=176, y=88, w=656, h=232
+[11:40:45] Iniciando captura de imagen...
+[11:40:47] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:40:47] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:40:54] Uso de ROI activado
+[11:40:54] [INFO] ROI aplicado en preview: x=176, y=88, w=640, h=232
+[11:41:09] Guardado automático activado
+[11:41:10] Iniciando captura de fondo...
+[11:41:12] Fondo capturado correctamente.
+[11:41:12] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\fondo_20250512_114112.tif
+[11:41:24] Iniciando captura de imagen...
+[11:41:26] [INFO] ROI aplicado: x=176, y=88, w=640, h=232
+[11:41:26] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:41:26] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_114126.tif
+[11:41:26] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_114126.tif
+[11:41:29] Restar fondo desactivada
+[11:41:32] Iniciando captura de imagen...
+[11:41:33] [INFO] ROI aplicado: x=176, y=88, w=640, h=232
+[11:41:33] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:41:33] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_114133.tif
+[11:41:33] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_114133.tif
+[11:41:36] Restar fondo activada
+[11:41:39] ROI selected: x=320, y=368, w=696, h=200
+[11:41:41] Iniciando captura de imagen...
+[11:41:43] [INFO] ROI aplicado: x=320, y=368, w=640, h=200
+[11:41:43] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:41:43] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_114143.tif
+[11:41:43] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_114143.tif
+=== Se inició la app el día 12/05/2025 a las 11:50:57 ===
+[11:50:57] FPS cambiado a 7.50
+=== Se inició la app el día 12/05/2025 a las 11:51:09 ===
+[11:51:09] FPS cambiado a 15.00
+=== Se inició la app el día 12/05/2025 a las 11:51:16 ===
+[11:51:16] FPS cambiado a 7.50
+[11:51:23] Iniciando captura de imagen...
+[11:51:27] Iniciando captura de imagen...
+[11:51:29] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:51:29] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:51:31] Iniciando captura de fondo...
+[11:51:33] Fondo capturado correctamente.
+[11:51:34] Iniciando captura de imagen...
+[11:51:36] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:51:36] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:51:38] Offset del fondo ajustado a 655 (escalado: 0.02)
+[11:51:38] Offset del fondo ajustado a 983 (escalado: 0.03)
+[11:51:38] Offset del fondo ajustado a 1311 (escalado: 0.04)
+[11:51:38] Offset del fondo ajustado a 1966 (escalado: 0.06)
+[11:51:38] Offset del fondo ajustado a 2294 (escalado: 0.07)
+[11:51:38] Offset del fondo ajustado a 2621 (escalado: 0.08)
+[11:51:38] Offset del fondo ajustado a 2949 (escalado: 0.09)
+[11:51:38] Offset del fondo ajustado a 3277 (escalado: 0.10)
+[11:51:41] Iniciando captura de imagen...
+[11:51:43] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:51:43] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:51:44] Offset del fondo ajustado a 4260 (escalado: 0.13)
+[11:51:44] Offset del fondo ajustado a 4588 (escalado: 0.14)
+[11:51:44] Offset del fondo ajustado a 5571 (escalado: 0.17)
+[11:51:44] Offset del fondo ajustado a 5898 (escalado: 0.18)
+[11:51:44] Offset del fondo ajustado a 6226 (escalado: 0.19)
+[11:51:44] Offset del fondo ajustado a 6881 (escalado: 0.21)
+[11:51:44] Offset del fondo ajustado a 7537 (escalado: 0.23)
+[11:51:44] Offset del fondo ajustado a 8192 (escalado: 0.25)
+[11:51:44] Offset del fondo ajustado a 9175 (escalado: 0.28)
+[11:51:44] Offset del fondo ajustado a 9503 (escalado: 0.29)
+[11:51:44] Offset del fondo ajustado a 9830 (escalado: 0.30)
+[11:51:44] Offset del fondo ajustado a 10158 (escalado: 0.31)
+[11:51:44] Offset del fondo ajustado a 11141 (escalado: 0.34)
+[11:51:44] Offset del fondo ajustado a 11796 (escalado: 0.36)
+[11:51:44] Offset del fondo ajustado a 12780 (escalado: 0.39)
+[11:51:44] Offset del fondo ajustado a 13107 (escalado: 0.40)
+[11:51:44] Offset del fondo ajustado a 13435 (escalado: 0.41)
+[11:51:44] Offset del fondo ajustado a 13763 (escalado: 0.42)
+[11:51:44] Offset del fondo ajustado a 14418 (escalado: 0.44)
+[11:51:44] Offset del fondo ajustado a 14746 (escalado: 0.45)
+[11:51:44] Offset del fondo ajustado a 15073 (escalado: 0.46)
+[11:51:44] Offset del fondo ajustado a 15401 (escalado: 0.47)
+[11:51:44] Offset del fondo ajustado a 15729 (escalado: 0.48)
+[11:51:44] Offset del fondo ajustado a 16384 (escalado: 0.50)
+[11:51:44] Offset del fondo ajustado a 16712 (escalado: 0.51)
+[11:51:44] Offset del fondo ajustado a 17039 (escalado: 0.52)
+[11:51:44] Offset del fondo ajustado a 17367 (escalado: 0.53)
+[11:51:44] Offset del fondo ajustado a 18022 (escalado: 0.55)
+[11:51:44] Offset del fondo ajustado a 18350 (escalado: 0.56)
+[11:51:44] Offset del fondo ajustado a 18678 (escalado: 0.57)
+[11:51:44] Offset del fondo ajustado a 19005 (escalado: 0.58)
+[11:51:44] Offset del fondo ajustado a 19661 (escalado: 0.60)
+[11:51:44] Offset del fondo ajustado a 19988 (escalado: 0.61)
+[11:51:45] Iniciando captura de imagen...
+[11:51:47] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:51:47] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:51:49] Offset del fondo ajustado a 20316 (escalado: 0.62)
+[11:51:49] Offset del fondo ajustado a 20644 (escalado: 0.63)
+[11:51:49] Offset del fondo ajustado a 20972 (escalado: 0.64)
+[11:51:49] Offset del fondo ajustado a 21627 (escalado: 0.66)
+[11:51:49] Offset del fondo ajustado a 22282 (escalado: 0.68)
+[11:51:49] Offset del fondo ajustado a 22610 (escalado: 0.69)
+[11:51:49] Offset del fondo ajustado a 23265 (escalado: 0.71)
+[11:51:49] Offset del fondo ajustado a 23593 (escalado: 0.72)
+[11:51:49] Offset del fondo ajustado a 23921 (escalado: 0.73)
+[11:51:49] Offset del fondo ajustado a 24248 (escalado: 0.74)
+[11:51:49] Offset del fondo ajustado a 24576 (escalado: 0.75)
+[11:51:49] Offset del fondo ajustado a 25231 (escalado: 0.77)
+[11:51:49] Offset del fondo ajustado a 25559 (escalado: 0.78)
+[11:51:49] Offset del fondo ajustado a 25887 (escalado: 0.79)
+[11:51:49] Offset del fondo ajustado a 26214 (escalado: 0.80)
+[11:51:49] Offset del fondo ajustado a 26870 (escalado: 0.82)
+[11:51:49] Offset del fondo ajustado a 27197 (escalado: 0.83)
+[11:51:49] Offset del fondo ajustado a 27525 (escalado: 0.84)
+[11:51:50] Offset del fondo ajustado a 27853 (escalado: 0.85)
+[11:51:50] Offset del fondo ajustado a 28508 (escalado: 0.87)
+[11:51:50] Offset del fondo ajustado a 28836 (escalado: 0.88)
+[11:51:50] Offset del fondo ajustado a 29164 (escalado: 0.89)
+[11:51:50] Offset del fondo ajustado a 29491 (escalado: 0.90)
+[11:51:50] Offset del fondo ajustado a 29819 (escalado: 0.91)
+[11:51:50] Offset del fondo ajustado a 30474 (escalado: 0.93)
+[11:51:50] Offset del fondo ajustado a 30802 (escalado: 0.94)
+[11:51:50] Offset del fondo ajustado a 31130 (escalado: 0.95)
+[11:51:51] Iniciando captura de imagen...
+[11:51:53] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:51:53] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:51:55] Offset del fondo ajustado a 31457 (escalado: 0.96)
+[11:51:55] Offset del fondo ajustado a 32440 (escalado: 0.99)
+[11:51:55] Offset del fondo ajustado a 32768 (escalado: 1.00)
+[11:51:56] Ganancia del fondo ajustada a 2.67
+[11:51:56] Ganancia del fondo ajustada a 4.00
+[11:51:56] Ganancia del fondo ajustada a 6.00
+[11:51:56] Ganancia del fondo ajustada a 8.67
+[11:51:56] Ganancia del fondo ajustada a 12.67
+[11:51:56] Ganancia del fondo ajustada a 15.33
+[11:51:56] Ganancia del fondo ajustada a 18.67
+[11:51:56] Ganancia del fondo ajustada a 22.67
+[11:51:56] Ganancia del fondo ajustada a 26.00
+[11:51:56] Ganancia del fondo ajustada a 28.00
+[11:51:56] Ganancia del fondo ajustada a 30.67
+[11:51:56] Ganancia del fondo ajustada a 33.33
+[11:51:56] Ganancia del fondo ajustada a 35.33
+[11:51:56] Ganancia del fondo ajustada a 38.00
+[11:51:56] Ganancia del fondo ajustada a 40.00
+[11:51:56] Ganancia del fondo ajustada a 40.67
+[11:51:56] Ganancia del fondo ajustada a 41.33
+[11:51:56] Ganancia del fondo ajustada a 42.67
+[11:51:56] Ganancia del fondo ajustada a 44.00
+[11:51:56] Ganancia del fondo ajustada a 44.67
+[11:51:56] Ganancia del fondo ajustada a 45.33
+[11:51:56] Ganancia del fondo ajustada a 46.00
+[11:51:56] Ganancia del fondo ajustada a 47.33
+[11:51:56] Ganancia del fondo ajustada a 48.00
+[11:51:56] Ganancia del fondo ajustada a 48.67
+[11:51:57] Ganancia del fondo ajustada a 50.00
+[11:51:57] Ganancia del fondo ajustada a 50.67
+[11:51:57] Ganancia del fondo ajustada a 51.33
+[11:51:57] Ganancia del fondo ajustada a 52.00
+[11:51:57] Ganancia del fondo ajustada a 52.67
+[11:51:57] Ganancia del fondo ajustada a 53.33
+[11:51:57] Ganancia del fondo ajustada a 54.00
+[11:51:57] Ganancia del fondo ajustada a 54.67
+[11:51:57] Ganancia del fondo ajustada a 55.33
+[11:51:57] Ganancia del fondo ajustada a 56.00
+[11:51:57] Ganancia del fondo ajustada a 57.33
+[11:51:57] Ganancia del fondo ajustada a 58.00
+[11:51:57] Ganancia del fondo ajustada a 58.67
+[11:51:57] Ganancia del fondo ajustada a 59.33
+[11:51:57] Ganancia del fondo ajustada a 60.00
+[11:51:58] Iniciando captura de imagen...
+[11:52:00] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:52:00] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:52:02] Ganancia del fondo ajustada a 59.33
+[11:52:02] Ganancia del fondo ajustada a 58.67
+[11:52:02] Ganancia del fondo ajustada a 58.00
+[11:52:02] Ganancia del fondo ajustada a 56.67
+[11:52:02] Ganancia del fondo ajustada a 55.33
+[11:52:02] Ganancia del fondo ajustada a 54.67
+[11:52:02] Ganancia del fondo ajustada a 54.00
+[11:52:02] Ganancia del fondo ajustada a 53.33
+[11:52:02] Ganancia del fondo ajustada a 52.67
+[11:52:02] Ganancia del fondo ajustada a 52.00
+[11:52:02] Ganancia del fondo ajustada a 51.33
+[11:52:02] Ganancia del fondo ajustada a 50.67
+[11:52:02] Ganancia del fondo ajustada a 50.00
+[11:52:02] Ganancia del fondo ajustada a 49.33
+[11:52:02] Ganancia del fondo ajustada a 48.67
+[11:52:02] Ganancia del fondo ajustada a 48.00
+[11:52:02] Ganancia del fondo ajustada a 47.33
+[11:52:02] Ganancia del fondo ajustada a 46.67
+[11:52:02] Ganancia del fondo ajustada a 46.00
+[11:52:03] Iniciando captura de imagen...
+[11:52:05] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:52:05] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:52:09] Ganancia del fondo ajustada a 45.33
+[11:52:09] Ganancia del fondo ajustada a 44.67
+[11:52:09] Ganancia del fondo ajustada a 44.00
+[11:52:09] Ganancia del fondo ajustada a 43.33
+[11:52:09] Ganancia del fondo ajustada a 42.67
+[11:52:09] Ganancia del fondo ajustada a 42.00
+[11:52:09] Ganancia del fondo ajustada a 41.33
+[11:52:09] Ganancia del fondo ajustada a 40.67
+[11:52:10] Ganancia del fondo ajustada a 40.00
+[11:52:10] Ganancia del fondo ajustada a 39.33
+[11:52:10] Ganancia del fondo ajustada a 38.67
+[11:52:10] Ganancia del fondo ajustada a 38.00
+[11:52:10] Ganancia del fondo ajustada a 37.33
+[11:52:10] Ganancia del fondo ajustada a 36.67
+[11:52:10] Ganancia del fondo ajustada a 36.00
+[11:52:10] Ganancia del fondo ajustada a 35.33
+[11:52:10] Ganancia del fondo ajustada a 34.67
+[11:52:11] Ganancia del fondo ajustada a 34.00
+[11:52:11] Ganancia del fondo ajustada a 33.33
+[11:52:11] Ganancia del fondo ajustada a 32.67
+[11:52:11] Ganancia del fondo ajustada a 32.00
+[11:52:11] Ganancia del fondo ajustada a 31.33
+[11:52:11] Ganancia del fondo ajustada a 30.67
+[11:52:11] Ganancia del fondo ajustada a 30.00
+[11:52:11] Ganancia del fondo ajustada a 29.33
+[11:52:11] Ganancia del fondo ajustada a 28.67
+[11:52:11] Ganancia del fondo ajustada a 28.00
+[11:52:11] Ganancia del fondo ajustada a 27.33
+[11:52:11] Ganancia del fondo ajustada a 26.67
+[11:52:11] Ganancia del fondo ajustada a 26.00
+[11:52:11] Ganancia del fondo ajustada a 25.33
+[11:52:13] Iniciando captura de imagen...
+[11:52:15] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:52:15] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:52:18] Ganancia del fondo ajustada a 25.23
+[11:52:19] Ganancia del fondo ajustada a 24.67
+[11:52:19] Ganancia del fondo ajustada a 24.00
+[11:52:19] Ganancia del fondo ajustada a 23.33
+[11:52:20] Ganancia del fondo ajustada a 22.67
+[11:52:20] Ganancia del fondo ajustada a 21.33
+[11:52:20] Ganancia del fondo ajustada a 20.67
+[11:52:20] Ganancia del fondo ajustada a 20.00
+[11:52:20] Ganancia del fondo ajustada a 19.33
+[11:52:20] Ganancia del fondo ajustada a 18.67
+[11:52:20] Ganancia del fondo ajustada a 18.00
+[11:52:20] Ganancia del fondo ajustada a 17.33
+[11:52:20] Ganancia del fondo ajustada a 16.67
+[11:52:20] Ganancia del fondo ajustada a 16.00
+[11:52:20] Ganancia del fondo ajustada a 15.33
+[11:52:20] Ganancia del fondo ajustada a 14.67
+[11:52:20] Ganancia del fondo ajustada a 14.00
+[11:52:20] Ganancia del fondo ajustada a 12.67
+[11:52:20] Ganancia del fondo ajustada a 12.00
+[11:52:20] Ganancia del fondo ajustada a 11.33
+[11:52:20] Ganancia del fondo ajustada a 10.67
+[11:52:20] Ganancia del fondo ajustada a 10.00
+[11:52:20] Ganancia del fondo ajustada a 9.33
+[11:52:20] Ganancia del fondo ajustada a 8.67
+[11:52:20] Ganancia del fondo ajustada a 8.00
+[11:52:20] Ganancia del fondo ajustada a 7.33
+[11:52:21] Iniciando captura de imagen...
+[11:52:23] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:52:23] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:52:25] Offset del fondo ajustado a 29491 (escalado: 0.90)
+[11:52:26] Offset del fondo ajustado a 30474 (escalado: 0.93)
+[11:52:27] Offset del fondo ajustado a 27197 (escalado: 0.83)
+[11:52:27] Offset del fondo ajustado a 23921 (escalado: 0.73)
+[11:52:27] Offset del fondo ajustado a 20644 (escalado: 0.63)
+[11:52:30] Offset del fondo ajustado a 0 (escalado: 0.00)
+[11:52:32] Iniciando captura de imagen...
+[11:52:33] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:52:34] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:52:37] Ganancia del fondo ajustada a 8.00
+[11:52:37] Ganancia del fondo ajustada a 8.67
+[11:52:37] Ganancia del fondo ajustada a 9.33
+[11:52:37] Ganancia del fondo ajustada a 10.00
+[11:52:37] Ganancia del fondo ajustada a 10.67
+[11:52:37] Ganancia del fondo ajustada a 11.33
+[11:52:37] Ganancia del fondo ajustada a 12.00
+[11:52:37] Ganancia del fondo ajustada a 12.67
+[11:52:38] Ganancia del fondo ajustada a 13.33
+[11:52:38] Ganancia del fondo ajustada a 14.00
+[11:52:38] Ganancia del fondo ajustada a 14.67
+[11:52:38] Ganancia del fondo ajustada a 15.33
+[11:52:39] Iniciando captura de imagen...
+[11:52:41] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:52:41] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:52:43] Ganancia del fondo ajustada a 14.00
+[11:52:43] Ganancia del fondo ajustada a 12.00
+[11:52:43] Ganancia del fondo ajustada a 8.67
+[11:52:43] Ganancia del fondo ajustada a 6.67
+[11:52:43] Ganancia del fondo ajustada a 3.33
+[11:52:43] Ganancia del fondo ajustada a 0.67
+[11:52:43] Ganancia del fondo ajustada a 0.00
+[11:52:47] Iniciando captura de imagen...
+[11:52:49] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:52:49] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:52:51] Ganancia del fondo ajustada a 0.67
+[11:52:51] Ganancia del fondo ajustada a 1.33
+[11:52:51] Ganancia del fondo ajustada a 2.00
+=== Se inició la app el día 12/05/2025 a las 11:52:55 ===
+[11:52:55] FPS cambiado a 7.50
+[11:53:02] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[11:53:04] Guardado automático activado
+[11:53:07] Iniciando captura de imagen...
+[11:53:09] Iniciando captura de imagen...
+[11:53:11] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:53:11] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:53:11] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115311.tif
+[11:53:11] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115311.tif
+[11:53:15] Iniciando captura de fondo...
+[11:53:17] Fondo capturado correctamente.
+[11:53:18] Iniciando captura de imagen...
+[11:53:20] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:53:20] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:53:20] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115320.tif
+[11:53:20] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115320.tif
+[11:53:20] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115320.tif
+[11:53:25] Uso de ROI activado
+[11:53:25] [WARNING] ROI inválido en preview. Mostrando imagen completa.
+[11:53:33] ROI selected: x=240, y=224, w=816, h=552
+[11:53:42] Iniciando captura de fondo...
+[11:53:44] Fondo capturado correctamente.
+[11:53:48] ROI selected: x=96, y=32, w=1032, h=264
+[11:53:49] Iniciando captura de fondo...
+[11:53:51] Fondo capturado correctamente.
+[11:53:55] Iniciando captura de imagen...
+[11:53:57] [INFO] ROI aplicado: x=96, y=32, w=640, h=264
+[11:53:57] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:53:57] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115357.tif
+[11:53:57] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115357.tif
+[11:53:57] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115357.tif
+[11:54:01] ROI selected: x=192, y=384, w=808, h=232
+[11:54:05] Iniciando captura de imagen...
+[11:54:07] [INFO] ROI aplicado: x=192, y=384, w=640, h=232
+[11:54:07] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:54:07] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115407.tif
+[11:54:07] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115407.tif
+[11:54:07] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115407.tif
+[11:54:12] Iniciando captura de fondo...
+[11:54:14] Fondo capturado correctamente.
+[11:54:17] ROI selected: x=576, y=56, w=688, h=112
+[11:54:20] Iniciando captura de imagen...
+[11:54:21] [INFO] ROI aplicado: x=576, y=56, w=640, h=112
+[11:54:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:54:21] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115421.tif
+[11:54:21] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115421.tif
+[11:54:21] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115421.tif
+[11:54:24] ROI selected: x=1072, y=376, w=136, h=464
+[11:54:25] Iniciando captura de imagen...
+[11:54:27] [INFO] ROI aplicado: x=640, y=376, w=136, h=464
+[11:54:27] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:54:27] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115427.tif
+[11:54:27] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115427.tif
+[11:54:27] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115427.tif
+=== Se inició la app el día 12/05/2025 a las 11:55:16 ===
+[11:55:16] FPS cambiado a 7.50
+[11:55:30] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[11:55:33] Modo de captura cambiado a Mediana
+[11:55:35] Se seteó el blur a 1
+[11:55:38] Iniciando captura de imagen...
+[11:55:40] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:55:40] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:55:46] Modo de captura cambiado a Promedio
+[11:55:47] Iniciando captura de imagen...
+[11:55:49] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:55:49] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:55:52] Modo de captura cambiado a Mediana
+[11:55:58] Guardado automático activado
+[11:56:04] Uso de ROI activado
+[11:56:04] [WARNING] ROI inválido en preview. Mostrando imagen completa.
+[11:56:05] Iniciando captura de fondo...
+[11:56:07] Fondo capturado correctamente.
+[11:56:09] Iniciando captura de imagen...
+[11:56:11] [WARNING] ROI inválido o trivial. Mostrando imagen completa.
+[11:56:11] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:56:11] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115611.tif
+[11:56:11] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115611.tif
+[11:56:11] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115611.tif
+[11:56:13] ROI selected: x=232, y=176, w=784, h=584
+[11:56:15] Iniciando captura de imagen...
+[11:56:16] [INFO] ROI aplicado: x=232, y=176, w=640, h=480
+[11:56:17] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:56:17] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115617.tif
+[11:56:17] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115617.tif
+[11:56:17] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115617.tif
+[11:56:18] ROI selected: x=360, y=64, w=568, h=560
+[11:56:19] Iniciando captura de imagen...
+[11:56:21] [INFO] ROI aplicado: x=360, y=64, w=568, h=480
+[11:56:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:56:21] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115621.tif
+[11:56:21] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115621.tif
+[11:56:21] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115621.tif
+[11:56:23] ROI selected: x=840, y=176, w=256, h=440
+[11:56:29] Iniciando captura de imagen...
+[11:56:31] [INFO] ROI aplicado: x=640, y=176, w=256, h=440
+[11:56:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:56:31] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115631.tif
+[11:56:31] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115631.tif
+[11:56:31] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115631.tif
+[11:56:43] Iniciando captura de fondo...
+[11:56:45] Fondo capturado correctamente.
+[11:56:48] ROI selected: x=1104, y=224, w=136, h=520
+[11:56:49] Iniciando captura de imagen...
+[11:56:51] [INFO] ROI aplicado: x=640, y=224, w=136, h=480
+[11:56:51] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:56:51] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_115651.tif
+[11:56:51] Imagen normal (ROI) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_115651.tif
+[11:56:51] Imagen resta (ROI + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_115651.tif
+=== Se inició la app el día 12/05/2025 a las 11:57:23 ===
+[11:57:23] FPS cambiado a 7.50
+=== Se inició la app el día 12/05/2025 a las 12:07:42 ===
+[12:07:42] FPS cambiado a 7.50
+[12:07:46] Iniciando captura de imagen...
+[12:07:53] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[12:07:55] Guardado automático activado
+[12:08:02] Se seteó el blur a 1
+[12:08:08] Iniciando captura de fondo...
+[12:08:10] Fondo capturado correctamente.
+[12:08:12] Iniciando captura de imagen...
+[12:08:14] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:08:14] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:08:14] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_120814.tif
+[12:08:14] Imagen normal (ROI + blur) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_120814.tif
+[12:08:14] Imagen resta (ROI + blur + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_120814.tif
+[12:08:17] Uso de ROI activado
+[12:08:17] [WARNING] ROI inválido en preview. Mostrando imagen completa.
+[12:08:22] Iniciando captura de imagen...
+[12:08:24] [WARNING] ROI inválido o trivial. Mostrando imagen completa.
+[12:08:24] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:08:24] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_120824.tif
+[12:08:24] Imagen normal (ROI + blur) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_120824.tif
+[12:08:25] Imagen resta (ROI + blur + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_120824.tif
+[12:08:27] ROI selected: x=584, y=32, w=88, h=968
+[12:08:29] Iniciando captura de imagen...
+[12:08:31] [INFO] ROI aplicado: x=584, y=32, w=88, h=480
+[12:08:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:08:31] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_120831.tif
+[12:08:31] Imagen normal (ROI + blur) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_120831.tif
+[12:08:31] Imagen resta (ROI + blur + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_120831.tif
+[12:08:34] ROI selected: x=16, y=328, w=136, h=32
+[12:08:36] Iniciando captura de imagen...
+[12:08:37] [INFO] ROI aplicado: x=16, y=328, w=136, h=32
+[12:08:37] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:08:37] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250512_120837.tif
+[12:08:37] Imagen normal (ROI + blur) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\normal_20250512_120837.tif
+[12:08:37] Imagen resta (ROI + blur + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250512_120837.tif
+=== Se inició la app el día 12/05/2025 a las 12:13:31 ===
+[12:13:31] FPS cambiado a 7.50
+[12:13:48] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[12:13:49] Guardado automático activado
+[12:13:50] Iniciando captura de imagen...
+[12:13:52] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:13:52] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:13:52] Iniciando captura de imagen...
+[12:13:54] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:13:54] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:13:55] Se seteó el blur a 1
+[12:13:57] Iniciando captura de imagen...
+[12:13:59] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:13:59] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:13:59] Iniciando captura de fondo...
+[12:14:01] Fondo capturado correctamente.
+[12:14:02] Iniciando captura de imagen...
+[12:14:04] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:14:07] Iniciando captura de imagen...
+[12:14:08] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:14:10] Iniciando captura de fondo...
+[12:14:12] Fondo capturado correctamente.
+[12:14:25] Uso de ROI activado
+[12:14:25] [WARNING] ROI inválido en preview. Mostrando imagen completa.
+[12:14:27] Iniciando captura de imagen...
+[12:14:28] [WARNING] ROI inválido o trivial. Mostrando imagen completa.
+[12:14:34] ROI selected: x=736, y=200, w=344, h=480
+[12:14:35] Iniciando captura de imagen...
+[12:14:37] [INFO] ROI aplicado: x=640, y=200, w=344, h=480
+=== Se inició la app el día 12/05/2025 a las 12:15:21 ===
+[12:15:22] FPS cambiado a 7.50
+[12:15:36] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi
+[12:15:43] Guardado automático activado
+[12:15:45] Iniciando captura de imagen...
+[12:15:47] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:15:47] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:15:47] Se seteó el blur a 1
+[12:15:49] Iniciando captura de imagen...
+[12:15:50] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:15:50] Imagen capturada y mostrada en pestaña 'Captura'.
+[12:15:57] ROI selected: x=480, y=512, w=480, h=192
+[12:15:58] Iniciando captura de imagen...
+[12:16:00] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:16:00] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 12/05/2025 a las 20:20:41 ===
+[20:20:43] FPS cambiado a 15.00
