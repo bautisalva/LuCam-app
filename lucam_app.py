@@ -959,7 +959,6 @@ class CameraApp(QWidget):
         self.auto_save = (text == "Sí")
         estado = "activado" if self.auto_save else "desactivado"
         self.log_message(f"Guardado automático {estado}")
-        
     
     def save_auto_images(self, full_image, roi_image, roi_coords):
         x, y, w, h = roi_coords

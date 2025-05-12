@@ -3091,3 +3091,5 @@
 [12:15:58] Iniciando captura de imagen...
 [12:16:00] [INFO] ROI desactivado. Mostrando imagen completa.
 [12:16:00] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 12/05/2025 a las 20:20:41 ===
+[20:20:43] FPS cambiado a 15.00
