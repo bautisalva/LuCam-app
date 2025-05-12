@@ -2201,3 +2201,341 @@
 [13:10:38] Imagen capturada y mostrada en pestaña 'Captura'.
 [13:10:38] Imagen guardada automáticamente en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\resta_20250507_131038.tif
 [13:10:38] Imagen cruda guardada en: C:/Users/Marina/Documents/Labo 6/LuCam-app/test/test_roi\raw\cruda_20250507_131038.tif
+=== Se inició la app el día 12/05/2025 a las 11:04:49 ===
+[11:04:49] FPS cambiado a 7.50
+[11:05:03] Se actualizó 'brightness' a 10.4
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 14.0
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 14.5
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 15.0
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 15.5
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 16.1
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:04] Se actualizó 'brightness' a 16.6
+[11:05:04] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:09] Se actualizó 'brightness' a 17.1
+[11:05:09] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:09] Se actualizó 'brightness' a 17.6
+[11:05:09] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:09] Se actualizó 'brightness' a 18.1
+[11:05:09] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 18.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 19.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 20.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 21.2
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 21.8
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 22.3
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 22.8
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 22.3
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 20.7
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 19.2
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 16.6
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 15.0
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 13.0
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 11.9
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 10.9
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:12] Se actualizó 'brightness' a 9.8
+[11:05:12] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 8.8
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 8.3
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 7.8
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 7.3
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 6.7
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 6.2
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 5.7
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 4.7
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 3.6
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 3.1
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 2.6
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 2.1
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 1.6
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 1.0
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 0.5
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:13] Se actualizó 'brightness' a 0.0
+[11:05:13] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 1.0
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 9.3
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 14.5
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 17.6
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 19.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 21.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 23.3
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 24.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 26.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 29.0
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 31.1
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 33.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 34.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 34.7
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 35.2
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 35.8
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 36.8
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 37.3
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 38.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 39.9
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:17] Se actualizó 'brightness' a 40.4
+[11:05:17] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:18] Se actualizó 'brightness' a 40.9
+[11:05:18] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:18] Se actualizó 'brightness' a 41.5
+[11:05:18] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5277D90>
+[11:05:19] Se actualizó 'contrast' a 1.1
+[11:05:19] [ERROR] No se pudo actualizar el preview tras cambiar contrast: <lucam.Lucam object at 0x00000251F5277D90>
+=== Se inició la app el día 12/05/2025 a las 11:05:26 ===
+[11:05:26] FPS cambiado a 7.50
+=== Se inició la app el día 12/05/2025 a las 11:05:42 ===
+[11:05:42] FPS cambiado a 7.50
+[11:05:47] Se actualizó 'brightness' a 10.4
+[11:05:48] Se actualizó 'brightness' a 12.4
+[11:05:48] Se actualizó 'brightness' a 15.5
+[11:05:50] Se actualizó 'brightness' a 16.1
+[11:05:50] Se actualizó 'brightness' a 18.7
+[11:05:51] Se actualizó 'brightness' a 22.8
+[11:05:58] Se actualizó 'exposure' a 13.9
+[11:05:58] Se actualizó 'exposure' a 474.1
+[11:06:00] Se actualizó 'exposure' a 479.3
+[11:06:01] Se actualizó 'exposure' a 500.0
+[11:06:09] Se actualizó 'contrast' a 1.1
+[11:06:10] Se actualizó 'contrast' a 1.4
+[11:06:10] Se actualizó 'contrast' a 1.7
+[11:06:11] Se actualizó 'contrast' a 2.1
+[11:06:11] Se actualizó 'contrast' a 2.4
+[11:06:12] Se actualizó 'contrast' a 2.3
+[11:06:13] Se actualizó 'contrast' a 2.2
+[11:06:13] Se actualizó 'contrast' a 2.3
+[11:06:14] Se actualizó 'contrast' a 2.0
+[11:06:14] Se actualizó 'contrast' a 1.8
+[11:06:17] Se actualizó 'contrast' a 1.7
+[11:06:18] Se actualizó 'contrast' a 1.5
+[11:06:19] Se actualizó 'brightness' a 22.3
+[11:06:20] Se actualizó 'brightness' a 10.9
+[11:06:21] Se actualizó 'brightness' a 10.4
+[11:06:21] Se actualizó 'brightness' a 9.8
+[11:06:22] Se actualizó 'brightness' a 7.3
+[11:06:22] Se actualizó 'brightness' a 2.6
+[11:06:23] Se actualizó 'brightness' a 2.1
+[11:06:24] Se actualizó 'brightness' a 4.7
+[11:06:24] Se actualizó 'brightness' a 5.2
+[11:06:26] Se actualizó 'brightness' a 5.7
+[11:06:26] Se actualizó 'brightness' a 10.4
+[11:06:27] Se actualizó 'brightness' a 11.9
+[11:06:31] Se actualizó 'brightness' a 11.4
+[11:06:31] Se actualizó 'brightness' a 10.9
+[11:06:33] Se actualizó 'brightness' a 10.4
+[11:06:34] Se actualizó 'brightness' a 6.7
+[11:06:36] Se actualizó 'brightness' a 7.7
+[11:06:39] Se actualizó 'brightness' a 8.7
+[11:06:59] Se actualizó 'brightness' a 10.0
+[11:07:00] Se actualizó 'brightness' a 10.0
+[11:07:00] Se actualizó 'contrast' a 1.8
+[11:07:01] Se actualizó 'contrast' a 1.8
+[11:07:01] Se actualizó 'saturation' a 10.0
+[11:07:02] Se actualizó 'hue' a 0.0
+[11:07:02] Se actualizó 'gamma' a 10.0
+[11:07:03] Se actualizó 'exposure' a 10.0
+[11:07:03] Se actualizó 'exposure' a 10.0
+[11:07:03] Se actualizó 'gain' a 1.0
+[11:07:04] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:07:04] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_preview.json
+=== Se inició la app el día 12/05/2025 a las 11:07:26 ===
+[11:07:26] FPS cambiado a 7.50
+[11:07:40] Se actualizó 'brightness' a 1.0
+[11:07:40] Se actualizó 'brightness' a 1.0
+[11:07:43] Se actualizó 'brightness' a 1.0
+[11:07:45] Se actualizó 'contrast' a 1.4
+[11:07:46] Se actualizó 'contrast' a 1.4
+[11:07:48] Se actualizó 'contrast' a 1.4
+[11:07:55] Se actualizó 'gamma' a 1.0
+[11:07:55] Se actualizó 'gamma' a 1.0
+[11:07:57] Se actualizó 'gamma' a 1.0
+[11:07:59] Se actualizó 'exposure' a 13.9
+[11:07:59] Se actualizó 'exposure' a 500.0
+[11:08:06] Se actualizó 'gain' a 3.7
+[11:08:06] Se actualizó 'gain' a 3.7
+[11:08:15] Se actualizó 'gain' a 3.7
+[11:08:18] Se actualizó 'gain' a 3.7
+[11:08:33] Preview parameters saved to C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+[11:09:05] Se actualizó 'contrast' a 1.5
+[11:09:05] Se actualizó 'contrast' a 1.8
+[11:09:06] Se actualizó 'contrast' a 2.0
+[11:09:10] Se actualizó 'contrast' a 1.9
+[11:09:10] Se actualizó 'contrast' a 1.0
+=== Se inició la app el día 12/05/2025 a las 11:09:22 ===
+[11:09:22] FPS cambiado a 7.50
+[11:09:33] Se actualizó 'brightness' a 1.0
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'brightness' a 1.0
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'contrast' a 1.4
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar contrast: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'contrast' a 1.4
+[11:09:33] [ERROR] No se pudo actualizar el preview tras cambiar contrast: <lucam.Lucam object at 0x00000251F50997B0>
+[11:09:33] Se actualizó 'saturation' a 10.0
+[11:09:33] Se actualizó 'hue' a 0.0
+[11:09:34] Se actualizó 'gamma' a 1.0
+[11:09:34] Se actualizó 'gamma' a 1.0
+[11:09:35] Se actualizó 'exposure' a 500.0
+[11:09:35] Se actualizó 'exposure' a 500.0
+[11:09:36] Se actualizó 'gain' a 3.7
+[11:09:36] Se actualizó 'gain' a 3.7
+[11:09:37] ROI definido manualmente: x=0, y=0, w=8, h=8 (no aplicado hasta que actives)
+[11:09:37] Parámetros cargados desde archivo: C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
+[11:10:14] Iniciando captura de imagen...
+[11:10:17] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:17] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:17] Iniciando captura de imagen...
+[11:10:20] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:20] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:21] Preview reanudado.
+[11:10:29] Iniciando captura de imagen...
+[11:10:32] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:32] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:33] Iniciando captura de imagen...
+[11:10:36] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:36] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:37] Iniciando captura de imagen...
+[11:10:40] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:40] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:44] Iniciando captura de imagen...
+[11:10:47] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:10:47] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:10:52] Preview reanudado.
+[11:11:05] Iniciando captura de imagen...
+[11:11:07] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:07] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:10] Iniciando captura de imagen...
+[11:11:12] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:12] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:13] Iniciando captura de imagen...
+[11:11:15] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:16] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:19] Iniciando captura de imagen...
+[11:11:21] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:28] Iniciando captura de imagen...
+[11:11:30] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:33] Iniciando captura de imagen...
+[11:11:36] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:36] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:40] Iniciando captura de imagen...
+[11:11:42] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:11:42] Imagen capturada y mostrada en pestaña 'Captura'.
+[11:11:57] Preview reanudado.
+[11:12:02] Se actualizó 'brightness' a 1.6
+[11:12:02] Se actualizó 'brightness' a 7.3
+[11:12:07] Se actualizó 'brightness' a 1.0
+[11:12:08] Se actualizó 'brightness' a 1.0
+[11:12:15] Se actualizó 'brightness' a 2.0
+[11:12:16] Se actualizó 'brightness' a 2.0
+[11:12:18] Se actualizó 'brightness' a 1.0
+[11:12:19] Se actualizó 'brightness' a 1.0
+[11:12:23] Se actualizó 'brightness' a 1.0
+[11:12:32] Iniciando captura de imagen...
+[11:12:35] [INFO] ROI desactivado. Mostrando imagen completa.
+[11:12:35] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 12/05/2025 a las 11:13:17 ===
+[11:13:17] FPS cambiado a 7.50
+[11:13:22] Se actualizó 'brightness' a 11.0
+[11:13:22] [ERROR] No se pudo actualizar el preview tras cambiar brightness: <lucam.Lucam object at 0x00000251F5099EA0>
+[11:13:25] Se actualizó 'brightness' a 12.0
+[11:13:31] Se actualizó 'brightness' a 12.4
+[11:13:32] Se actualizó 'brightness' a 15.5
+[11:13:32] Se actualizó 'brightness' a 22.8
+[11:13:40] Se actualizó 'exposure' a 13.9
+[11:13:40] Se actualizó 'exposure' a 277.6
+[11:13:41] Se actualizó 'exposure' a 481.9
+[11:13:41] Se actualizó 'exposure' a 500.0
+[11:13:50] Se actualizó 'gain' a 10.0
+[11:13:51] Se actualizó 'gain' a 375.0
+[11:13:59] Se actualizó 'gain' a 375.0
+[11:14:03] Se actualizó 'gain' a 3.7
+[11:14:03] Se actualizó 'gain' a 3.8
+[11:14:13] Se actualizó 'gain' a 3.8
+[11:14:13] Se actualizó 'gain' a 3.8
+[11:14:17] Se actualizó 'exposure' a 330.0
+[11:14:18] Se actualizó 'exposure' a 330.0
+[11:14:20] Se actualizó 'exposure' a 330.0
+[11:14:21] Se actualizó 'gamma' a 1.0
+[11:14:22] Se actualizó 'gamma' a 1.0
+[11:14:23] Se actualizó 'gamma' a 1.0
+[11:14:27] Se actualizó 'contrast' a 3.8
+[11:14:27] Se actualizó 'contrast' a 3.9
+[11:14:30] Se actualizó 'contrast' a 3.9
+[11:14:31] Se actualizó 'contrast' a 3.9
+[11:14:33] Se actualizó 'brightness' a 1.0
+[11:14:34] Se actualizó 'brightness' a 1.0
+[11:14:41] Se actualizó 'brightness' a 0.0
+[11:14:42] Se actualizó 'brightness' a 0.0
+[11:14:46] Se actualizó 'brightness' a 10.0
+[11:14:46] Se actualizó 'brightness' a 10.0
+[11:15:04] Se actualizó 'brightness' a 100.0
+[11:15:05] Se actualizó 'brightness' a 100.0
+[11:15:09] Se actualizó 'brightness' a 50.0
+[11:15:09] Se actualizó 'brightness' a 50.0
+[11:15:13] Se actualizó 'brightness' a 1.0
+[11:15:14] Se actualizó 'brightness' a 1.0
+[11:15:16] Se actualizó 'brightness' a 2.0
+[11:15:16] Se actualizó 'brightness' a 2.0
+[11:15:19] Se actualizó 'brightness' a 3.0
+[11:15:19] Se actualizó 'brightness' a 3.0
+[11:15:22] Se actualizó 'brightness' a 10.0
+[11:15:22] Se actualizó 'brightness' a 10.0
+[11:15:26] Se actualizó 'brightness' a 20.0
+[11:15:27] Se actualizó 'brightness' a 20.0
+[11:15:33] Se actualizó 'brightness' a 20.0
+[11:15:45] Preview parameters saved to C:/Users/Marina/Documents/Labo 6/LuCam-app/params/params_test_12_5.json
