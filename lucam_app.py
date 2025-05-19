@@ -37,6 +37,7 @@ from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 
 
+
 def blur_uint16(image, sigma):
     """
     Applies Gaussian blur to a 16-bit image using scipy.ndimage.
@@ -306,6 +307,9 @@ class CameraApp(QWidget):
         frameformat, fps = self.camera.GetFormat()
         frameformat.pixelFormat = API.LUCAM_PF_16
         self.camera.SetFormat(frameformat, fps)
+        
+        self.frame_width = frameformat.width
+        self.frame_height = frameformat.height
     
         # Logging system
         self.log_file_path = os.path.join(os.getcwd(), "log.txt")
@@ -326,11 +330,11 @@ class CameraApp(QWidget):
     
         # Initialize GUI widgets and internal state variables
         self.preview_label_preview = QLabel("Preview en vivo")
-        self.preview_label_preview.setFixedSize(640, 480)
+        self.preview_label_preview.setFixedSize(960, 720)
     
         self.preview_label_capture = ROILabel()
         self.preview_label_capture.roi_selected.connect(self.set_roi_from_mouse)
-        self.preview_label_capture.setFixedSize(640, 480)
+        self.preview_label_capture.setFixedSize(960, 720)
     
         self.console_preview = QPlainTextEdit()
         self.console_preview.setReadOnly(True)
@@ -354,9 +358,9 @@ class CameraApp(QWidget):
             "contrast": (0, 10, 1.0),
             "saturation": (0, 100, 10.0),
             "hue": (-180, 180, 0.0),
-            "gamma": (1, 50, 10),
-            "exposure": (1, 500, 10.0),
-            "gain": (0, 10, 1.0),
+            "gamma": (1, 5, 10),
+            "exposure": (1, 375, 10.0),
+            "gain": (0, 7.75, 1.0),
         }
     
         #self.camera.SetProperty(168,10)
@@ -399,10 +403,13 @@ class CameraApp(QWidget):
         # Window 2: Capture
         self.capture_tab = QWidget()
         self.init_capture_tab()
+        
+        
     
         # Add window
         self.tabs.addTab(self.preview_tab, "Preview")
         self.tabs.addTab(self.capture_tab, "Captura")
+    
     
         # Main layout
         main_layout = QVBoxLayout()
@@ -453,10 +460,10 @@ class CameraApp(QWidget):
     
             label = QLabel(f"{default}")
             slider = QSlider(Qt.Orientation.Horizontal)
-            slider.setMinimum(int(min_val * 10))
-            slider.setMaximum(int(max_val * 10))
-            slider.setValue(int(default * 10))
-            slider.valueChanged.connect(lambda value, p=prop: self.update_property(p, value / 10))
+            slider.setMinimum(int(min_val * 100))
+            slider.setMaximum(int(max_val * 100))
+            slider.setValue(int(default * 100))
+            slider.valueChanged.connect(lambda value, p=prop: self.update_property(p, value / 100))
     
             input_field = QLineEdit(str(default))
             input_field.setFixedWidth(50)
@@ -479,11 +486,15 @@ class CameraApp(QWidget):
         self.load_settings_button = QPushButton("Cargar Parámetros")
         self.load_settings_button.clicked.connect(self.load_parameters)
         controls_layout.addWidget(self.load_settings_button)
+        
+        self.refresh_preview_button = QPushButton("Refrescar desde Cámara")
+        self.refresh_preview_button.clicked.connect(self.apply_real_camera_values_to_sliders)
+        controls_layout.addWidget(self.refresh_preview_button)
     
         controls_layout.addStretch()
         layout.addLayout(controls_layout)
     
-        self.apply_default_slider_values_to_camera()
+        self.apply_real_camera_values_to_sliders()
     
         self.preview_tab.setLayout(layout)
 
@@ -643,13 +654,13 @@ class CameraApp(QWidget):
         roi_layout = QGridLayout()
         
         self.roi_x_input = QSpinBox()
-        self.roi_x_input.setRange(0, 640)
+        self.roi_x_input.setRange(0, self.frame_width)
         self.roi_y_input = QSpinBox()
-        self.roi_y_input.setRange(0, 480)
+        self.roi_y_input.setRange(0, self.frame_height)
         self.roi_width_input = QSpinBox()
-        self.roi_width_input.setRange(8, 640)
+        self.roi_width_input.setRange(8, self.frame_width)
         self.roi_height_input = QSpinBox()
-        self.roi_height_input.setRange(8, 480)
+        self.roi_height_input.setRange(8, self.frame_height)
         
         roi_layout.addWidget(QLabel("X:"), 0, 0)
         roi_layout.addWidget(self.roi_x_input, 0, 1)
@@ -730,14 +741,24 @@ class CameraApp(QWidget):
         self.log_message(f"ROI definido manualmente: x={x}, y={y}, w={width}, h={height} (no aplicado hasta que actives)")
 
 
-    def apply_default_slider_values_to_camera(self):
+    def apply_real_camera_values_to_sliders(self):
             """
             Applies the default values defined in self.properties
             to the connected camera using set_properties().
             """
-            for prop, (min_val, max_val, default) in self.properties.items():
-                if self.camera:
-                    self.camera.set_properties(**{prop: default})
+            for prop in self.properties:
+                try:
+                    if self.simulation:
+                        value = self.properties[prop][2]  # default
+                    else:
+                        value, _ = self.camera.GetProperty(prop)
+                    # Actualiza slider y campo de texto
+                    slider = self.sliders[prop]
+                    input_field = self.inputs[prop]
+                    slider.setValue(int(value * 100))
+                    input_field.setText(f"{value:.2f}")
+                except Exception as e:
+                    self.log_message(f"[ERROR] No se pudo leer propiedad '{prop}': {e}")
     
     def update_property(self, prop, value):
         """
@@ -753,10 +774,10 @@ class CameraApp(QWidget):
     
         # Actualiza sliders y textbox
         self.sliders[prop].blockSignals(True)
-        self.sliders[prop].setValue(int(value * 10))
+        self.sliders[prop].setValue(int(value * 100))
         self.sliders[prop].blockSignals(False)
-        self.inputs[prop].setText(f"{value:.1f}")
-        self.log_message(f"Se actualizó '{prop}' a {value:.1f}")
+        self.inputs[prop].setText(f"{value:.2f}")
+        self.log_message(f"Se actualizó '{prop}' a {value:.2f}")
     
         #Captura una imagen nueva inmediatamente para reflejar el cambio
         if self.preview_mode:
@@ -847,8 +868,8 @@ class CameraApp(QWidget):
         """
         try:
             value = float(field.text())
-            self.sliders[prop].setValue(int(value * 10))
-            self.update_property(prop, value)
+            self.sliders[prop].setValue(int(value * 100))
+            self.camera.set_properties(**{prop: value})
         except ValueError:
             field.setText(f"{self.sliders[prop].value() / 10:.1f}")
     
@@ -1112,6 +1133,11 @@ class CameraApp(QWidget):
                 self.log_message("[WARNING] ROI inválido o trivial. Mostrando imagen completa.")
             else:
                 self.log_message("[INFO] ROI desactivado. Mostrando imagen completa.")
+                
+        if not roi_valid:
+            x, y = 0, 0
+            h, w = image.shape
+
     
         # Store the ROI-applied image
         self.captured_image = image_roi
@@ -1152,7 +1178,12 @@ class CameraApp(QWidget):
     
         bytes_per_line = image_8bit.shape[1]
         qimage = QImage(image_8bit.data, image_8bit.shape[1], image_8bit.shape[0], bytes_per_line, QImage.Format.Format_Grayscale8)
-        self.preview_label_capture.setPixmap(QPixmap.fromImage(qimage))
+        pixmap = QPixmap.fromImage(qimage).scaled(
+            self.preview_label_capture.width(), 
+            self.preview_label_capture.height(), 
+            Qt.KeepAspectRatio
+        )
+        self.preview_label_capture.setPixmap(pixmap)
     
 
     def save_image(self):
@@ -1217,7 +1248,7 @@ class CameraApp(QWidget):
                     json.dump(params, f, indent=4)
                 self.log_message(f"Parámetros de Captura guardados en {file_path}")
             except Exception as e:
-                self.log_message(f"[ERROR] No se pudieron guardar parámetros de Captura: {e}")
+                self.log_message("[ERROR] No se pudieron guardar parámetros de Captura: {e}")
                 
     def save_parameters(self):
         """
@@ -1319,7 +1350,12 @@ class CameraApp(QWidget):
                         image_8bit.shape[1], QImage.Format_Grayscale8)
     
         # Update preview display
-        self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
+        pixmap = QPixmap.fromImage(qimage).scaled(
+            self.preview_label_preview.width(), 
+            self.preview_label_preview.height(), 
+            Qt.KeepAspectRatio
+        )
+        self.preview_label_preview.setPixmap(pixmap)
 
 
     def display_image(self, image, scale_factor=1):
@@ -1345,6 +1381,12 @@ class CameraApp(QWidget):
     
         self.preview_label_preview.setPixmap(QPixmap.fromImage(qimage))
         self.preview_label_capture.setPixmap(QPixmap.fromImage(qimage))
+        
+    def get_last_image(self):
+        """
+        Devuelve la última imagen capturada en 16 bits, o None si no hay.
+        """
+        return getattr(self, "last_full_image", None)
 
     def log_message(self, message):
         """
