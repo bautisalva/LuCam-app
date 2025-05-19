@@ -67,38 +67,70 @@ class ImageEnhancer:
             contornos = [c for c, a in zip(contornos, areas) if a >= umbral]
         return contornos
 
-    def procesar(self, suavizado=5, ganancia_tanh=0.1, mostrar=True, percentil_contornos=0, min_dist_picos=30, metodo_contorno="sobel"):
+    def procesar_gui(self, suavizado=5, ganancia_tanh=0.1, mostrar=False, percentil_contornos=0,
+                     min_dist_picos=30, metodo_contorno="sobel", retornar_etapas=False):
         corrected = self._subtract_background()
         centro, sigma, hist, top_peaks = self._detect_histogram_peaks(corrected, min_dist=min_dist_picos)
-
+    
+        # Realce con función gaussiana x*exp(-(x/sigma)^2)
         enhanced = self._enhance_tanh_diff2(corrected, centro, sigma)
         enhanced_norm = (enhanced - enhanced.min()) / (enhanced.max() - enhanced.min())
         enhanced_uint8 = (enhanced_norm * 255).astype(np.uint8)
-
+    
+        # Suavizado y segunda realce tipo tanh
         smooth = uniform_filter(enhanced_uint8, size=suavizado)
-        centro1, sigma1, hist, top_peaks = self._detect_histogram_peaks(smooth, min_dist=min_dist_picos)
-
+        centro1, sigma1, hist2, top_peaks2 = self._detect_histogram_peaks(smooth, min_dist=min_dist_picos)
+    
         enhanced2 = self._apply_tanh(smooth, ganancia=ganancia_tanh, centro=centro1, sigma=sigma1)
         enhanced2_norm = (enhanced2 - enhanced2.min()) / (enhanced2.max() - enhanced2.min())
         enhanced2_uint8 = (enhanced2_norm * 255).astype(np.uint8)
-
+    
+        # Binarización
         threshold = np.mean(enhanced2_uint8)
         binary = (enhanced2_uint8 > threshold).astype(np.uint8) * 255
-
+    
+        # Detección de contornos
         if metodo_contorno == "sobel":
-            sobel_image = sobel(enhanced2_uint8.astype(float) / 255.0)
             contornos = self._find_contours_by_sobel(enhanced2_uint8, levels=[0.16], percentil_contornos=percentil_contornos)
-            imagen_contorno = sobel_image
         elif metodo_contorno == "binarizacion":
             contornos = self._find_large_contours(binary, percentil_contornos=percentil_contornos)
-            imagen_contorno = binary
         else:
             raise ValueError(f"Método de contorno no reconocido: {metodo_contorno}")
+    
+        # Etapas para mostrar en GUI
+        imagen_original = self.image
+        imagen_realzada = enhanced_uint8
+        imagen_suavizada = smooth
+        imagen_tanh = enhanced2_uint8
+        imagen_binaria = binary
+    
+        # Histograma como imagen
+        fig, ax = plt.subplots(figsize=(4, 3), dpi=100)
+        ax.plot(hist2, color='black')
+        ax.scatter(top_peaks2, hist2[top_peaks2], color='red')
+        ax.set_title("Histograma de Intensidades")
+        ax.set_xlabel("Intensidad")
+        ax.set_ylabel("Frecuencia")
+        fig.tight_layout()
+    
+        # Convertir figura matplotlib a QImage
+        import io
+        from PIL import Image
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png')
+        buf.seek(0)
+        hist_img = Image.open(buf).convert("RGB")
+        hist_img = hist_img.resize((300, 220))
+        hist_np = np.array(hist_img)
+        buf.close()
+        plt.close(fig)
+    
+        if retornar_etapas:
+            return binary, contornos, [imagen_original, imagen_realzada, imagen_suavizada,
+                                       imagen_tanh, imagen_binaria], hist_np
+        else:
+            return binary, contornos
 
-        if mostrar:
-            self._mostrar_resultados(enhanced_uint8, smooth, enhanced2_uint8, binary, contornos, hist, top_peaks, threshold, imagen_contorno)
-
-        return binary, contornos
 
     def _mostrar_resultados(self, enhanced_uint8, smooth, enhanced2_uint8, binary, contornos, hist, top_peaks, threshold, imagen_contorno):
         plt.figure(figsize=(18, 10))
