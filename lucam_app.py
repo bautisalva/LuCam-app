@@ -63,6 +63,120 @@ def to_8bit_for_preview(image_16bit):
     scaled = ((image_16bit - min_val) / (max_val - min_val) * 255).astype(np.uint8)
     return scaled
 
+from analisis_bordes import ImageEnhancer
+
+class AnalysisTab(QWidget):
+    def __init__(self, parent=None, get_image_callback=None):
+        super().__init__(parent)
+        self.get_image_callback = get_image_callback
+        self.init_ui()
+        self.loaded_image = None
+
+    def init_ui(self):
+        main_layout = QVBoxLayout()
+
+        # === Controles de configuración ===
+        control_layout = QHBoxLayout()
+
+        self.suavizado_spin = QSpinBox()
+        self.suavizado_spin.setRange(1, 20)
+        self.suavizado_spin.setValue(3)
+        control_layout.addWidget(QLabel("Suavizado:"))
+        control_layout.addWidget(self.suavizado_spin)
+
+        self.percentil_spin = QSpinBox()
+        self.percentil_spin.setRange(0, 100)
+        self.percentil_spin.setValue(99)
+        control_layout.addWidget(QLabel("% Contornos:"))
+        control_layout.addWidget(self.percentil_spin)
+
+        self.distpico_spin = QSpinBox()
+        self.distpico_spin.setRange(1, 100)
+        self.distpico_spin.setValue(10)
+        control_layout.addWidget(QLabel("Dist. mín. picos:"))
+        control_layout.addWidget(self.distpico_spin)
+
+        self.metodo_combo = QComboBox()
+        self.metodo_combo.addItems(["sobel", "binarizacion"])
+        control_layout.addWidget(QLabel("Método:"))
+        control_layout.addWidget(self.metodo_combo)
+
+        main_layout.addLayout(control_layout)
+
+        # === Botón de análisis ===
+        self.run_button = QPushButton("Aplicar análisis de bordes")
+        self.run_button.setStyleSheet("background-color: lightgreen; font-weight: bold")
+        self.run_button.clicked.connect(self.run_analysis)
+        main_layout.addWidget(self.run_button)
+
+        self.load_button = QPushButton("Cargar imagen desde archivo")
+        self.load_button.setStyleSheet("background-color: lightblue;")
+        self.load_button.clicked.connect(self.load_image)
+        main_layout.addWidget(self.load_button)
+        # === Consola de texto ===
+        self.console = QPlainTextEdit()
+        self.console.setReadOnly(True)
+        self.console.setFixedHeight(120)
+        main_layout.addWidget(self.console)
+
+        # === Visualización del resultado ===
+        self.result_label = QLabel("Resultado del análisis")
+        self.result_label.setAlignment(Qt.AlignCenter)
+        self.result_label.setStyleSheet("border: 1px solid gray")
+        self.result_label.setFixedSize(960, 720)
+        main_layout.addWidget(self.result_label)
+
+        self.setLayout(main_layout)
+
+    def log(self, text):
+        self.console.appendPlainText(text)
+
+    def run_analysis(self):
+        image = self.loaded_image if self.loaded_image is not None else (
+            self.get_image_callback() if self.get_image_callback else None
+        )
+        
+        if image is None:
+            self.log("[ERROR] No hay imagen cargada ni capturada.")
+            return
+
+        if len(image.shape) == 3:
+            image = (rgb2gray(image) * 255).astype(np.uint8)
+        else:
+            image = ((image - np.min(image)) / (np.max(image) - np.min(image)) * 255).astype(np.uint8)
+
+        try:
+            enhancer = ImageEnhancer(image)
+            binary, contornos = enhancer.procesar(
+                suavizado=self.suavizado_spin.value(),
+                percentil_contornos=self.percentil_spin.value(),
+                min_dist_picos=self.distpico_spin.value(),
+                metodo_contorno=self.metodo_combo.currentText(),
+                mostrar=True
+            )
+            self.log(f"[OK] Se detectaron {len(contornos)} contornos.")
+
+            resized = resize(binary, (720, 960), preserve_range=True).astype(np.uint8)
+            qimage = QImage(resized.data, resized.shape[1], resized.shape[0], resized.shape[1], QImage.Format_Grayscale8)
+            self.result_label.setPixmap(QPixmap.fromImage(qimage))
+
+        except Exception as e:
+            self.log(f"[ERROR] Falló el análisis: {e}")
+            
+    def load_image(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar imagen", "", "Imágenes (*.tif *.tiff *.png *.jpg)")
+        if file_path:
+            try:
+                from skimage.io import imread
+                image = imread(file_path)
+                if len(image.shape) == 3:
+                    image = (rgb2gray(image) * 255).astype(np.uint8)
+                else:
+                    image = ((image - np.min(image)) / (np.max(image) - np.min(image)) * 255).astype(np.uint8)
+                self.loaded_image = image
+                self.log(f"[OK] Imagen cargada: {file_path}")
+            except Exception as e:
+                self.log(f"[ERROR] No se pudo cargar la imagen: {e}")
 
 class SimulatedFrameFormat:
     def __init__(self):
@@ -179,6 +293,7 @@ class Worker(QObject):
             
     def stop(self):
         self._running = False
+        
 class PreviewWorker(QObject):
     """
     Worker class for acquiring and emitting live preview frames.
@@ -404,11 +519,14 @@ class CameraApp(QWidget):
         self.capture_tab = QWidget()
         self.init_capture_tab()
         
+        self.analysis_tab = AnalysisTab(get_image_callback=self.get_last_image)
         
+
     
         # Add window
         self.tabs.addTab(self.preview_tab, "Preview")
         self.tabs.addTab(self.capture_tab, "Captura")
+        self.tabs.addTab(self.analysis_tab, "Análisis")
     
     
         # Main layout

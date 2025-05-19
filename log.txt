@@ -3112,3 +3112,23 @@
 [12:16:05] FPS cambiado a 15.00
 === Se inició la app el día 19/05/2025 a las 12:23:57 ===
 [12:23:57] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 12:44:29 ===
+[12:44:29] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 12:44:54 ===
+[12:44:54] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 12:45:47 ===
+[12:45:47] FPS cambiado a 7.50
+[12:45:47] Se actualizó 'brightness' a 0.00
+[12:45:47] Se actualizó 'saturation' a 1.00
+[12:45:47] Se actualizó 'gamma' a 1.00
+[12:45:47] Se actualizó 'exposure' a 66.87
+[12:45:54] Iniciando captura de imagen...
+[12:46:02] Iniciando captura de imagen...
+[12:46:04] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:46:04] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 19/05/2025 a las 12:47:36 ===
+[12:47:36] FPS cambiado a 7.50
+[12:47:36] Se actualizó 'brightness' a 0.00
+[12:47:36] Se actualizó 'saturation' a 1.00
+[12:47:36] Se actualizó 'gamma' a 1.00
+[12:47:36] Se actualizó 'exposure' a 63.84
