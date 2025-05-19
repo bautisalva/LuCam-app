@@ -3132,3 +3132,11 @@
 [12:47:36] Se actualizó 'saturation' a 1.00
 [12:47:36] Se actualizó 'gamma' a 1.00
 [12:47:36] Se actualizó 'exposure' a 63.84
+=== Se inició la app el día 19/05/2025 a las 13:01:05 ===
+[13:01:05] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:01:09 ===
+[13:01:09] FPS cambiado a 7.50
+[13:01:09] Se actualizó 'brightness' a 0.00
+[13:01:09] Se actualizó 'saturation' a 1.00
+[13:01:09] Se actualizó 'gamma' a 1.00
+[13:01:09] Se actualizó 'exposure' a 66.87
