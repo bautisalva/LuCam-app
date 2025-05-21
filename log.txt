@@ -3110,3 +3110,47 @@
 [12:13:23] FPS cambiado a 15.00
 === Se inició la app el día 19/05/2025 a las 12:16:05 ===
 [12:16:05] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 12:23:57 ===
+[12:23:57] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 12:44:29 ===
+[12:44:29] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 12:44:54 ===
+[12:44:54] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 12:45:47 ===
+[12:45:47] FPS cambiado a 7.50
+[12:45:47] Se actualizó 'brightness' a 0.00
+[12:45:47] Se actualizó 'saturation' a 1.00
+[12:45:47] Se actualizó 'gamma' a 1.00
+[12:45:47] Se actualizó 'exposure' a 66.87
+[12:45:54] Iniciando captura de imagen...
+[12:46:02] Iniciando captura de imagen...
+[12:46:04] [INFO] ROI desactivado. Mostrando imagen completa.
+[12:46:04] Imagen capturada y mostrada en pestaña 'Captura'.
+=== Se inició la app el día 19/05/2025 a las 12:47:36 ===
+[12:47:36] FPS cambiado a 7.50
+[12:47:36] Se actualizó 'brightness' a 0.00
+[12:47:36] Se actualizó 'saturation' a 1.00
+[12:47:36] Se actualizó 'gamma' a 1.00
+[12:47:36] Se actualizó 'exposure' a 63.84
+=== Se inició la app el día 19/05/2025 a las 13:01:05 ===
+[13:01:05] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:01:09 ===
+[13:01:09] FPS cambiado a 7.50
+[13:01:09] Se actualizó 'brightness' a 0.00
+[13:01:09] Se actualizó 'saturation' a 1.00
+[13:01:09] Se actualizó 'gamma' a 1.00
+[13:01:09] Se actualizó 'exposure' a 66.87
+=== Se inició la app el día 19/05/2025 a las 13:04:42 ===
+[13:04:42] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:05:30 ===
+[13:05:30] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:10:47 ===
+[13:10:47] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:19:10 ===
+[13:19:10] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:20:27 ===
+[13:20:27] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:21:21 ===
+[13:21:21] FPS cambiado a 15.00
+=== Se inició la app el día 19/05/2025 a las 13:23:39 ===
+[13:23:39] FPS cambiado a 15.00
