@@ -4,7 +4,7 @@
 
 ## Description
 
-A Python application for **acquiring and processiong images from Lumenera cameras** using the LuCam API by [Christoph Gohlke](https://github.com/cgohlke). Features a graphical user interface.
+A Python application for **acquiring and processiong images from Lumenera cameras** to study magentic domains on thin films using the LuCam API by [Christoph Gohlke](https://github.com/cgohlke). Features a graphical user interface.
 
 ---
 
