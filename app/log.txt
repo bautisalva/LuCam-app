@@ -3238,3 +3238,27 @@
 [10:26:51] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\raw\cruda_20250526_102651.tif
 [10:26:51] Imagen normal (ROI + blur) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\normal_20250526_102651.tif
 [10:26:51] Imagen resta (ROI + blur + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\resta_20250526_102651.tif
+=== Se inició la app el día 26/05/2025 a las 10:38:17 ===
+[10:38:17] FPS cambiado a 7.50
+[10:38:17] Se actualizó 'brightness' a 0.00
+[10:38:17] Se actualizó 'saturation' a 1.00
+[10:38:17] Se actualizó 'gamma' a 1.00
+[10:38:17] Se actualizó 'exposure' a 63.84
+[10:38:25] Iniciando captura de imagen...
+[10:38:28] Iniciando captura de imagen...
+[10:38:30] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:38:30] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:38:40] Uso de ROI activado
+[10:38:40] [WARNING] ROI inválido en preview. Mostrando imagen completa.
+[10:38:52] Iniciando captura de imagen...
+[10:38:54] [WARNING] ROI inválido o trivial. Mostrando imagen completa.
+[10:38:55] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:39:00] Iniciando captura de fondo...
+[10:39:02] Fondo capturado correctamente.
+[10:39:02] [WARNING] ROI inválido al capturar fondo. Mostrando imagen completa.
+[10:39:04] Iniciando captura de imagen...
+[10:39:07] [WARNING] ROI inválido o trivial. Mostrando imagen completa.
+[10:39:07] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:39:11] Iniciando captura de fondo...
+[10:39:14] Fondo capturado correctamente.
+[10:39:14] [WARNING] ROI inválido al capturar fondo. Mostrando imagen completa.
