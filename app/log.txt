@@ -3262,3 +3262,9 @@
 [10:39:11] Iniciando captura de fondo...
 [10:39:14] Fondo capturado correctamente.
 [10:39:14] [WARNING] ROI inválido al capturar fondo. Mostrando imagen completa.
+=== Se inició la app el día 26/05/2025 a las 10:50:35 ===
+[10:50:35] FPS cambiado a 7.50
+[10:50:35] Se actualizó 'brightness' a 0.00
+[10:50:35] Se actualizó 'saturation' a 1.00
+[10:50:35] Se actualizó 'gamma' a 1.00
+[10:50:35] Se actualizó 'exposure' a 63.84
