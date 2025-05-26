@@ -1153,7 +1153,6 @@ class CameraApp(QWidget):
         x, y, w, h = roi_coords
         """Save all automatic image versions"""
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    
         # 1. Save raw full image (no ROI, no processing)
         raw_folder = os.path.join(self.work_dir, "raw")
         os.makedirs(raw_folder, exist_ok=True)
