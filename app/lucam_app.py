@@ -1206,13 +1206,38 @@ class CameraApp(QWidget):
             image (np.ndarray): background image to store and show.
         """
         self.background_image = image
-        self.display_image(image)
+        self.last_full_image = image.copy()  # actualizar el último frame
         self.log_message("Fondo capturado correctamente.")
+    
+        # Mostrar imagen con o sin ROI
+        x = self.roi_x_input.value()
+        y = self.roi_y_input.value()
+        w = self.roi_width_input.value()
+        h = self.roi_height_input.value()
+    
+        roi_valid = (
+            self.roi_enabled and
+            w >= 16 and h >= 16 and
+            x + w <= image.shape[1] and
+            y + h <= image.shape[0]
+        )
+    
+        if roi_valid:
+            image_roi = image[y:y+h, x:x+w]
+            self.log_message(f"[INFO] ROI aplicado al fondo: x={x}, y={y}, w={w}, h={h}")
+        else:
+            image_roi = image.copy()
+            if self.roi_enabled:
+                self.log_message("[WARNING] ROI inválido al capturar fondo. Mostrando imagen completa.")
+            else:
+                self.log_message("[INFO] ROI desactivado al capturar fondo. Mostrando imagen completa.")
+    
+        self.display_captured_image_in_tab(image_roi)
+    
         if self.auto_save and self.work_dir:
             fondo_path = os.path.join(self.work_dir, f"fondo_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.tif")
             imsave(fondo_path, image)
             self.log_message(f"Imagen de fondo guardada en: {fondo_path}")
-
 
     
     def toggle_background(self, text):
