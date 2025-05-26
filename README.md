@@ -36,14 +36,11 @@ python test.py
 ---
 
 ## Missing
-- Arreglar el problema de las rayas en las imagenes
-    - ver si funciona apagando y prendiendo la camara (no sirvio)
-    - ver si funciona yendo linea por linea y restandole la media (faltaria implementar mejor esto)
-- arreglar el problema en el guardado de imagenes que se guardan distinto con y sin ROI. La cruda tambien se ve distinta. SOlucionar bugs con el ROI
-- agregrar un mini histograma en la secion de 'captura'  ytambien uno mas grande en el sector analisis
+- el script 'rayas.py' arregla el problema de las rayas en las imagenes restando la media por fila sobre cada imagen pero esto no queremos hacerlo pues estaríamos perdiendo resolución en ls bordes de los dominio. Necesitamos trabajar en mejorar el contraste de la camara 'desde el setup' mejorando el enfoque y la alineación de los instrumentos
+- agregrar un mini histograma en la secion de 'captura'  y tambien uno mas grande en el sector analisis
 - ver que hacemos con las manchas cuando quedan en el borde del dominio, las guardamos? inventamos los puntos despues? que hacemos con eso
-- nos quedamos finalmente con la diferencia de tangentes con la gaussiana y la lineal
-- acordarse que todo el analisis esta hecho en 8bits pero tenemos que pasarlo todo a 16bits para las proximas imagenes cuando las saquemos nosotros
+- incluir mejor la pestaña 'análisis'
+- arreglar error al capturar fondo que muestra la imagen 'recortada'
 ---
 
 
