@@ -3154,3 +3154,87 @@
 [13:21:21] FPS cambiado a 15.00
 === Se inició la app el día 19/05/2025 a las 13:23:39 ===
 [13:23:39] FPS cambiado a 15.00
+=== Se inició la app el día 26/05/2025 a las 10:22:11 ===
+[10:22:12] FPS cambiado a 15.00
+=== Se inició la app el día 26/05/2025 a las 10:23:06 ===
+[10:23:06] FPS cambiado a 7.50
+[10:23:06] Se actualizó 'brightness' a 0.00
+[10:23:06] Se actualizó 'saturation' a 1.00
+[10:23:06] Se actualizó 'gamma' a 1.00
+[10:23:06] Se actualizó 'exposure' a 66.87
+[10:23:20] Iniciando captura de imagen...
+[10:23:22] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:23:22] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:23:26] ROI selected: x=104, y=64, w=624, h=416
+[10:23:28] Iniciando captura de imagen...
+[10:23:30] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:23:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:23:33] ROI selected: x=488, y=72, w=360, h=512
+[10:23:36] Uso de ROI activado
+[10:23:36] [INFO] ROI aplicado en preview: x=488, y=72, w=360, h=512
+[10:23:38] Iniciando captura de imagen...
+[10:23:40] [INFO] ROI aplicado: x=488, y=72, w=360, h=512
+[10:23:40] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:23:41] Iniciando captura de imagen...
+[10:23:43] [INFO] ROI aplicado: x=488, y=72, w=360, h=512
+[10:23:43] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:23:49] ROI selected: x=168, y=136, w=392, h=272
+[10:23:54] Iniciando captura de imagen...
+[10:23:56] [INFO] ROI aplicado: x=168, y=136, w=392, h=272
+[10:23:56] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:23:58] Iniciando captura de fondo...
+[10:24:00] Fondo capturado correctamente.
+[10:24:10] ROI selected: x=408, y=80, w=608, h=536
+[10:24:12] Iniciando captura de fondo...
+[10:24:14] Fondo capturado correctamente.
+[10:24:19] Iniciando captura de fondo...
+[10:24:21] Iniciando captura de imagen...
+[10:24:21] Fondo capturado correctamente.
+[10:24:23] [INFO] ROI aplicado: x=408, y=80, w=608, h=536
+[10:24:24] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:24:28] Iniciando captura de fondo...
+[10:24:30] Fondo capturado correctamente.
+[10:24:32] Iniciando captura de imagen...
+[10:24:34] [INFO] ROI aplicado: x=408, y=80, w=608, h=536
+[10:24:34] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:24:53] Preview reanudado.
+[10:25:00] Uso de ROI desactivado
+[10:25:00] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:25:02] Iniciando captura de imagen...
+[10:25:05] Iniciando captura de imagen...
+[10:25:07] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:25:07] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:25:11] Restar fondo desactivada
+[10:25:15] Uso de ROI activado
+[10:25:15] [INFO] ROI aplicado en preview: x=408, y=80, w=608, h=536
+[10:25:17] ROI selected: x=192, y=176, w=704, h=336
+[10:25:19] Iniciando captura de imagen...
+[10:25:21] [INFO] ROI aplicado: x=192, y=176, w=704, h=336
+[10:25:21] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:25:25] Iniciando captura de fondo...
+[10:25:27] Fondo capturado correctamente.
+[10:25:36] Restar fondo activada
+[10:25:37] Iniciando captura de imagen...
+[10:25:39] [INFO] ROI aplicado: x=192, y=176, w=704, h=336
+[10:25:39] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:26:16] Directorio de trabajo establecido: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug
+[10:26:18] Guardado automático activado
+[10:26:20] Uso de ROI desactivado
+[10:26:20] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:26:24] Restar fondo desactivada
+[10:26:25] Iniciando captura de imagen...
+[10:26:27] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:26:27] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:26:28] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\raw\cruda_20250526_102627.tif
+[10:26:28] Imagen normal (ROI + blur) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\normal_20250526_102627.tif
+[10:26:28] Fondo no activado o no disponible, imagen 'resta' no guardada.
+[10:26:32] Iniciando captura de fondo...
+[10:26:34] Fondo capturado correctamente.
+[10:26:34] Imagen de fondo guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\fondo_20250526_102634.tif
+[10:26:47] Restar fondo activada
+[10:26:48] Iniciando captura de imagen...
+[10:26:50] [INFO] ROI desactivado. Mostrando imagen completa.
+[10:26:51] Imagen capturada y mostrada en pestaña 'Captura'.
+[10:26:51] Imagen cruda (completa) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\raw\cruda_20250526_102651.tif
+[10:26:51] Imagen normal (ROI + blur) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\normal_20250526_102651.tif
+[10:26:51] Imagen resta (ROI + blur + fondo) guardada en: C:/Users/Marina/Documents/Labo 6/imagenes/test_bug\resta_20250526_102651.tif
