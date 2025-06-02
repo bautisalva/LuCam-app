@@ -26,3 +26,27 @@ def to_8bit_for_preview(image_16bit):
     scaled = ((image_16bit - min_val) / (max_val - min_val) * 255).astype(np.uint8)
     return scaled
 
+
+
+import datetime
+
+def log_message(message, log_file=None, consoles=None):
+    timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+    full_message = f"[{timestamp}] {message}"
+
+    # Mostrar en terminal
+    print(full_message)
+
+    # Mostrar en consolas de las tabs
+    if consoles:
+        for console in consoles:
+            if console:
+                console.appendPlainText(full_message)
+
+    # Guardar en archivo
+    if log_file:
+        try:
+            log_file.write(full_message + "\n")
+            log_file.flush()
+        except Exception as e:
+            print(f"[ERROR] Falló escritura en log.txt: {e}")

@@ -1,0 +1,84 @@
+=== App iniciada el 02/06/2025 a las 10:10:26 ===
+=== App iniciada el 02/06/2025 a las 10:12:06 ===
+=== App iniciada el 02/06/2025 a las 10:14:15 ===
+[10:14:15] Propiedad 'brightness' actualizada a 0.00
+[10:14:15] Propiedad 'saturation' actualizada a 1.00
+[10:14:15] Propiedad 'gamma' actualizada a 1.00
+[10:14:15] Propiedad 'exposure' actualizada a 63.84
+=== App iniciada el 02/06/2025 a las 10:14:26 ===
+[10:14:26] Propiedad 'brightness' actualizada a 0.00
+[10:14:26] Propiedad 'saturation' actualizada a 1.00
+[10:14:26] Propiedad 'gamma' actualizada a 1.00
+[10:14:26] Propiedad 'exposure' actualizada a 63.84
+[10:14:29] Iniciando captura de imagen...
+[10:14:29] Iniciando captura de imagen...
+[10:14:31] Imagen capturada y mostrada en pestaña 'Captura'.
+=== App iniciada el 02/06/2025 a las 10:16:44 ===
+[10:16:44] Propiedad 'brightness' actualizada a 0.00
+[10:16:44] Propiedad 'saturation' actualizada a 1.00
+[10:16:44] Propiedad 'gamma' actualizada a 1.00
+[10:16:44] Propiedad 'exposure' actualizada a 63.84
+[10:16:51] Iniciando captura de imagen...
+[10:16:51] Iniciando captura de imagen...
+[10:16:53] Imagen capturada y mostrada en pestaña 'Captura'.
+=== App iniciada el 02/06/2025 a las 10:17:59 ===
+[10:17:59] Propiedad 'brightness' actualizada a 0.00
+[10:17:59] Propiedad 'saturation' actualizada a 1.00
+[10:17:59] Propiedad 'gamma' actualizada a 1.00
+[10:17:59] Propiedad 'exposure' actualizada a 63.84
+=== App iniciada el 02/06/2025 a las 10:35:10 ===
+[10:35:10] Propiedad 'brightness' actualizada a 0.00
+[10:35:10] Propiedad 'saturation' actualizada a 1.00
+[10:35:10] Propiedad 'gamma' actualizada a 1.00
+[10:35:10] Propiedad 'exposure' actualizada a 63.84
+[10:35:14] Iniciando captura de imagen...
+[10:35:21] Iniciando captura de imagen...
+[10:35:21] Iniciando captura de imagen...
+[10:35:28] Iniciando captura de imagen...
+[10:35:34] Iniciando captura de imagen...
+[10:35:43] Iniciando captura de imagen...
+[10:35:43] Iniciando captura de imagen...
+[10:35:45] Imagen capturada y mostrada en pestaña 'Captura'.
+=== App iniciada el 02/06/2025 a las 10:36:35 ===
+[10:36:35] Propiedad 'brightness' actualizada a 0.00
+[10:36:35] Propiedad 'saturation' actualizada a 1.00
+[10:36:35] Propiedad 'gamma' actualizada a 1.00
+[10:36:35] Propiedad 'exposure' actualizada a 63.84
+[10:36:39] Iniciando captura de imagen...
+[10:36:39] Iniciando captura de imagen...
+[10:36:42] Iniciando captura de imagen...
+[10:36:54] Iniciando captura de imagen...
+[10:36:56] Imagen capturada y mostrada en pestaña 'Captura'.
+=== App iniciada el 02/06/2025 a las 10:37:32 ===
+[10:37:32] Propiedad 'brightness' actualizada a 0.00
+[10:37:32] Propiedad 'saturation' actualizada a 1.00
+[10:37:32] Propiedad 'gamma' actualizada a 1.00
+[10:37:32] Propiedad 'exposure' actualizada a 63.84
+[10:37:37] Iniciando captura de imagen...
+[10:37:39] Iniciando captura de imagen...
+[10:37:42] Imagen capturada y mostrada en pestaña 'Captura'.
+=== App iniciada el 02/06/2025 a las 10:44:25 ===
+[10:44:25] Propiedad 'brightness' actualizada a 0.00
+[10:44:25] Propiedad 'saturation' actualizada a 1.00
+[10:44:25] Propiedad 'gamma' actualizada a 1.00
+[10:44:25] Propiedad 'exposure' actualizada a 63.84
+[10:44:28] Iniciando captura de imagen...
+[10:44:32] Iniciando captura de imagen...
+[10:44:34] Imagen capturada y mostrada en pestaña 'Captura'.
+=== App iniciada el 02/06/2025 a las 10:45:16 ===
+[10:45:16] Propiedad 'brightness' actualizada a 0.00
+[10:45:16] Propiedad 'saturation' actualizada a 1.00
+[10:45:16] Propiedad 'gamma' actualizada a 1.00
+[10:45:16] Propiedad 'exposure' actualizada a 63.84
+[10:45:19] Iniciando captura de imagen...
+[10:45:21] Iniciando captura de imagen...
+[10:45:23] Imagen capturada y mostrada en pestaña 'Captura'.
+=== App iniciada el 02/06/2025 a las 10:47:21 ===
+[10:47:21] Propiedad 'brightness' actualizada a 0.00
+[10:47:21] Propiedad 'saturation' actualizada a 1.00
+[10:47:21] Propiedad 'gamma' actualizada a 1.00
+[10:47:21] Propiedad 'exposure' actualizada a 63.84
+[10:47:25] Iniciando captura de imagen...
+[10:47:26] Iniciando captura de imagen...
+[10:47:32] Iniciando captura de imagen...
+[10:47:34] Imagen capturada y mostrada en pestaña 'Captura'.

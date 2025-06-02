@@ -5,7 +5,9 @@ from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout
 from tabs.preview_tab import PreviewTab
 from tabs.capture_tab import CaptureTab
 from tabs.analysis_tab import AnalysisTab
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 from common import SimulatedCamera, PreviewWorker, ROILabel
+from utils import log_message as global_log_message
 
 try:
     from lucam import Lucam, API
@@ -111,15 +113,22 @@ class CameraApp(QWidget):
     def get_last_image(self):
         return self.last_full_image
 
+
     def log_message(self, message):
-        timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-        full_message = f"[{timestamp}] {message}"
-        self.preview_tab.console.appendPlainText(full_message)
-        self.capture_tab.console.appendPlainText(full_message)
-        print(full_message)
-        if hasattr(self, "log_file") and self.log_file:
-            self.log_file.write(full_message + "\n")
-            self.log_file.flush()
+        consoles = []
+        if hasattr(self, "preview_tab") and hasattr(self.preview_tab, "console"):
+            consoles.append(self.preview_tab.console)
+        if hasattr(self, "capture_tab") and hasattr(self.capture_tab, "console"):
+            consoles.append(self.capture_tab.console)
+        if hasattr(self, "analysis_tab") and hasattr(self.analysis_tab, "console"):
+            consoles.append(self.analysis_tab.console)
+    
+        global_log_message(
+            message,
+            log_file=self.log_file,
+            consoles=consoles
+        )
+
 
     def display_preview_image(self, image):
         self.last_full_image = image.copy()
