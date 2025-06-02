@@ -1,18 +1,23 @@
+import sys
 import os
-import datetime
 import numpy as np
+import matplotlib.pyplot as plt
+import threading
 import json
-from PyQt5.QtWidgets import (
-    QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton,
-    QSpinBox, QComboBox, QFileDialog, QPlainTextEdit, QGridLayout
-)
-from PyQt5.QtCore import Qt
-from skimage.io import imread, imsave
-from skimage.color import rgb2gray
+import datetime
 from skimage.transform import resize
-from PyQt5.QtGui import QImage, QPixmap
+from skimage.filters import gaussian
+from skimage.io import imsave,imread
+from skimage.color import rgb2gray
+from scipy.ndimage import gaussian_filter
+from PIL import Image, ImageDraw, ImageFont
+from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
+                             QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
+                             QSpinBox, QComboBox, QFileDialog,
+                             QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 from analisis_bordes import ImageEnhancer
-
 
 class AnalysisTab(QWidget):
     def __init__(self, parent=None, get_image_callback=None):
@@ -66,7 +71,6 @@ class AnalysisTab(QWidget):
         self.save_button.clicked.connect(self.save_results)
         self.save_button.setEnabled(False)
         button_layout.addWidget(self.save_button)
-
         main_layout.addLayout(button_layout)
 
         self.console = QPlainTextEdit()
@@ -88,8 +92,6 @@ class AnalysisTab(QWidget):
 
         self.setLayout(main_layout)
 
-    def log(self, text):
-        self.console.appendPlainText(text)
 
     def load_image(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar imagen", "", "Imágenes (*.tif *.tiff *.png *.jpg)")
@@ -99,7 +101,7 @@ class AnalysisTab(QWidget):
                 if len(image.shape) == 3:
                     image = (rgb2gray(image) * 255).astype(np.uint8)
                 else:
-                    image = ((image - image.min()) / (image.max() - image.min()) * 255).astype(np.uint8)
+                    image = ((image - np.min(image)) / (np.max(image) - np.min(image)) * 255).astype(np.uint8)
                 self.loaded_image = image
                 self.log(f"[OK] Imagen cargada: {file_path}")
             except Exception as e:
@@ -119,6 +121,7 @@ class AnalysisTab(QWidget):
 
         try:
             enhancer = ImageEnhancer(image)
+            # Procesar sin mostrar con matplotlib
             binary, contornos, etapas, hist_img = enhancer.procesar_gui(
                 suavizado=self.suavizado_spin.value(),
                 percentil_contornos=self.percentil_spin.value(),
@@ -133,19 +136,22 @@ class AnalysisTab(QWidget):
             self.save_button.setEnabled(True)
             self.log(f"[OK] Se detectaron {len(contornos)} contornos.")
 
+            # Mostrar cada imagen procesada
             for label, etapa in zip(self.image_labels[:5], etapas):
                 self._mostrar_imagen_en_label(etapa, label)
+
+            # Histograma
             self._mostrar_imagen_en_label(hist_img, self.image_labels[5], is_rgb=True)
 
         except Exception as e:
             self.log(f"[ERROR] Falló el análisis: {e}")
 
     def _mostrar_imagen_en_label(self, image, label, is_rgb=False):
-        image = resize(image, (220, 300), preserve_range=True).astype(np.uint8)
-        if is_rgb:
-            qimage = QImage(image.data, image.shape[1], image.shape[0], QImage.Format_RGB888)
-        else:
+        if not is_rgb:
+            image = resize(image, (220, 300), preserve_range=True).astype(np.uint8)
             qimage = QImage(image.data, image.shape[1], image.shape[0], image.shape[1], QImage.Format_Grayscale8)
+        else:
+            qimage = QImage(image.data, image.shape[1] * 3, image.shape[0], QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(qimage)
         label.setPixmap(pixmap)
 
@@ -173,3 +179,4 @@ class AnalysisTab(QWidget):
 
         except Exception as e:
             self.log(f"[ERROR] No se pudieron guardar los resultados: {e}")
+
