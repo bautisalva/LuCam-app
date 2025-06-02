@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
 from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
-from utils import log_to_console
+
 
 class PreviewTab(QWidget):
     def __init__(self, camera, log_message, available_fps, properties, simulation=False):
