@@ -1,12 +1,10 @@
-import sys
 from PyQt5.QtWidgets import QApplication
-from gui_main import CameraApp
+import sys
+from camera_app import CameraApp
 
-def main():
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = CameraApp()
     window.show()
     sys.exit(app.exec())
 
-if __name__ == "__main__":
-    main()

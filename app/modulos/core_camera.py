@@ -1,13 +1,6 @@
 import numpy as np
 from PIL import Image, ImageDraw
 
-try:
-    from lucam import Lucam, API
-    LUCAM_AVAILABLE = True
-except ImportError:
-    LUCAM_AVAILABLE = False
-    print("[WARNING] Módulo 'lucam' no disponible, usando modo simulación.")
-
 class SimulatedFrameFormat:
     def __init__(self):
         self.pixelFormat = None
@@ -39,13 +32,25 @@ class SimulatedCamera:
     def EnumAvailableFrameRates(self):
         return [7.5, 15.0, 30.0]
 
-def get_camera():
+
+# Try to import Lucam
+try:
+    from lucam import Lucam, API
+    LUCAM_AVAILABLE = True
+except ImportError:
+    LUCAM_AVAILABLE = False
+    Lucam = None
+    API = None
+    print("[WARNING] Módulo 'lucam' no disponible, usando modo simulación.")
+
+
+def init_camera():
     if LUCAM_AVAILABLE:
         try:
             cam = Lucam()
             cam.CameraClose()
             cam = Lucam()
-            return cam, False  # False: not simulated
+            return cam, False
         except Exception as e:
-            print(f"[WARNING] Falló inicialización de Lucam: {e}")
+            print(f"[ERROR] No se pudo iniciar Lucam: {e}")
     return SimulatedCamera(), True
