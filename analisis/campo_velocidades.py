@@ -9,7 +9,7 @@ from scipy.stats import gaussian_kde
 from matplotlib.colors import LinearSegmentedColormap
 
 class ContourAnalyzer:
-    def __init__(self, folder_path, delta_t=1.0, n_points=200):
+    def __init__(self, folder_path, delta_t=1.0, n_points=1000):
         self.folder_path = folder_path
         self.delta_t = delta_t
         self.n_points = n_points
@@ -96,7 +96,7 @@ class ContourAnalyzer:
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
         ax.axis("equal")
-        ax.grid(True, alpha=0.3)
+        #ax.grid(True, alpha=0.3)
     
         # ScalarMappable para la barra de color
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
