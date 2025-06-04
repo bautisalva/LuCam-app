@@ -51,5 +51,5 @@ python test.py
 
 ---
 ![image](https://github.com/user-attachments/assets/982437cf-5599-43d9-a4dd-87b9221eee4f)
-![Figure_1](https://github.com/user-attachments/assets/4c321fbf-000b-4291-8758-edccdfaf5d66)
+
 
