@@ -753,8 +753,8 @@ def API():
     LUCAM_CM_IDENTITY = 14
     LUCAM_CM_CUSTOM = 15
     # Shutter types
-    LUCAM_SHUTTER_TYPE_GLOBAL = 0
-    LUCAM_SHUTTER_TYPE_ROLLING = 1
+    LUCAM_SHUTTER_TYPE_GLOBAL = 1
+    LUCAM_SHUTTER_TYPE_ROLLING = 0
     # Extern interfaces
     LUCAM_EXTERN_INTERFACE_USB1 = 1
     LUCAM_EXTERN_INTERFACE_USB2 = 2
@@ -969,7 +969,7 @@ class Lucam:
         snapshot.useStrobe = False
         snapshot.strobeDelay = 0.0
         snapshot.useHwTrigger = 0
-        snapshot.shutterType = 0
+        snapshot.shutterType = 1
         snapshot.exposureDelay = 0.0
         snapshot.bufferlastframe = 0
         return snapshot
@@ -2903,7 +2903,7 @@ def test():
     print('Camera Properties', lucam)
 
     # set camera to 16 bit, 4x4 binning, max framerate
-    """lucam.SetFormat(
+    lucam.SetFormat(
         Lucam.FrameFormat(
             0,
             0,
@@ -2916,7 +2916,7 @@ def test():
             flagsY=1,
         ),
         framerate=10.0,
-    )"""
+    )
 
     # disable all internal image enhancements
     lucam.set_properties(
