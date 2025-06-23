@@ -961,7 +961,7 @@ class Lucam:
         snapshot.format = self.GetFormat()[0]
         snapshot.exposure = self.GetProperty('exposure')[0]
         snapshot.gain = self.GetProperty('gain')[0]
-        snapshot.timeout = 1000.0
+        snapshot.timeout = max(4 * snapshot.exposure, 2000.0)
         snapshot.gainRed = 1.0
         snapshot.gainBlue = 1.0
         snapshot.gainGrn1 = 1.0

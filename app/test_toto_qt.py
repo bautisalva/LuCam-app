@@ -210,7 +210,7 @@ class PreviewWorker(QObject):
                 image = self.camera.TakeSnapshot()
                 if image is not None:
                     self.new_frame.emit(image)
-            QThread.msleep(300)  # delay between frames
+            QThread.msleep(100)  # delay between frames
 
     def stop(self):
         """Stop the preview loop."""
@@ -1078,8 +1078,13 @@ class CameraApp(QWidget):
         bg_float = bg_roi.astype(np.float32)
     
         diff = a * (image_float - bg_float + b)
-        diff_centered = diff + 32768
-        return np.clip(diff_centered, 0, 65535).astype(np.uint16)
+        
+        # Reescalar a [0, 65535]
+        min_val = diff.min()
+        max_val = diff.max()
+        diff_16bits = ((diff - min_val) / (max_val - min_val) * 65535).astype(np.uint16)
+        
+        return diff_16bits
     
     def capture_image(self):
         """
