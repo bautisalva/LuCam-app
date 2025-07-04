@@ -170,7 +170,7 @@ class ImageEnhancer:
 #%%
 from skimage.io import imread
 
-im = imread(r"D:\Labos 6-7 2025\Baut+Toto\23-06-2025\260 x 5 relocated\resta_20250623_141618.tif")
+im = imread()
 im = im[570:710,830:970]
 
 plt.imshow(im)
