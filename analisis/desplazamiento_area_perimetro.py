@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 from skimage.io import imread, imsave
 from scipy.spatial import ConvexHull
 import pandas as pd
-from Analisis_poco_contorno import ImageEnhancer
+from bordes_poco_contraste import ImageEnhancer
 
 # Configuración de estilos para gráficos
 plt.style.use('seaborn-whitegrid')

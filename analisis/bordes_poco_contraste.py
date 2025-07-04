@@ -20,7 +20,7 @@ class ImageEnhancer:
     def _detect_histogram_peaks(self, image, min_intensity=5, min_dist=30, usar_dos_picos=True):
         histograma, bins = np.histogram(image[image > min_intensity], bins=32767*2, range=(0, 32767*2))
         histograma[:5] = 0
-        hist = gaussian(histograma.astype(float), sigma=5)
+        hist = gaussian(histograma.astype(float), sigma=650)
         peaks, _ = find_peaks(hist, distance=min_dist)
         peak_vals = hist[peaks]
 
@@ -52,11 +52,11 @@ class ImageEnhancer:
 
     def _enhance_tanh_diff2(self, corrected, centro, sigma):
         delta = corrected - centro
-        return -np.exp(-0.5 * (delta / sigma) ** 2) * delta
+        return np.exp(-0.5 * (delta / sigma) ** 2) * delta
 
     def _apply_tanh(self, image, ganancia=1, centro=100, sigma=50):
         delta = image - centro
-        return 0.5 * (np.tanh(0.5 * delta / sigma) + 1)
+        return -0.5 * (np.tanh(0.5 * delta / sigma) + 1)
 
     def _find_large_contours(self, binary, percentil_contornos=0):
         contours = find_contours(binary, level=0.5)
@@ -91,7 +91,7 @@ class ImageEnhancer:
                  metodo_contorno="sobel", usar_dos_picos=True):
 
         corrected = self._subtract_background()
-        centro, sigma, hist, top_peaks = self._detect_histogram_peaks(corrected, min_dist=min_dist_picos, usar_dos_picos=False)
+        centro, sigma, hist, top_peaks = self._detect_histogram_peaks(corrected, min_dist=min_dist_picos, usar_dos_picos=True)
 
         enhanced = self._enhance_tanh_diff2(corrected, centro, sigma)
         enhanced_norm = (enhanced - enhanced.min()) / (enhanced.max() - enhanced.min())
@@ -166,44 +166,23 @@ class ImageEnhancer:
 
         plt.tight_layout()
         plt.show()
-
+        
 #%%
 from skimage.io import imread
 
-saturado_positivo = imread("D:/Labos 6-7 2025/Baut+Toto/Fotos Test/Fotos 21-5/Saturado positivo.tif")
-saturado_negativo = imread("D:/Labos 6-7 2025/Baut+Toto/Fotos Test/Fotos 21-5/Saturado negativo.tif")
-raw = imread("D:/Labos 6-7 2025/Baut+Toto/Fotos Test/raw/cruda_20250521_125452.tif")
+im = imread(r"D:\Labos 6-7 2025\Baut+Toto\23-06-2025\260 x 5 relocated\resta_20250623_141618.tif")
+im = im[570:710,830:970]
 
-def remove_horizontal_lines_local(img):
-    row_means = np.mean(img, axis=1, keepdims=True)
-    corrected = img - row_means
-    corrected += np.mean(img)  # conservar brillo promedio
-    return corrected
+plt.imshow(im)
 
-raw = remove_horizontal_lines_local(raw)
-
-resta = saturado_positivo - saturado_negativo
-
-prueba = (raw - remove_horizontal_lines_local(saturado_negativo))/200*remove_horizontal_lines_local(resta)
-
-
-prueba_norm = (prueba - prueba.min()) / (prueba.max() - prueba.min())
-prueba_uint16 = (prueba_norm * 65535).astype(np.uint16)
-
-
-plt.figure(figsize=(12, 4))
-plt.imshow(prueba_uint16, cmap='gray')
-plt.title("Resta")
-plt.axis('off')   
-
-
-     
 #%%
 
-enhancer = ImageEnhancer(imagen=prueba_uint16)
+enhancer = ImageEnhancer(imagen=im)
 binary, contornos, hist = enhancer.procesar(
-    suavizado=5,
+    suavizado=41,
     percentil_contornos=99.9,
-    min_dist_picos=5,
+    min_dist_picos=8000,
     metodo_contorno="binarizacion"
 )
+
+
