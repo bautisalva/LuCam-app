@@ -50,9 +50,6 @@ python test.py
 - Lumenera USB Camera API Reference Manual Release 5.0. Lumenera Corporation.
 
 ---
-![image](https://github.com/user-attachments/assets/982437cf-5599-43d9-a4dd-87b9221eee4f)
-![Bin-P8139-190Oe-30ms-5Tw-97](https://github.com/user-attachments/assets/3f6d4692-93f4-4548-891b-496643e3728a)
-![image](https://github.com/user-attachments/assets/0f8721ff-4443-429b-ab2b-e989d0a0b7f2)
 
 
 
