@@ -867,9 +867,9 @@ def var_u(binary1, binary2, contours1):
     distances, _ = tree.query(changed_pixels)
 
     sum_uprime = np.sum(distances)
-    sum_abs_da = np.sum(np.abs(delta_a))
+    sum_abs_da = np.sum(delta_a)
 
-    return (2*sum_uprime / P) - (sum_abs_da / P)**2
+    return (2*sum_uprime / P)
 
 # ------------------------------------------------------------
 # Pipeline completo
