@@ -226,7 +226,7 @@ images = [io.imread(path) > 0 for _, path in files]  # umbral simple
 var_values = []
 steps = []
 
-for k in range(len(images) - 1):
+for k in range(18):
     v = var_u(images[k], images[k+1])
     var_values.append(v)
     steps.append(k)  # paso k → k+1
@@ -487,7 +487,7 @@ img = []
 
 for i in range(len(imag)):
     enhancer = ImageEnhancer(imagen=imag[i])
-    binary = enhancer.procesar(
+    binary,_,_ = enhancer.procesar(
         suavizado=3,
         percentil_contornos=99.9,
         min_dist_picos=8000,
@@ -496,7 +496,6 @@ for i in range(len(imag)):
     
     img.append(binary)
     
-plt.imshow(img[16])
     
 #%%    
 
@@ -518,5 +517,261 @@ plt.xlabel("Paso (n → n+1)")
 plt.ylabel("Var(u)")
 plt.ylim(-10,10)
 plt.title("Variación de Var(u) entre pasos consecutivos")
+plt.grid(True)
+plt.show()
+
+#%%
+
+import os, re
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage.filters import gaussian, threshold_otsu, sobel
+from skimage.measure import find_contours, perimeter
+from scipy.ndimage import uniform_filter, distance_transform_edt
+from scipy.signal import find_peaks
+from scipy.optimize import curve_fit
+from skimage.io import imread
+
+
+# ====================
+# CLASE ImageEnhancer
+# ====================
+class ImageEnhancer:
+    def __init__(self, imagen, sigma_background=100, alpha=0):
+        self.image = imagen
+        self.sigma_background = sigma_background
+        self.alpha = alpha
+
+    def _subtract_background(self):
+        background = gaussian(self.image.astype(np.float32),
+                              sigma=self.sigma_background,
+                              preserve_range=True)
+        corrected = self.image.astype(np.float32) - self.alpha * background
+        return corrected
+
+    def _detect_histogram_peaks(self, image, min_intensity=5, min_dist=30, usar_dos_picos=True):
+        histograma, bins = np.histogram(image[image > min_intensity],
+                                        bins=32767*2,
+                                        range=(0, 32767*2))
+        histograma[:5] = 0
+        hist = gaussian(histograma.astype(float), sigma=650)
+        peaks, _ = find_peaks(hist, distance=min_dist)
+        peak_vals = hist[peaks]
+
+        if len(peaks) >= 2 and usar_dos_picos:
+            sorted_indices = np.argsort(peak_vals)[-2:]
+            top_peaks = peaks[sorted_indices]
+            top_peaks.sort()
+            centro = (top_peaks[0] + top_peaks[1]) / 2
+            sigma = abs(top_peaks[0] - centro)
+        elif len(peaks) >= 1:
+            mu = peaks[np.argmax(peak_vals)]
+
+            def gauss(x, A, sigma):
+                return A * np.exp(-0.5 * ((x - mu) / sigma) ** 2)
+
+            x_data = np.linspace(0, 32767*2, 32767*2)
+            y_data = hist
+            try:
+                popt, _ = curve_fit(gauss, x_data, y_data, p0=[hist[mu], 10])
+                A, sigma = popt
+                centro = mu
+            except RuntimeError:
+                centro = mu
+                sigma = 10
+            top_peaks = np.array([mu])
+        else:
+            raise ValueError("No se detectaron picos en el histograma.")
+
+        return centro, sigma, hist, top_peaks
+
+    def _enhance_tanh_diff2(self, corrected, centro, sigma):
+        delta = corrected - centro
+        return np.exp(-0.5 * (delta / sigma) ** 2) * delta
+
+    def _apply_tanh(self, image, ganancia=1, centro=100, sigma=50):
+        delta = image - centro
+        return -0.5 * (np.tanh(0.5 * delta / sigma) + 1)
+
+    def _find_large_contours(self, binary, percentil_contornos=0):
+        contours = find_contours(binary, level=0.5)
+        if percentil_contornos > 0 and contours:
+            def area_contorno(contour):
+                if contour.shape[0] < 3:
+                    return 0.0
+                x = contour[:, 1]
+                y = contour[:, 0]
+                return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
+            areas = np.array([area_contorno(c) for c in contours])
+            umbral = np.percentile(areas, percentil_contornos)
+            contours = [c for c, a in zip(contours, areas) if a >= umbral]
+        return contours
+
+    def procesar(self, suavizado=5, ganancia_tanh=0.1,
+                 percentil_contornos=0, min_dist_picos=30,
+                 metodo_contorno="sobel", usar_dos_picos=True):
+
+        corrected = self._subtract_background()
+        centro, sigma, hist, top_peaks = self._detect_histogram_peaks(corrected,
+                                                                      min_dist=min_dist_picos,
+                                                                      usar_dos_picos=True)
+
+        enhanced = self._enhance_tanh_diff2(corrected, centro, sigma)
+        enhanced_norm = (enhanced - enhanced.min()) / (enhanced.max() - enhanced.min())
+        enhanced_uint8 = (enhanced_norm * 65534).astype(np.uint16)
+
+        smooth = uniform_filter(enhanced_uint8, size=suavizado)
+        centro1, sigma1, hist1, top_peaks1 = self._detect_histogram_peaks(smooth,
+                                                                          min_dist=min_dist_picos,
+                                                                          usar_dos_picos=True)
+
+        enhanced2 = self._apply_tanh(smooth, ganancia=ganancia_tanh,
+                                     centro=centro1, sigma=sigma1)
+        enhanced2_norm = (enhanced2 - enhanced2.min()) / (enhanced2.max() - enhanced2.min())
+        enhanced2_uint8 = (enhanced2_norm * 65534).astype(np.uint16)
+
+        threshold = threshold_otsu(enhanced2_uint8)
+        binary = (enhanced2_uint8 > threshold).astype(np.uint8)  # CORREGIDO a 0/1
+
+        if metodo_contorno == "binarizacion":
+            contornos = self._find_large_contours(binary,
+                                                  percentil_contornos=percentil_contornos)
+        else:
+            raise ValueError(f"Método de contorno no reconocido: {metodo_contorno}")
+
+        return binary, contornos, hist
+
+
+# ====================
+# Cargar imágenes
+# ====================
+RAIZ = r'C:\Users\Marina\Documents\Labo 6\imagenes\250 x 10'
+PATRON = r'resta_(\d{8}_\d{6})\.tif'
+
+def load_images(PATRON, RAIZ):
+    files = []
+    for f in os.listdir(RAIZ):
+        match = re.match(PATRON, f)
+        if match:
+            key = match.group(1)
+            files.append((key, f))
+    files.sort(key=lambda x: x[0])
+    files = files[15:]  # SALTEA LOS PRIMEROS 15
+
+    images, filenames = [], []
+    for _, fname in files:
+        try:
+            img = imread(os.path.join(RAIZ, fname))[140:280, 345:495]
+            images.append(img)
+            filenames.append(fname)
+        except Exception as e:
+            print(f"Error cargando {fname}: {str(e)}")
+    return images, filenames
+
+imag, _ = load_images(PATRON, RAIZ)
+
+
+# ====================
+# Procesar imágenes
+# ====================
+binaries = []
+contours = []
+for i in range(len(imag)):
+    enhancer = ImageEnhancer(imagen=imag[i])
+    binary, contornos, _ = enhancer.procesar(
+        suavizado=3,
+        percentil_contornos=99.9,
+        min_dist_picos=8000,
+        metodo_contorno="binarizacion"
+    )
+    binaries.append(binary)
+    contours.append(contornos)
+
+
+# ====================
+# Calcular Var(u)
+# ====================
+def calcular_var_u(binary1, binary2):
+    delta_a = binary2.astype(int) - binary1.astype(int)
+    mask_cambio = delta_a != 0
+
+    distancias = distance_transform_edt(1 - binary1)  # CORREGIDO
+    u_primes = distancias[mask_cambio]
+
+    P = perimeter(binary1)
+    term1 = (2 / P) * np.sum(np.abs(u_primes))
+    term2 = (np.sum(delta_a) / P) ** 2
+    return term1 - term2
+
+
+variaciones = []
+for i in range(len(binaries) - 1):
+    var_u = calcular_var_u(binaries[i], binaries[i+1])
+    variaciones.append(var_u)
+
+
+# ====================
+# Graficar
+# ====================
+plt.figure(figsize=(7,5))
+plt.plot(range(len(variaciones)), variaciones, marker="o")
+plt.xlabel("Paso")
+plt.ylabel("Var(u)")
+plt.title("Varianza del desplazamiento entre bordes consecutivos")
+plt.grid(True)
+plt.show()
+
+#%%
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.spatial import cKDTree
+
+# --- Función para calcular Var(u) usando contornos ya extraídos ---
+def calcular_var_u(contorno1_list, contorno2_list, binary1):
+    """
+    contorno1_list, contorno2_list: lista de arrays de contornos (de ImageEnhancer)
+    binary1: imagen binaria asociada al contorno1, para calcular perímetro
+    """
+    # Si hay varios contornos, los concatenamos en un solo array
+    cont1 = np.vstack(contorno1_list)
+    cont2 = np.vstack(contorno2_list)
+
+    # Crear KDTree para búsqueda rápida
+    tree1 = cKDTree(cont1)
+
+    # Para cada punto del contorno2, distancia mínima al contorno1
+    distancias, _ = tree1.query(cont2)
+
+    # Perímetro aproximado como número de puntos en el contorno1
+    P = len(cont1)
+
+    # Diferencia de "área" (número de píxeles en el dominio)
+    delta_a = np.sum(binary1.astype(int)) - np.sum(binary1.astype(int))  # como aproximación
+    # Nota: si querés exacto, podes usar np.sum(binary2)-np.sum(binary1), pero se puede dejar para la fórmula
+
+    term1 = (2 / P) * np.sum(distancias)
+    term2 = (delta_a / P) ** 2
+
+    return term1 - term2
+
+
+# --- Loop sobre todos los pasos consecutivos ---
+variances = []
+for k in range(len(binaries)-1):
+    var_u = calcular_var_u(
+        contours[k],      # contorno de la imagen k
+        contours[k+1],    # contorno de la imagen k+1
+        binaries[k]       # binaria de la imagen k
+    )
+    variances.append(var_u)
+
+
+# --- Graficar ---
+plt.figure(figsize=(8,5))
+plt.plot(range(len(variances)), variances, marker="o")
+plt.xlabel("Paso")
+plt.ylabel("Var(u)")
+plt.title("Varianza del desplazamiento entre contornos consecutivos")
 plt.grid(True)
 plt.show()
