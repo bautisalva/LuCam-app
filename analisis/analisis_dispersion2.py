@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Aug 21 11:42:07 2025
-
-@author: Toto y Bauti
-"""
-
 import os, re
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,73 +8,75 @@ from scipy.spatial import cKDTree
 from scipy.ndimage import uniform_filter
 
 # ------------------------------------------------------------
-# Preprocesamiento y binarización
+# Clase para mejorar imágenes no binarizadas
 # ------------------------------------------------------------
-def preprocess_image(image, already_binary=False, smooth=3):
-    """
-    Convierte la imagen a binaria.
-    - Si ya es binaria: asegura que esté en 0/1.
-    - Si no: aplica suavizado y threshold de Otsu.
-    """
-    img = image.astype(np.float32)
+class ImageEnhancer:
+    def __init__(self, imagen, sigma_background=100, alpha=0):
+        self.image = imagen
+        self.sigma_background = sigma_background
+        self.alpha = alpha
 
-    if already_binary:
-        # Aseguramos que sea 0/1
-        binary = (img > 0).astype(np.uint8)
-    else:
-        # Suavizado y umbral Otsu
-        smooth_img = uniform_filter(img, size=smooth)
-        thresh = threshold_otsu(smooth_img)
-        binary = (smooth_img > thresh).astype(np.uint8)
+    def _subtract_background(self):
+        background = gaussian(self.image.astype(np.float32),
+                              sigma=self.sigma_background,
+                              preserve_range=True)
+        corrected = self.image.astype(np.float32) - self.alpha * background
+        return corrected
 
-    # Contornos del dominio
-    contours = find_contours(binary, level=0.5)
-    return binary, contours
+    def _find_large_contours(self, binary, percentil_contornos=99.9):
+        contours = find_contours(binary, level=0.5)
+        if percentil_contornos > 0 and contours:
+            def area_contour(contour):
+                x = contour[:, 1]
+                y = contour[:, 0]
+                return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
+            areas = np.array([area_contour(c) for c in contours])
+            umbral = np.percentile(areas, percentil_contornos)
+            return [c for c, a in zip(contours, areas) if a >= umbral]
+        return contours
+
+    def procesar(self, suavizado=3, percentil_contornos=99.9):
+        corrected = self._subtract_background() if self.alpha > 0 else self.image.astype(float)
+        smooth = uniform_filter(corrected, size=suavizado)
+        threshold = threshold_otsu(smooth)
+        binary = (smooth > threshold).astype(np.uint16)
+        contours = self._find_large_contours(binary, percentil_contornos=percentil_contornos)
+        return binary, contours
 
 # ------------------------------------------------------------
 # Cálculo de Var(u)
 # ------------------------------------------------------------
 def var_u(binary1, binary2, contours1):
-    """
-    Calcula la varianza del desplazamiento Var(u) entre dos imágenes binarias.
-    """
-    delta_a = binary2.astype(int) - binary1.astype(int)   # cambios de +1/-1/0
+    delta_a = binary2.astype(int) - binary1.astype(int)
     changed_pixels = np.argwhere(delta_a != 0)
 
     if len(changed_pixels) == 0 or len(contours1) == 0:
         return 0.0
 
-    # Concatenamos todos los contornos de la primera imagen
     cont1 = np.vstack(contours1)
     P = perimeter(binary1)
     if P == 0:
         return 0.0
 
-    # Distancias mínimas de píxeles cambiados al contorno original
     tree = cKDTree(cont1)
     distances, _ = tree.query(changed_pixels)
 
-    # Aplicamos la fórmula
     sum_uprime = np.sum(distances)
-    sum_abs_da = np.sum(np.abs(delta_a))  # solo |Δa_i|
+    sum_abs_da = np.sum(np.abs(delta_a))
 
     var_u_value = (2 * sum_uprime / P) - (sum_abs_da / P) ** 2
     return var_u_value
 
 # ------------------------------------------------------------
-# Cargar imágenes de una carpeta
+# Cargar imágenes desde carpeta
 # ------------------------------------------------------------
-def load_images_folder(folder, regex_pattern):
-    """
-    Carga imágenes de una carpeta y las ordena usando un número en el nombre.
-    """
+def load_images_folder(folder, regex_pattern, min_index=15):
     pattern = re.compile(regex_pattern)
     files = []
 
     for f in os.listdir(folder):
         match = pattern.match(f)
         if match:
-            # key es el número que define el orden
             try:
                 key = int(match.group(1))
             except:
@@ -89,6 +84,7 @@ def load_images_folder(folder, regex_pattern):
             files.append((key, f))
 
     files.sort(key=lambda x: x[0])
+    files = files[min_index:]
 
     images, filenames = [], []
     for _, fname in files:
@@ -104,24 +100,23 @@ def load_images_folder(folder, regex_pattern):
 # Pipeline principal
 # ------------------------------------------------------------
 def pipeline(folder, regex_pattern, already_binary=False):
-    """
-    Ejecuta todo el cálculo de Var(u) para una carpeta.
-    """
-    images, filenames = load_images_folder(folder, regex_pattern)
+    images, filenames = load_images_folder(folder, regex_pattern, min_index=15)
 
-    binaries, contours = [], []
-    for img in images:
-        binary, conts = preprocess_image(img, already_binary=already_binary, smooth=3)
-        binaries.append(binary)
-        contours.append(conts)
-
-    # Calcular Var(u) entre frames consecutivos
     variances = []
-    for k in range(len(binaries) - 1):
-        v = var_u(binaries[k], binaries[k+1], contours[k])
+    for k in range(len(images) - 1):
+        if already_binary:
+            binary1 = (images[k] > 0).astype(np.uint8)
+            binary2 = (images[k+1] > 0).astype(np.uint8)
+            contours1 = find_contours(binary1, level=0.5)
+        else:
+            enhancer1 = ImageEnhancer(images[k], sigma_background=100, alpha=0)
+            enhancer2 = ImageEnhancer(images[k+1], sigma_background=100, alpha=0)
+            binary1, contours1 = enhancer1.procesar(suavizado=3, percentil_contornos=99.9)
+            binary2, _ = enhancer2.procesar(suavizado=3, percentil_contornos=99.9)
+
+        v = var_u(binary1, binary2, contours1)
         variances.append(v)
 
-    # Graficar resultados
     plt.figure(figsize=(8, 5))
     plt.plot(range(len(variances)), variances, marker="o")
     plt.xlabel("Paso")
@@ -133,14 +128,12 @@ def pipeline(folder, regex_pattern, already_binary=False):
     return variances
 
 # ------------------------------------------------------------
-# Uso en las dos carpetas
+# Ejecución en carpetas
 # ------------------------------------------------------------
-# Caso 1: imágenes NO binarizadas (usar Otsu)
 folder1 = r"C:\Users\Marina\Documents\Labo 6\imagenes\250 x 10"
 regex1 = r'resta_(\d{8}_\d{6})\.tif'
 var1 = pipeline(folder1, regex1, already_binary=False)
 
-# Caso 2: imágenes YA binarizadas
 folder2 = r"C:\Users\Marina\Documents\Labo 6\imagenes\test_velocidades"
 regex2 = r".*-(\d+).tif$"
 var2 = pipeline(folder2, regex2, already_binary=True)
