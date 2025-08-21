@@ -75,6 +75,7 @@ def var_u(binary1, binary2, contours1):
 
     sum_uprime = dists.sum()
     sum_abs_da = np.abs(delta).sum()
+
     return (2 * sum_uprime / P) - (sum_abs_da / P) ** 2
 
 
