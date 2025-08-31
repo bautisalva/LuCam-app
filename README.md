@@ -1,6 +1,6 @@
 # Lumanera Camera Python Image Acquisition Software
 
-A Python application for **acquiring and processiong images from Lumenera cameras** to study magentic domains on thin films using the LuCam API by [Christoph Gohlke](https://github.com/cgohlke).
+A Python application for **acquiring and processiong images from Lumenera cameras** to study magentic domains on thin films using the LuCam API by [Christoph Gohlke](https://github.com/cgohlke). It offers a cross‑platform PyQt5 interface for live preview, high‑quality capture, and magnetic‑domain analysis.
 
 ---
 ## Features
@@ -30,13 +30,19 @@ A Python application for **acquiring and processiong images from Lumenera camera
 You can also install all at once with:
 
 ```bash
+git clone https://github.com/bautisalva/LuCam-app.git
+cd LuCam-app
 pip install -r requirements.txt
+
 ```
 ---
-## Usage
-```bash
-python test.py
-```
+## Tabs Overview
+1. Preview
+Adjust FPS and sensor properties, save/load settings, and refresh from the camera in real time
+2. Capture
+Capture bursts of frames with averaging or median modes, apply Gaussian blur, enable/disable background subtraction, select ROI with the mouse, and auto‑save multiple image variants (raw, blurred, background‑subtracted) to a working directory
+3. Analysis
+Run edge‑detection analysis on the last captured or loaded image. Parameters include smoothing, contour percentile, peak distance, and contour method (Sobel vs. binarization). Results (binary image and contour coordinates) can be exported to disk
 ---
 
 ## Missing
