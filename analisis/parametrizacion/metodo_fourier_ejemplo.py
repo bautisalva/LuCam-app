@@ -273,7 +273,7 @@ def run_v8(image_path: str,
     
     fig.tight_layout()
     fig.savefig(os.path.join(outdir, "01_overlay_modes.png"), dpi=220)
-
+    plt.close()
     # 4) Figura 02 — Error RMS radial vs K (muestreo denso hasta K_final)
     # Para evitar costos, si K_final>400, muestreamos 400 puntos entre 1 y K_final
     if K_curve <= 400:
@@ -310,7 +310,7 @@ def run_v8(image_path: str,
     plt.title('Error de reconstrucción vs K')
     plt.tight_layout()
     plt.savefig(os.path.join(outdir, "02_error_vs_K.png"), dpi=220)
-    
+    plt.close()
     # 5) Figura 03 — x(s) e y(s) (original y final)
     xr_u, yr_u = np.real(z_u), np.imag(z_u)
     xr_c, yr_c = np.real(z_curve), np.imag(z_curve)
@@ -324,6 +324,7 @@ def run_v8(image_path: str,
     ax2.set_xlabel('s/L'); ax2.set_ylabel('y [px]'); ax2.set_title('y(s)')
     ax2.grid(alpha=0.25); ax2.legend(fontsize=8, frameon=False)
     fig3.tight_layout(); fig3.savefig(os.path.join(outdir, "03_xy_vs_s.png"), dpi=220)
+    plt.close()
 
     # 6) Figura 04 — r(s) absoluto de la curva final
     xc, yc = xr_c.mean(), yr_c.mean()
@@ -334,9 +335,9 @@ def run_v8(image_path: str,
     plt.title('Perfil radial absoluto r(s) de la curva final')
     plt.grid(alpha=0.25)
     plt.tight_layout(); plt.savefig(os.path.join(outdir, "04_radial_rs.png"), dpi=220)
-
+    plt.close()
     # 7) Guardado
-    np.savez(os.path.join(outdir, "results_v8.npz"),
+    np.savez(os.path.join(outdir, "results.npz"),
              C=C, P_u=P_u, s_u=s_u, L=L,
              Z=Z, z_mean=z_mean,
              K_curve=np.array([K_curve]),
@@ -353,7 +354,7 @@ def run_v8(image_path: str,
 if __name__ == "__main__":
     run_v8(
         image_path=r"E:\Documents\Labo 6\LuCam-app\analisis\parametrizacion\Bin-P8139-190Oe-30ms-5Tw-99.tif",
-        outdir="v8_out",
+        outdir="out_ejemplo",
         M=8192,
         eps_curve=1e-3,
         overlay_modes=(1,8),
