@@ -280,20 +280,37 @@ def run_v8(image_path: str,
         Ks_err = np.arange(1, K_curve+1, dtype=int)
     else:
         Ks_err = np.unique(np.linspace(1, K_curve, 400, dtype=int))
+    
+    # Asegurar orden ascendente (por las dudas)
+    Ks_err = np.sort(Ks_err)
+    
+    # Errores: ¡usar el mismo z_mean para evitar offset!
     errs_dense = []
     for K in Ks_err:
-        zr = reconstruct_from_Z(Z, K, z_mean=0.0)  # medir vs z_u (que ya incluye z_mean)
+        zr = reconstruct_from_Z(Z, K, z_mean=z_mean)   # consistente
         errs_dense.append(rms_radial(z_u, zr))
     errs_dense = np.array(errs_dense, float)
-
+    
+    # Piso para graficar en log (no altera datos, sólo evita -inf en ploteo)
+    plot_eps = 1e-16
+    errs_plot = np.clip(errs_dense, plot_eps, None)
+    
+    # Valor de error en K_final (el más cercano en la grilla)
+    idx_kf = int(np.argmin(np.abs(Ks_err - K_curve)))
+    err_at_kf = errs_plot[idx_kf]+0.1
+    
     plt.figure(figsize=(6.6, 4.0))
-    plt.plot(Ks_err, errs_dense, '-', lw=1.5, color='#444444')
+    plt.loglog(Ks_err, errs_plot, '-', lw=1.5, color='#444444')
     plt.axvline(K_curve, ls="--", color='#888888')
-    plt.text(K_curve, np.max(errs_dense)*0.93, f"K_final={K_curve}", rotation=90, va="top", ha="right", fontsize=8)
-    plt.xlabel('Armónico K'); plt.ylabel('RMS radial (vs contorno)')
+    plt.text(K_curve, err_at_kf, f"K_final={K_curve}",
+             rotation=90, va="bottom", ha="right", fontsize=11)
+    
+    plt.xlabel('Armónico K')
+    plt.ylabel('RMS radial (vs contorno)')
     plt.title('Error de reconstrucción vs K')
-    plt.tight_layout(); plt.savefig(os.path.join(outdir, "02_error_vs_K.png"), dpi=220)
-
+    plt.tight_layout()
+    plt.savefig(os.path.join(outdir, "02_error_vs_K.png"), dpi=220)
+    
     # 5) Figura 03 — x(s) e y(s) (original y final)
     xr_u, yr_u = np.real(z_u), np.imag(z_u)
     xr_c, yr_c = np.real(z_curve), np.imag(z_curve)
