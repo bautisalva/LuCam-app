@@ -253,7 +253,9 @@ def run_v8(image_path: str,
     
     # Punto inicial
     ax.plot(np.real(z_curve)[0], np.imag(z_curve)[0], 'o', ms=4, color='black', label="Inicio (t=0)", zorder=4)
-    
+    # Centroide de la curva final
+    xc, yc = np.real(z_curve).mean(), np.imag(z_curve).mean()
+    #ax.plot(xc, yc, '.', ms=7, color='red', label="Centroide", zorder=5)
     # Ejes y estética
     ax.set_aspect('equal')
     ax.set_xlabel('x [px]')
