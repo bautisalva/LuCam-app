@@ -469,11 +469,11 @@ def process_series(
 
 def parse_args():
     p = argparse.ArgumentParser(description="Batch de parametrización Fourier con alineación global.")
-    p.add_argument("--input-dir", type=str, default=".", help="Carpeta con las imágenes.")
-    p.add_argument("--prefix", type=str, default="Bin-P8139-190Oe-30ms-5Tw", help="Prefijo común del nombre.")
+    p.add_argument("--input-dir", type=str, default=r"C:\Users\Tomas\Desktop\FACULTAD\LABO 6\Analisis para informe\080", help="Carpeta con las imágenes.")
+    p.add_argument("--prefix", type=str, default="Bin-P8137-080Oe-100ms", help="Prefijo común del nombre.")
     p.add_argument("--ext", type=str, default=".tif", help="Extensión (incluyendo punto).")
     p.add_argument("--start", type=int, default=0, help="Índice inicial (inclusive).")
-    p.add_argument("--end", type=int, default=2, help="Índice final (inclusive).")
+    p.add_argument("--end", type=int, default=5, help="Índice final (inclusive).")
     p.add_argument("--outdir", type=str, default="out_pablo", help="Carpeta de salida.")
     p.add_argument("--M", type=int, default=8192, help="Muestras uniformes sobre la curva.")
     p.add_argument("--eps", type=float, default=1e-3, help="Tolerancia para seleccionar K.")
