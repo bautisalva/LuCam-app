@@ -1,3 +1,0 @@
-Comparación de α (espectro vs B(ℓ)) — opción B
-Promedios  |  α_spec=1.3873  α_B=0.3343  Δ=1.0530
-Desvíos    |  σ_spec=0.0490  σ_B=0.1054

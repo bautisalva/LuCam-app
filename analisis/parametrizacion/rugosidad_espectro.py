@@ -246,7 +246,7 @@ def run(series_npz, out_dir, option='A', rmin_frac=None, rmax_frac=None, qmin_fr
 # ---------------- CLI ----------------
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description='Rugosidad (ξ) por B(r) y S(q̃) tal como en la tesis.')
-    ap.add_argument('--series_npz', default=r"C:\Users\Marina\Documents\Labo 6\LuCam-app\analisis\parametrizacion\out_pablo\series_results.npz", type=str)
+    ap.add_argument('--series_npz', default=r"E:\Documents\Labo 6\LuCam-app\analisis\parametrizacion\out_pabloseries_results.npz", type=str)
     ap.add_argument('--out_dir', default='alpha_tesis_out', type=str)
     ap.add_argument('--option', default='A', choices=['A','B'], help='A: centroide por frame, B: centroide del frame 0')
     ap.add_argument('--rmin_frac', type=float, default=None)
