@@ -1,0 +1,46 @@
+{
+  "IMAGE_PATH": null,
+  "BASE_DIR": "C:\\Users\\Marina\\Documents\\Labo 6\\LuCam-app\\analisis\\rugosidad",
+  "BASENAME": "Bin-P8137-150Oe-3ms-",
+  "IDX": 5,
+  "EXTS": [
+    ".png",
+    ".tif",
+    ".tiff",
+    ".jpg",
+    ".jpeg",
+    ".bmp"
+  ],
+  "MSAMPLES": 1024,
+  "FIT_RANGE_LOG10": [
+    0.1,
+    0.8
+  ],
+  "DRAW_EVERY": 1,
+  "K_SET_BASE": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    20
+  ],
+  "K_FINE_MIN": 1,
+  "K_FINE_MAX": 80,
+  "K_FINE_N": 1,
+  "K_OVERLAY": [
+    1,
+    2,
+    3,
+    20
+  ],
+  "ROOT_OUT": "out",
+  "TAG": "rugosidad",
+  "SHOW_PLOTS": false,
+  "input_path": "C:\\Users\\Marina\\Documents\\Labo 6\\LuCam-app\\analisis\\rugosidad\\Bin-P8137-150Oe-3ms-5.tif"
+}
