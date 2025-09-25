@@ -321,7 +321,7 @@ def cargar_binaria(path, thresh=0.5):
 # ================== ejemplo de uso ==================
 if __name__ == "__main__":
     BASE_DIR = r"C:\Users\Tomas\Desktop\FACULTAD\LABO 6\Analisis para informe\080"
-    BASENAME = "Bin-P8137-080Oe-100ms-"
+    BASENAME = "Bin-P8137-150Oe-3ms-"
     IDX      = 5
     EXTS     = [".png", ".tif", ".tiff", ".jpg", ".jpeg", ".bmp"]
 
