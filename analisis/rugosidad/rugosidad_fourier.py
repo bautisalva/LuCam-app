@@ -42,7 +42,7 @@ CFG = dict(
     EXTS=(".png", ".tif", ".tiff", ".jpg", ".jpeg", ".bmp"),
 
     # --- Parámetros geométricos y de análisis:
-    MSAMPLES=1024,             # puntos por arclonga (nuestro método)
+    MSAMPLES=512,             # puntos por arclonga (nuestro método)
     FIT_RANGE_LOG10=(0, 0.8),  # ventana para el ajuste en log10(r)
     DRAW_EVERY=1,              # fajas a dibujar (1=todas) para el plot de normales
 
