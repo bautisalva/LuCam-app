@@ -13,9 +13,9 @@ from skimage.draw import polygon
 from scipy.ndimage import distance_transform_edt
 
 # ------------------ Parámetros de entrada ------------------
-BASE_DIR = r"C:\Users\Tomas\Desktop\FACULTAD\LABO 6\Analisis para informe\080"
-BASENAME = "Bin-P8137-080Oe-100ms-"
-IDX      = 5
+BASE_DIR=r"C:\Users\Marina\Documents\Labo 6\LuCam-app\analisis\rugosidad",
+BASENAME="Bin-P8137-150Oe-3ms-",    # ejemplo: "Bin-P8137-150Oe-3ms-"
+IDX=5,       
 EXTS     = [".png", ".tif", ".tiff", ".jpg", ".jpeg", ".bmp"]
 
 # Escala espacial
