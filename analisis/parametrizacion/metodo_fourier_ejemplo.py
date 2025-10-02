@@ -353,8 +353,8 @@ def run_v8(image_path: str,
 # -----------------------------------------------------------------------------
 if __name__ == "__main__":
     run_v8(
-        image_path=r"E:\Documents\Labo 6\LuCam-app\analisis\parametrizacion\Bin-P8139-190Oe-30ms-5Tw-99.tif",
-        outdir="out_ejemplo",
+        image_path=r"C:\Users\Marina\Documents\Labo 6\LuCam-app\analisis\parametrizacion\Bin-P8139-190Oe-30ms-5Tw-99.tif",
+        outdir="out_ejemplo_2",
         M=8192,
         eps_curve=1e-3,
         overlay_modes=(1,8),
