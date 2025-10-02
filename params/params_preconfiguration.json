@@ -1,0 +1,23 @@
+{
+    "ConfigPrueba1": {
+        "tiempo_saturacion": "10",
+        "campo_saturacion": "100",
+        "tiempo_dominio": "10",
+        "campo_dominio": "100",
+        "resistencia": "100"
+    },
+    "ConfigPrueba2": {
+        "tiempo_saturacion": "5",
+        "campo_saturacion": "100",
+        "tiempo_dominio": "5",
+        "campo_dominio": "100",
+        "resistencia": "100"
+    },
+    "aaa": {
+        "tiempo_saturacion": "10",
+        "campo_saturacion": "100",
+        "tiempo_dominio": "",
+        "campo_dominio": "",
+        "resistencia": ""
+    }
+}

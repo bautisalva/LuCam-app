@@ -31,8 +31,9 @@ from scipy.ndimage import gaussian_filter
 from PIL import Image, ImageDraw, ImageFont
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
-                             QSpinBox, QComboBox, QFileDialog,
-                             QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
+                             QSpinBox, QComboBox, QFileDialog, QMessageBox,
+                             QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit,
+                             QInputDialog,QCheckBox)
 from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 from analysis_tab import AnalysisTab
@@ -407,11 +408,16 @@ class CameraApp(QWidget):
         # Window 3: Analysis
         self.analysis_tab = AnalysisTab(self.get_last_image, self.log_message)
         
+        # Window 4: Pulse control
+        self.control_tab = QWidget()
+        self.init_control_tab()
     
         # Add window
         self.tabs.addTab(self.preview_tab, "Preview")
         self.tabs.addTab(self.capture_tab, "Captura")
         self.tabs.addTab(self.analysis_tab, "Análisis de Imagen")
+        self.tabs.addTab(self.control_tab, "Control de pulso")
+
     
         # Main layout
         main_layout = QVBoxLayout()
@@ -693,7 +699,151 @@ class CameraApp(QWidget):
         layout.addLayout(controls_layout)
     
         self.capture_tab.setLayout(layout)
+    
+    def init_control_tab(self):
+        '''
+        This tab has the porpuse of controling de intensity and width of the magnetic pulses that modify the PDM's
+        '''
+        main_layout = QVBoxLayout()
+
+        # --- Main frame ---
+        main_group = QGroupBox("Control de pulsos y toma de datos")
+        main_group_layout = QVBoxLayout(main_group)
+
+        # --- Osciloscope ---
+        osc_group = QGroupBox("Osciloscopio")
+        osc_layout = QGridLayout(osc_group)
+
+        osc_layout.addWidget(QLabel("Nombre archivo datos:"), 0, 0)
+        self.osc_file_edit = QLineEdit()
+        osc_layout.addWidget(self.osc_file_edit, 0, 1,1,3)
+
+        osc_layout.addWidget(QLabel("Escala X:"), 1, 2)
+        self.osc_x_combo = QComboBox()
+        self.osc_x_combo.addItems(["1 ns/div", "2 ns/div", "5 ns/div", 
+                                  "10 ns/div", "20 ns/div", "50 ns/div", 
+                                  "100 ns/div", "200 ns/div", "500 ns/div", 
+                                  "1 µs/div", "2 µs/div", "5 µs/div", 
+                                  "10 µs/div", "20 µs/div", "50 µs/div", 
+                                  "100 µs/div", "200 µs/div", "500 µs/div", 
+                                  "1 ms/div", "2 ms/div", "5 ms/div", 
+                                  "10 ms/div", "20 ms/div", "50 ms/div", 
+                                  "100 ms/div", "200 ms/div", "500 ms/div", 
+                                  "1 s/div", "2 s/div", "5 s/div", "10 s/div"])  
+        osc_layout.addWidget(self.osc_x_combo,2,2)
+
+        osc_layout.addWidget(QLabel("Escala Y:"), 1, 3)
+        self.osc_y_combo = QComboBox()
+        self.osc_y_combo.addItems(["1 mV/div", "2 mV/div", "5 mV/div", 
+                                   "10 mV/div", "20 mV/div", "50 mV/div", 
+                                   "100 mV/div", "200 mV/div", "500 mV/div", 
+                                   "1 V/div", "2 V/div", "5 V/div", "10 V/div"])  
+        osc_layout.addWidget(self.osc_y_combo, 2, 3)
+
+        self.osci_scale_button = QPushButton("Cambiar Escala")
+        osc_layout.addWidget(self.osci_scale_button,3,2,1,2)
+
+        self.osc_save_checkbox = QCheckBox("Guardar foto del osciloscopio")
+        osc_layout.addWidget(self.osc_save_checkbox, 1,0, 1, 2)
+
+        self.osci_data_reader_button = QPushButton("Tomar datos del Osciloscopio")
+        osc_layout.addWidget(self.osci_data_reader_button,4,0,1,4)
+
+        main_group_layout.addWidget(osc_group)
+
+        # --- Mid Frame ---
+        mid_layout = QHBoxLayout()
+
+        dom_group = QGroupBox("Saturar muestra y crear dominios")
+        dom_layout = QGridLayout(dom_group)
+
+        dom_layout.addWidget(QLabel("Tiempo de saturación [ms]"), 0, 0)
+        self.tiempo_saturacion_edit = QLineEdit()
+        dom_layout.addWidget(self.tiempo_saturacion_edit, 0, 1)
+
+        dom_layout.addWidget(QLabel("Campo de saturación [Oe]"), 1, 0)
+        self.campo_saturacion_edit = QLineEdit()
+        dom_layout.addWidget(self.campo_saturacion_edit, 1, 1)
+
+        dom_layout.addWidget(QLabel("Tiempo de dominio [ms]"), 2, 0)
+        self.tiempo_dominio_edit = QLineEdit()
+        dom_layout.addWidget(self.tiempo_dominio_edit, 2, 1)
+
+        dom_layout.addWidget(QLabel("Campo de dominio [Oe]"), 3, 0)
+        self.campo_dominio_edit = QLineEdit()
+        dom_layout.addWidget(self.campo_dominio_edit, 3, 1)
+
+        dom_layout.addWidget(QLabel("Tipo de pulso"),4,0)
+        self.combo_pulso = QComboBox()
+        dom_layout.addWidget(self.combo_pulso,4,1)
+
+        self.saturate_dom_button = QPushButton("Saturar")
+        self.create_dom_button = QPushButton("Crear dominios")
+        dom_layout.addWidget(self.saturate_dom_button, 4, 0)
+        dom_layout.addWidget(self.create_dom_button, 4, 1)
+
+        mid_layout.addWidget(dom_group)
+
+        main_group_layout.addLayout(mid_layout)
+
+        # --- Combobox for configurations already saved ---
+        combo_group = QGroupBox()
+        combo_layout = QGridLayout(combo_group)
+
+        combo_layout.addWidget(QLabel("Seleccionar configuración"), 0, 0) 
+        self.combo = QComboBox() 
+        try: 
+          with open("../../params/params_preconfiguration.json", "r", encoding="utf-8") as f: 
+            #Everything will be saved in here 
+            data = json.load(f) 
+            for nombre, valores in data.items():   # nombre = clave, valores = diccionario
+                self.combo.addItem(nombre, valores)
+        except Exception as e: 
+            print(f"[WARNING] No se pudo cargar JSON: {e}")
+            
+        combo_layout.addWidget(self.combo, 0, 1)
+
+        main_group_layout.addWidget(combo_group)
+
+
+        # --- Inferior Frame ---
+        bottom_layout = QHBoxLayout()
+
+        # --- Cicle caracteristics ---
         
+        ciclo_group = QGroupBox("Características Ciclo")
+        ciclo_layout = QGridLayout(ciclo_group)
+
+        
+        ciclo_layout.addWidget(QLabel(r"Resistencia [\Omega]"), 1, 0)
+        self.resistencia_edit = QLineEdit()
+        ciclo_layout.addWidget(self.resistencia_edit, 1, 1)
+
+        bottom_layout.addWidget(ciclo_group)
+
+        # --- Saturate and create domains ---
+
+        capture_group = QGroupBox("Saturar muestra y crear dominios")
+        capture_layout = QGridLayout(capture_group)
+        
+        bottom_layout.addWidget(capture_group)
+
+        main_group_layout.addLayout(bottom_layout)
+
+        # --- Add preconfiguration ---
+        self.update_dom_config_button = QPushButton("Agregar configuración")
+        main_group_layout.addWidget(self.update_dom_config_button)
+
+
+        main_layout.addWidget(main_group)
+        self.control_tab.setLayout(main_layout)
+
+        # Conections
+        self.saturate_dom_button.clicked.connect(self.saturate_dom)
+        self.create_dom_button.clicked.connect(self.create_dom)
+        self.update_dom_config_button.clicked.connect(self.update_dom_config)
+
+
     def toggle_roi(self, text):
         self.roi_enabled = (text == "Sí")
         estado = "activado" if self.roi_enabled else "desactivado"
@@ -1391,6 +1541,55 @@ class CameraApp(QWidget):
         Devuelve la última imagen capturada en 16 bits, o None si no hay.
         """
         return getattr(self, "last_processed_image", None)
+    
+    def create_dom(self):
+        pass
+
+    def saturate_dom(self):
+        pass
+
+    def update_dom_config(self):
+        '''updates a .json file with data that the user wants'''
+        # Verificar existencia del JSON
+        file_name = "../../params/params_preconfiguration.json"
+        if not os.path.exists(file_name):
+            QMessageBox.warning(self, "Error", f"El archivo '{file_name}' no existe.")
+            return None
+        
+        with open(file_name, "r", encoding="utf-8") as f:
+            datos = json.load(f)
+        
+        # Consultar nombre de la nueva configuración
+        nombre, ok = QInputDialog.getText(self, "Nueva configuración", "Ingrese nombre de configuración:")
+        if not ok or not nombre.strip():
+            return  # usuario canceló
+        
+         # Verificar si la clave ya existe
+        if nombre in datos:
+            QMessageBox.warning(self, "Error", f"La clave '{nombre}' ya existe en el JSON.")
+            return
+
+        # Crear diccionario con los datos de los QLineEdit
+        nueva_info = {
+                "tiempo_saturacion": self.tiempo_saturacion_edit.text(),
+                "campo_saturacion": self.campo_saturacion_edit.text(),
+                "tiempo_dominio": self.tiempo_dominio_edit.text(),
+                "campo_dominio": self.campo_dominio_edit.text(),
+                "resistencia": self.resistencia_edit.text()
+            }
+        
+        # Agregar nueva configuración al diccionario
+        datos[nombre] = nueva_info
+
+        # Guardar de nuevo el JSON
+        with open(file_name, "w", encoding="utf-8") as f:
+            json.dump(datos, f, indent=4, ensure_ascii=False)
+        
+        # Actualizar combobox
+        self.combo.clear()
+        for nombre_config, valores in datos.items():
+            self.combo.addItem(nombre_config, valores)
+
 
     def log_message(self, message):
         """
@@ -1422,7 +1621,7 @@ class CameraApp(QWidget):
         if hasattr(self, "log_file") and self.log_file:
             self.log_file.close()
         event.accept()
-        
+
 
 # Main execution block
 if __name__ == "__main__":
@@ -1430,7 +1629,6 @@ if __name__ == "__main__":
     window = CameraApp()
     window.show()
     sys.exit(app.exec())
-
 
 
     

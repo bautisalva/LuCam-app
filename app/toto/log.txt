@@ -1,2 +1,292 @@
 === Se inició la app el día 23/06/2025 a las 10:23:55 ===
 [10:23:55] FPS cambiado a 15.00
+=== Se inició la app el día 23/09/2025 a las 14:06:27 ===
+[14:06:29] FPS cambiado a 7.50
+[14:06:29] Se actualizó 'brightness' a 0.00
+[14:06:29] Se actualizó 'saturation' a 1.00
+[14:06:29] Se actualizó 'gamma' a 1.00
+[14:06:29] Se actualizó 'exposure' a 66.87
+[14:07:35] Se actualizó 'exposure' a 67.77
+[14:07:35] Se actualizó 'exposure' a 69.22
+[14:07:35] Se actualizó 'exposure' a 71.64
+[14:07:35] Se actualizó 'exposure' a 75.03
+[14:07:35] Se actualizó 'exposure' a 78.90
+[14:07:35] Se actualizó 'exposure' a 89.06
+[14:07:35] Se actualizó 'exposure' a 92.93
+[14:07:35] Se actualizó 'exposure' a 95.83
+[14:07:35] Se actualizó 'exposure' a 97.77
+[14:07:35] Se actualizó 'exposure' a 98.25
+[14:07:35] Se actualizó 'exposure' a 99.22
+[14:07:35] Se actualizó 'exposure' a 100.18
+[14:07:35] Se actualizó 'exposure' a 100.67
+[14:07:35] Se actualizó 'exposure' a 101.15
+[14:07:35] Se actualizó 'exposure' a 101.64
+[14:07:35] Se actualizó 'exposure' a 102.12
+[14:07:35] Se actualizó 'exposure' a 102.60
+[14:07:35] Se actualizó 'exposure' a 103.09
+[14:07:35] Se actualizó 'exposure' a 103.57
+[14:07:35] Se actualizó 'exposure' a 104.06
+[14:07:35] Se actualizó 'exposure' a 104.54
+[14:07:35] Se actualizó 'exposure' a 105.51
+[14:07:35] Se actualizó 'exposure' a 107.44
+[14:07:36] Se actualizó 'exposure' a 109.86
+[14:07:36] Se actualizó 'exposure' a 113.25
+[14:07:36] Se actualizó 'exposure' a 117.60
+[14:07:36] Se actualizó 'exposure' a 120.02
+[14:07:36] Se actualizó 'exposure' a 121.96
+[14:07:36] Se actualizó 'exposure' a 122.44
+[14:07:36] Se actualizó 'exposure' a 123.41
+[14:07:36] Se actualizó 'exposure' a 124.38
+[14:07:36] Se actualizó 'exposure' a 124.86
+[14:07:36] Se actualizó 'exposure' a 125.34
+[14:07:36] Se actualizó 'exposure' a 125.83
+[14:07:36] Se actualizó 'exposure' a 126.31
+[14:07:36] Se actualizó 'exposure' a 126.80
+[14:07:36] Se actualizó 'exposure' a 127.28
+[14:07:36] Se actualizó 'exposure' a 127.76
+[14:07:42] Se actualizó 'exposure' a 129.70
+[14:07:42] Se actualizó 'exposure' a 130.67
+[14:07:42] Se actualizó 'exposure' a 131.15
+[14:07:42] Se actualizó 'exposure' a 131.63
+[14:07:42] Se actualizó 'exposure' a 132.12
+[14:07:42] Se actualizó 'exposure' a 132.60
+[14:07:42] Se actualizó 'exposure' a 133.09
+[14:07:42] Se actualizó 'exposure' a 133.57
+[14:07:42] Se actualizó 'exposure' a 135.02
+[14:07:42] Se actualizó 'exposure' a 136.96
+[14:07:42] Se actualizó 'exposure' a 138.89
+[14:07:42] Se actualizó 'exposure' a 140.83
+[14:07:42] Se actualizó 'exposure' a 143.25
+[14:07:42] Se actualizó 'exposure' a 146.15
+[14:07:42] Se actualizó 'exposure' a 149.54
+[14:07:42] Se actualizó 'exposure' a 153.89
+[14:07:42] Se actualizó 'exposure' a 157.76
+[14:07:42] Se actualizó 'exposure' a 161.63
+[14:07:42] Se actualizó 'exposure' a 165.02
+[14:07:42] Se actualizó 'exposure' a 168.40
+[14:07:42] Se actualizó 'exposure' a 171.79
+[14:07:42] Se actualizó 'exposure' a 175.66
+[14:07:42] Se actualizó 'exposure' a 178.08
+[14:07:42] Se actualizó 'exposure' a 180.98
+[14:07:42] Se actualizó 'exposure' a 182.92
+[14:07:42] Se actualizó 'exposure' a 183.89
+[14:07:42] Se actualizó 'exposure' a 184.86
+[14:07:42] Se actualizó 'exposure' a 185.82
+[14:07:42] Se actualizó 'exposure' a 188.24
+[14:07:42] Se actualizó 'exposure' a 190.66
+[14:07:42] Se actualizó 'exposure' a 193.08
+[14:07:42] Se actualizó 'exposure' a 196.47
+[14:07:42] Se actualizó 'exposure' a 198.40
+[14:07:42] Se actualizó 'exposure' a 200.34
+[14:07:42] Se actualizó 'exposure' a 202.27
+[14:07:42] Se actualizó 'exposure' a 203.24
+[14:07:42] Se actualizó 'exposure' a 204.21
+[14:07:42] Se actualizó 'exposure' a 204.69
+[14:07:42] Se actualizó 'exposure' a 205.18
+[14:07:42] Se actualizó 'exposure' a 207.11
+[14:07:42] Se actualizó 'exposure' a 209.05
+[14:07:42] Se actualizó 'exposure' a 212.43
+[14:07:42] Se actualizó 'exposure' a 214.37
+[14:07:42] Se actualizó 'exposure' a 215.82
+[14:07:42] Se actualizó 'exposure' a 217.27
+[14:07:42] Se actualizó 'exposure' a 219.21
+[14:07:42] Se actualizó 'exposure' a 221.14
+[14:07:42] Se actualizó 'exposure' a 223.08
+[14:07:42] Se actualizó 'exposure' a 224.05
+[14:07:42] Se actualizó 'exposure' a 225.98
+[14:07:42] Se actualizó 'exposure' a 227.43
+[14:07:42] Se actualizó 'exposure' a 226.46
+[14:07:42] Se actualizó 'exposure' a 228.88
+[14:07:42] Se actualizó 'exposure' a 229.85
+[14:07:42] Se actualizó 'exposure' a 231.30
+[14:07:42] Se actualizó 'exposure' a 232.27
+[14:07:42] Se actualizó 'exposure' a 232.75
+[14:07:43] Se actualizó 'exposure' a 233.72
+[14:07:43] Se actualizó 'exposure' a 235.17
+[14:07:43] Se actualizó 'exposure' a 236.62
+[14:07:43] Se actualizó 'exposure' a 238.56
+[14:07:43] Se actualizó 'exposure' a 239.53
+[14:07:43] Se actualizó 'exposure' a 243.40
+[14:07:43] Se actualizó 'exposure' a 244.85
+[14:07:43] Se actualizó 'exposure' a 246.30
+[14:07:43] Se actualizó 'exposure' a 250.66
+[14:07:43] Se actualizó 'exposure' a 252.11
+[14:07:43] Se actualizó 'exposure' a 255.01
+[14:07:43] Se actualizó 'exposure' a 255.98
+[14:07:43] Se actualizó 'exposure' a 257.43
+[14:07:43] Se actualizó 'exposure' a 258.88
+[14:07:43] Se actualizó 'exposure' a 260.33
+[14:07:43] Se actualizó 'exposure' a 262.27
+[14:07:43] Se actualizó 'exposure' a 265.17
+[14:07:43] Se actualizó 'exposure' a 267.59
+[14:07:43] Se actualizó 'exposure' a 268.56
+[14:07:43] Se actualizó 'exposure' a 270.49
+[14:07:43] Se actualizó 'exposure' a 271.94
+[14:07:43] Se actualizó 'exposure' a 272.43
+[14:07:43] Se actualizó 'exposure' a 273.40
+[14:07:43] Se actualizó 'exposure' a 275.82
+[14:07:43] Se actualizó 'exposure' a 276.78
+[14:07:43] Se actualizó 'exposure' a 280.17
+[14:07:43] Se actualizó 'exposure' a 283.07
+[14:07:43] Se actualizó 'exposure' a 285.98
+[14:07:43] Se actualizó 'exposure' a 287.91
+[14:07:43] Se actualizó 'exposure' a 289.85
+[14:07:43] Se actualizó 'exposure' a 291.78
+[14:07:43] Se actualizó 'exposure' a 293.72
+[14:07:43] Se actualizó 'exposure' a 294.68
+[14:07:43] Se actualizó 'exposure' a 296.14
+[14:07:43] Se actualizó 'exposure' a 297.10
+[14:07:43] Se actualizó 'exposure' a 298.55
+[14:07:43] Se actualizó 'exposure' a 300.01
+[14:07:43] Se actualizó 'exposure' a 302.43
+[14:07:43] Se actualizó 'exposure' a 306.30
+[14:07:43] Se actualizó 'exposure' a 309.68
+[14:07:43] Se actualizó 'exposure' a 313.55
+[14:07:43] Se actualizó 'exposure' a 317.42
+[14:07:43] Se actualizó 'exposure' a 319.36
+[14:07:43] Se actualizó 'exposure' a 320.81
+[14:07:43] Se actualizó 'exposure' a 322.75
+[14:07:43] Se actualizó 'exposure' a 325.17
+[14:07:43] Se actualizó 'exposure' a 327.10
+[14:07:43] Se actualizó 'exposure' a 329.04
+[14:07:43] Se actualizó 'exposure' a 330.49
+[14:07:43] Se actualizó 'exposure' a 331.46
+[14:07:43] Se actualizó 'exposure' a 331.94
+[14:07:43] Se actualizó 'exposure' a 332.42
+[14:07:45] Se actualizó 'exposure' a 133.02
+[14:07:57] Se actualizó 'hue' a 0.10
+[14:07:57] Se actualizó 'hue' a 0.20
+[14:07:57] Se actualizó 'hue' a 0.30
+[14:07:57] Se actualizó 'hue' a 0.40
+[14:07:58] Se actualizó 'hue' a 0.50
+[14:07:58] Se actualizó 'hue' a 0.60
+[14:07:58] Se actualizó 'hue' a 0.70
+[14:07:58] Se actualizó 'hue' a 0.80
+[14:07:59] Se actualizó 'hue' a 0.90
+[14:08:01] Se actualizó 'hue' a 1.38
+[14:08:02] Se actualizó 'hue' a 3.69
+[14:08:02] Se actualizó 'hue' a 6.92
+[14:08:02] Se actualizó 'hue' a 12.46
+[14:08:02] Se actualizó 'hue' a 20.31
+[14:08:02] Se actualizó 'hue' a 27.69
+[14:08:02] Se actualizó 'hue' a 32.77
+[14:08:02] Se actualizó 'hue' a 35.08
+[14:08:02] Se actualizó 'hue' a 34.62
+[14:08:02] Se actualizó 'hue' a 41.08
+[14:08:02] Se actualizó 'hue' a 48.00
+[14:08:02] Se actualizó 'hue' a 51.69
+[14:08:02] Se actualizó 'hue' a 54.92
+[14:08:02] Se actualizó 'hue' a 55.85
+[14:08:02] Se actualizó 'hue' a 56.77
+[14:08:02] Se actualizó 'hue' a 58.15
+[14:08:02] Se actualizó 'hue' a 58.62
+[14:08:02] Se actualizó 'hue' a 59.08
+[14:08:02] Se actualizó 'hue' a 59.54
+[14:08:02] Se actualizó 'hue' a 60.00
+[14:08:02] Se actualizó 'hue' a 60.46
+[14:08:02] Se actualizó 'hue' a 60.92
+[14:08:02] Se actualizó 'hue' a 61.38
+[14:08:02] Se actualizó 'hue' a 61.85
+[14:08:02] Se actualizó 'hue' a 63.23
+[14:08:02] Se actualizó 'hue' a 65.08
+[14:08:02] Se actualizó 'hue' a 67.38
+[14:08:02] Se actualizó 'hue' a 72.00
+[14:08:02] Se actualizó 'hue' a 76.15
+[14:08:02] Se actualizó 'hue' a 79.85
+[14:08:02] Se actualizó 'hue' a 84.00
+[14:08:02] Se actualizó 'hue' a 87.23
+[14:08:02] Se actualizó 'hue' a 89.54
+[14:08:02] Se actualizó 'hue' a 90.92
+[14:08:02] Se actualizó 'hue' a 91.85
+[14:08:02] Se actualizó 'hue' a 92.31
+[14:08:02] Se actualizó 'hue' a 92.77
+[14:08:02] Se actualizó 'hue' a 93.23
+[14:08:02] Se actualizó 'hue' a 93.69
+[14:08:02] Se actualizó 'hue' a 94.15
+[14:08:02] Se actualizó 'hue' a 94.62
+[14:08:02] Se actualizó 'hue' a 95.08
+[14:08:03] Se actualizó 'hue' a 95.54
+[14:08:03] Se actualizó 'hue' a 96.00
+[14:08:03] Se actualizó 'hue' a 96.46
+[14:08:06] Se actualizó 'hue' a 96.45
+[14:08:06] Se actualizó 'exposure' a 132.86
+[14:08:08] Se actualizó 'hue' a 96.44
+[14:08:08] Se actualizó 'exposure' a 132.76
+[14:08:17] Iniciando captura de imagen...
+[14:08:26] Iniciando captura de imagen...
+[14:08:28] [INFO] ROI desactivado. Mostrando imagen completa.
+[14:08:28] Imagen capturada y mostrada en pestaña 'Captura'.
+[14:09:52] Preview reanudado.
+[14:10:22] ROI selected: x=56, y=136, w=536, h=320
+[14:10:28] Iniciando captura de imagen...
+[14:10:29] Iniciando captura de imagen...
+[14:10:31] [INFO] ROI desactivado. Mostrando imagen completa.
+[14:10:31] Imagen capturada y mostrada en pestaña 'Captura'.
+[14:10:33] Uso de ROI activado
+[14:10:33] [INFO] ROI aplicado en preview: x=56, y=136, w=536, h=320
+=== Se inició la app el día 24/09/2025 a las 15:57:20 ===
+[15:57:21] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 15:58:43 ===
+[15:58:43] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 15:58:56 ===
+[15:58:56] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:05:46 ===
+[16:05:46] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:10:07 ===
+[16:10:07] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:11:51 ===
+[16:11:51] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:12:16 ===
+[16:12:16] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:12:56 ===
+[16:12:57] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:15:36 ===
+[16:15:37] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:39:54 ===
+[16:39:55] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:40:53 ===
+[16:40:54] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 16:41:18 ===
+[16:41:18] FPS cambiado a 15.00
+=== Se inició la app el día 24/09/2025 a las 17:27:51 ===
+[17:27:51] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:12:18 ===
+[09:12:20] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:20:24 ===
+[09:20:24] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:22:41 ===
+[09:22:41] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:29:12 ===
+[09:29:12] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:35:11 ===
+[09:35:11] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:35:57 ===
+[09:35:58] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:38:35 ===
+[09:38:36] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:41:46 ===
+[09:41:46] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:42:10 ===
+[09:42:10] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:47:42 ===
+[09:47:42] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 09:52:50 ===
+[09:52:51] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:08:35 ===
+[10:08:35] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:17:36 ===
+[10:17:36] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:18:11 ===
+[10:18:11] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:30:50 ===
+[10:30:50] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:32:53 ===
+[10:32:53] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:34:57 ===
+[10:34:58] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:40:01 ===
+[10:40:01] FPS cambiado a 15.00
+=== Se inició la app el día 25/09/2025 a las 10:41:25 ===
+[10:41:25] FPS cambiado a 15.00
+=== Se inició la app el día 30/09/2025 a las 08:35:20 ===
+[08:35:21] FPS cambiado a 15.00
