@@ -19,5 +19,19 @@
         "tiempo_dominio": "",
         "campo_dominio": "",
         "resistencia": ""
+    },
+    "Preconfig_sat": {
+        "tiempo_saturacion": "5",
+        "campo_saturacion": "50",
+        "tiempo_dominio": "5",
+        "campo_dominio": "25",
+        "resistencia": ""
+    },
+    "precofing_sat": {
+        "tiempo_saturacion": "5",
+        "campo_saturacion": "50",
+        "tiempo_dominio": "5",
+        "campo_dominio": "25",
+        "resistencia": "100"
     }
 }

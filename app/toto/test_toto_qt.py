@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 import threading
 import json
 import datetime
+import pyvisa as visa
 from skimage.transform import resize
 from skimage.filters import gaussian
 from skimage.io import imsave
@@ -32,8 +33,8 @@ from PIL import Image, ImageDraw, ImageFont
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
                              QSpinBox, QComboBox, QFileDialog, QMessageBox,
-                             QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit,
-                             QInputDialog,QCheckBox)
+                             QGroupBox, QTabWidget, QGridLayout, QPlainTextEdit,
+                             QInputDialog, QCheckBox, QButtonGroup, QRadioButton)
 from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 from analysis_tab import AnalysisTab
@@ -765,22 +766,23 @@ class CameraApp(QWidget):
         self.campo_saturacion_edit = QLineEdit()
         dom_layout.addWidget(self.campo_saturacion_edit, 1, 1)
 
-        dom_layout.addWidget(QLabel("Tiempo de dominio [ms]"), 2, 0)
+        dom_layout.addWidget(QLabel("Tiempo de dominio [ms]"), 0, 2)
         self.tiempo_dominio_edit = QLineEdit()
-        dom_layout.addWidget(self.tiempo_dominio_edit, 2, 1)
+        dom_layout.addWidget(self.tiempo_dominio_edit, 0, 3)
 
-        dom_layout.addWidget(QLabel("Campo de dominio [Oe]"), 3, 0)
+        dom_layout.addWidget(QLabel("Campo de dominio [Oe]"), 1, 2)
         self.campo_dominio_edit = QLineEdit()
-        dom_layout.addWidget(self.campo_dominio_edit, 3, 1)
+        dom_layout.addWidget(self.campo_dominio_edit, 1, 3)
 
-        dom_layout.addWidget(QLabel("Tipo de pulso"),4,0)
+        dom_layout.addWidget(QLabel("Tipo de pulso"),2,1)
         self.combo_pulso = QComboBox()
-        dom_layout.addWidget(self.combo_pulso,4,1)
+        self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        dom_layout.addWidget(self.combo_pulso,2,2)
 
         self.saturate_dom_button = QPushButton("Saturar")
         self.create_dom_button = QPushButton("Crear dominios")
-        dom_layout.addWidget(self.saturate_dom_button, 4, 0)
-        dom_layout.addWidget(self.create_dom_button, 4, 1)
+        dom_layout.addWidget(self.saturate_dom_button, 3, 1)
+        dom_layout.addWidget(self.create_dom_button, 3, 2)
 
         mid_layout.addWidget(dom_group)
 
@@ -814,10 +816,50 @@ class CameraApp(QWidget):
         ciclo_group = QGroupBox("Características Ciclo")
         ciclo_layout = QGridLayout(ciclo_group)
 
-        
-        ciclo_layout.addWidget(QLabel(r"Resistencia [\Omega]"), 1, 0)
+        ciclo_layout.addWidget(QLabel("Constate campo-corriente [G/mA]:"), 0, 0)
+        self.campo_corr_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_corr_edit, 0, 1)
+
+        ciclo_layout.addWidget(QLabel("Resistencia [Ω]:"), 0, 2)
         self.resistencia_edit = QLineEdit()
-        ciclo_layout.addWidget(self.resistencia_edit, 1, 1)
+        ciclo_layout.addWidget(self.resistencia_edit, 0, 3)
+
+        ciclo_layout.addWidget(QLabel("Campo [Oe]:"), 1, 0)
+        self.campo_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_ciclo_edit, 1, 1)
+
+        ciclo_layout.addWidget(QLabel("Tiempo [ms]:"), 1, 2)
+        self.campo_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_ciclo_edit, 1, 3)
+
+        ciclo_layout.addWidget(QLabel("Offset [V]:"), 2, 0)
+        self.offset_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.offset_ciclo_edit, 2, 1)
+
+        ciclo_layout.addWidget(QLabel("Nro de ciclos:"), 2, 2)
+        self.nro_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.nro_ciclo_edit, 2, 3)
+
+        ciclo_layout.addWidget(QLabel("Tipo de pulso:"),3,0)
+        self.combo_pulso_ciclo = QComboBox()
+        self.combo_pulso_ciclo.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        ciclo_layout.addWidget(self.combo_pulso_ciclo,3,1)
+
+        ciclo_layout.addWidget(QLabel("Signo:"), 3, 2)
+
+        self.radio_signo_pos = QRadioButton("Positivo")
+        self.radio_signo_neg = QRadioButton("Negativo")
+
+        # Para que sean excluyentes, van en un mismo QButtonGroup
+        self.signo_group = QButtonGroup()
+        self.signo_group.addButton(self.radio_signo_pos)
+        self.signo_group.addButton(self.radio_signo_neg)
+
+        signo_layout = QHBoxLayout()
+        signo_layout.addWidget(self.radio_signo_pos)
+        signo_layout.addWidget(self.radio_signo_neg)
+
+        ciclo_layout.addLayout(signo_layout, 3, 3)
 
         bottom_layout.addWidget(ciclo_group)
 
