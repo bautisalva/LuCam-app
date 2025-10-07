@@ -707,6 +707,12 @@ class CameraApp(QWidget):
         '''
         main_layout = QVBoxLayout()
 
+         # === BOTÓN DE INICIO ===
+        self.init_button = QPushButton("INICIAR")
+        self.init_button.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold;")
+        self.init_button.clicked.connect(self.iniciar_conexion)
+        main_layout.addWidget(self.init_button)
+
         # --- Main frame ---
         main_group = QGroupBox("Control de pulsos y toma de datos")
         main_group_layout = QVBoxLayout(main_group)
@@ -751,6 +757,11 @@ class CameraApp(QWidget):
         osc_layout.addWidget(self.osci_data_reader_button,4,0,1,4)
 
         main_group_layout.addWidget(osc_group)
+
+        # === GUARDAMOS referencias para deshabilitarlas inicialmente ===
+        self.osc_buttons = [self.osci_scale_button, self.osci_data_reader_button]
+        for btn in self.osc_buttons:
+            btn.setEnabled(False)
 
         # --- Mid Frame ---
         mid_layout = QHBoxLayout()
@@ -863,6 +874,12 @@ class CameraApp(QWidget):
 
         bottom_layout.addWidget(ciclo_group)
 
+        # === GUARDAMOS referencias para deshabilitarlas inicialmente ===
+        self.gen_buttons = [self.saturate_dom_button, self.create_dom_button]
+        for btn in self.gen_buttons:
+            btn.setEnabled(False)
+
+
         # --- Saturate and create domains ---
 
         capture_group = QGroupBox("Saturar muestra y crear dominios")
@@ -884,6 +901,61 @@ class CameraApp(QWidget):
         self.saturate_dom_button.clicked.connect(self.saturate_dom)
         self.create_dom_button.clicked.connect(self.create_dom)
         self.update_dom_config_button.clicked.connect(self.update_dom_config)
+
+
+    def iniciar_conexion(self):
+        """
+        Intenta conectar con los equipos vía PyVISA.
+        Según los resultados, habilita los botones correspondientes.
+        """
+        rm = visa.ResourceManager('@py')
+        self.osci = None
+        self.gen = None
+
+        try:
+            recursos = rm.list_resources()
+            print(recursos)
+            for resource in recursos:
+                try:
+                    instr = rm.open_resource(resource)
+                    instr.timeout = 2000
+                    IDN = instr.query("*IDN?")
+                    print(f"{resource}:{IDN.strip()}")
+                    instr.close()
+            # print("Recursos detectados:", recursos)
+                except Exception as e:
+                    print(f"{resource}: No se pudo indentificar ({e})")
+
+            # self.osci = rm.open_resource("GPIB0::1::INSTR")
+            # self.gen = rm.open_resource("GPIB0::10::INSTR")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo escanear recursos VISA:\n{e}")
+            return
+
+        # --- lógica de activación según qué se conectó ---
+        if self.osci is not None and self.gen is not None:
+            estado = "✅ Se conectaron ambos equipos (osciloscopio y generador)."
+            for btn in self.gen_buttons:
+                btn.setEnabled(True)
+            for btn in self.osc_buttons:
+                btn.setEnabled(True)
+
+        elif self.osci is not None:
+            estado = "⚠️ Solo se conectó el osciloscopio."
+            for btn in self.osc_buttons:
+                btn.setEnabled(True)
+
+        elif self.gen is not None:
+            estado = "⚠️ Solo se conectó el generador."
+            for btn in self.gen_buttons:
+                btn.setEnabled(True)
+
+        else:
+            estado = "❌ No se detectó ningún equipo."
+            return QMessageBox.warning(self, "Conexión fallida", estado)
+
+        QMessageBox.information(self, "Conexión completada", estado)
 
 
     def toggle_roi(self, text):
