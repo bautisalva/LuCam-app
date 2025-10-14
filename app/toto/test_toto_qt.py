@@ -14,6 +14,7 @@ Classes:
 
 Author: Tomás Rodriguez Bouhier, Bautista Salvatierra Pérez
 Repository: https://github.com/bautisalva/LuCam-app
+mirko pedazo de gato
 """
 
 import sys
