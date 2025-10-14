@@ -34,8 +34,9 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
                              QSpinBox, QComboBox, QFileDialog, QMessageBox,
                              QGroupBox, QTabWidget, QGridLayout, QPlainTextEdit,
-                             QInputDialog, QCheckBox, QButtonGroup, QRadioButton)
-from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
+                             QInputDialog, QCheckBox, QButtonGroup, QRadioButton,
+                             QMainWindow)
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen,QIcon
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 from analysis_tab import AnalysisTab
 
@@ -379,7 +380,9 @@ class CameraApp(QWidget):
     
         self.work_dir = ""
         self.auto_save = False
-    
+        self.setWindowIcon(QIcon("toto.png"))
+        
+
         # Launch full GUI setup
         self.initUI()
 
@@ -785,10 +788,31 @@ class CameraApp(QWidget):
         self.campo_dominio_edit = QLineEdit()
         dom_layout.addWidget(self.campo_dominio_edit, 1, 3)
 
-        dom_layout.addWidget(QLabel("Tipo de pulso"),2,1)
+        # dom_layout.addWidget(QLabel("Tipo de pulso"),2,1)
+        # self.combo_pulso = QComboBox()
+        # self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        # dom_layout.addWidget(self.combo_pulso,2,2)
+
+        dom_layout.addWidget(QLabel("Tipo de pulso:"),2,0)
         self.combo_pulso = QComboBox()
         self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
-        dom_layout.addWidget(self.combo_pulso,2,2)
+        dom_layout.addWidget(self.combo_pulso,2,1)
+
+        dom_layout.addWidget(QLabel("Signo:"), 2, 2)
+
+        self.radio_signo_pos_dom = QRadioButton("Positivo")
+        self.radio_signo_neg_dom = QRadioButton("Negativo")
+
+        # Para que sean excluyentes, van en un mismo QButtonGroup
+        self.signo_group_dom = QButtonGroup()
+        self.signo_group_dom.addButton(self.radio_signo_pos_dom)
+        self.signo_group_dom.addButton(self.radio_signo_neg_dom)
+
+        signo_layout_dom = QHBoxLayout()
+        signo_layout_dom.addWidget(self.radio_signo_pos_dom)
+        signo_layout_dom.addWidget(self.radio_signo_pos_dom)
+
+        dom_layout.addLayout(signo_layout_dom, 3, 3)
 
         self.saturate_dom_button = QPushButton("Saturar")
         self.create_dom_button = QPushButton("Crear dominios")
@@ -882,7 +906,7 @@ class CameraApp(QWidget):
 
         # --- Saturate and create domains ---
 
-        capture_group = QGroupBox("Saturar muestra y crear dominios")
+        capture_group = QGroupBox("Captura")
         capture_layout = QGridLayout(capture_group)
         
         bottom_layout.addWidget(capture_group)
@@ -908,7 +932,7 @@ class CameraApp(QWidget):
         Intenta conectar con los equipos vía PyVISA.
         Según los resultados, habilita los botones correspondientes.
         """
-        rm = visa.ResourceManager('@py')
+        rm = visa.ResourceManager()
         self.osci = None
         self.gen = None
 
@@ -926,16 +950,29 @@ class CameraApp(QWidget):
                 except Exception as e:
                     print(f"{resource}: No se pudo indentificar ({e})")
 
-            # self.osci = rm.open_resource("GPIB0::1::INSTR")
-            # self.gen = rm.open_resource("GPIB0::10::INSTR")
+            self.osci = rm.open_resource("GPIB0::1::INSTR")
+            self.fungen = rm.open_resource("GPIB0::10::INSTR")
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"No se pudo escanear recursos VISA:\n{e}")
             return
 
         # --- lógica de activación según qué se conectó ---
-        if self.osci is not None and self.gen is not None:
+        if self.osci is not None and self.fungen is not None:
             estado = "✅ Se conectaron ambos equipos (osciloscopio y generador)."
+            # Preconfiguramos el osciloscopio
+            self.osci.write("ACQUIRE:MODE SAMPLE")
+            self.osci.write("TRIG:A:MODE NORMAL")
+
+            # Preconfiguramos el generador
+            self.fungen.write("OUTP:LOAD INF")    # impedancia de salida: High Z
+            # Configurar modo ráfaga (Burst Mode)
+            self.fungen.write("BM:SOUR INT")      # fuente de ráfaga interna
+            self.fungen.write("BM:NCYC 1")        # 1 ciclo por ráfaga
+            self.fungen.write("BM:PHASe 0")       # fase inicial 0°
+            self.fungen.write("BM:STAT ON")       # activar modo burst
+            self.fungen.write("TRIG:SOUR BUS")    # trigger por software
+
             for btn in self.gen_buttons:
                 btn.setEnabled(True)
             for btn in self.osc_buttons:
@@ -943,11 +980,24 @@ class CameraApp(QWidget):
 
         elif self.osci is not None:
             estado = "⚠️ Solo se conectó el osciloscopio."
+            # Preconfiguramos el osciloscopio
+            self.osci.write("ACQUIRE:MODE SAMPLE")
+            self.osci.write("TRIG:A:MODE NORMAL")
+
             for btn in self.osc_buttons:
                 btn.setEnabled(True)
 
         elif self.gen is not None:
             estado = "⚠️ Solo se conectó el generador."
+            # Preconfiguramos el generador
+            self.fungen.write("OUTP:LOAD INF")    # impedancia de salida: High Z
+            # Configurar modo ráfaga (Burst Mode)
+            self.fungen.write("BM:SOUR INT")      # fuente de ráfaga interna
+            self.fungen.write("BM:NCYC 1")        # 1 ciclo por ráfaga
+            self.fungen.write("BM:PHASe 0")       # fase inicial 0°
+            self.fungen.write("BM:STAT ON")       # activar modo burst
+            self.fungen.write("TRIG:SOUR BUS")    # trigger por software
+
             for btn in self.gen_buttons:
                 btn.setEnabled(True)
 
