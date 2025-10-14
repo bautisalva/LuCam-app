@@ -298,3 +298,83 @@ if __name__ == "__main__":
     print(f"[fin] Ajuste log–log: pendiente ~ {m:.4f}  (NaN si faltan puntos válidos)")
 
 
+#%%
+
+# ================== PLOTS ==================
+# (1) Autocorrelación NO normalizada, centrada en r=0 y picos marcados (algunos K)
+subset = [k for k in SUBSET_K_FOR_AUTOCORR if k in K_LIST]
+if subset:
+    plt.figure(figsize=(11.5, 4.8))
+    for K in subset:
+        R = next(r for r in results if r["K"] == K)
+        C_raw = R["C_raw"]
+        # chequeo y eje perfectamente alineado
+        Cc, r_axis_px, zero_idx = check_alignment(C_raw, ds_mean, label=f"K={K}")
+        r_axis = r_axis_px * PX_TO_UM
+
+        # curva
+        plt.plot(r_axis, Cc, lw=1.25, label=f"K={K}")
+
+        # marcar pico principal en r=0 (valor usado en el resumen)
+        plt.scatter([r_axis[zero_idx]], [Cc[zero_idx]], s=50, zorder=5,
+                    edgecolors='k', facecolors='white')
+        plt.annotate(f"C(0)={Cc[zero_idx]:.2f}",
+                     xy=(r_axis[zero_idx], Cc[zero_idx]),
+                     xytext=(10, 10), textcoords='offset points',
+                     fontsize=8,
+                     bbox=dict(boxstyle="round,pad=0.2", fc="w", ec="k", lw=0.6))
+
+        # picos laterales más cercanos (simetría/estructura)
+        def _local_peaks(y):
+            return [i for i in range(1, len(y)-1) if (y[i] > y[i-1] and y[i] >= y[i+1])]
+        peaks = _local_peaks(Cc)
+        left  = [i for i in peaks if i <  zero_idx]
+        right = [i for i in peaks if i >  zero_idx]
+        if left:
+            iL = max(left)
+            plt.scatter([r_axis[iL]], [Cc[iL]], s=28, zorder=5)
+            plt.annotate(f"{r_axis[iL]:.2f} µm", xy=(r_axis[iL], Cc[iL]),
+                         xytext=(0, -14), textcoords='offset points',
+                         ha='center', fontsize=8)
+        if right:
+            iR = min(right)
+            plt.scatter([r_axis[iR]], [Cc[iR]], s=28, zorder=5)
+            plt.annotate(f"{r_axis[iR]:.2f} µm", xy=(r_axis[iR], Cc[iR]),
+                         xytext=(0, -14), textcoords='offset points',
+                         ha='center', fontsize=8)
+
+    plt.axvline(0.0, color='k', lw=1.0, ls='--', alpha=0.6)
+    plt.xlabel('lag r [µm]')
+    plt.ylabel('C_raw(r) [px²]')
+    plt.title('Autocorrelación NO normalizada (centrada en r=0, picos marcados)')
+    plt.legend(ncol=4, fontsize=9)
+    plt.grid(alpha=0.25)
+    plt.tight_layout()
+    plt.show()
+
+# (2) Resumen: C_raw(0) vs K en log–log + ajuste
+K_arr  = 1/np.array([r["K"] for r in results], int)
+C0_arr = np.array([r["C0"] for r in results], float)
+
+mask_pos = (K_arr > 0) & (C0_arr > 0)
+if mask_pos.sum() >= 2:
+    xlog = np.log10(K_arr[mask_pos]); ylog = np.log10(C0_arr[mask_pos])
+    m, b = np.polyfit(xlog, ylog, 1)
+else:
+    m, b = np.nan, np.nan
+
+fig, ax = plt.subplots(figsize=(7.0, 4.6))
+ax.loglog(K_arr, C0_arr, 'o', ms=5, label='C_raw(0) datos')
+if np.isfinite(m):
+    xfit = np.linspace(xlog.min(), xlog.max(), 200)
+    yfit = m * xfit + b
+    ax.plot(10**xfit, 10**yfit, '-', lw=1.5, label=f"fit: slope = {m:.3f}")
+ax.set_xlabel("K (modos mantenidos)")
+ax.set_ylabel("C_raw(0) = var(u_K) [px²]")
+ax.set_title("Primer máximo de autocorrelación vs K (log–log)")
+ax.grid(which='both', alpha=0.3)
+ax.legend()
+plt.tight_layout()
+plt.show()
+
+print(f"[fin] Ajuste log–log: pendiente ~ {m:.4f}  (NaN si faltan puntos válidos)")
