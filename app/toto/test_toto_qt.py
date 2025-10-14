@@ -14,6 +14,8 @@ Classes:
 
 Author: Tomás Rodriguez Bouhier, Bautista Salvatierra Pérez
 Repository: https://github.com/bautisalva/LuCam-app
+mirko pedazo de gato
+bbb
 """
 
 import sys
@@ -23,6 +25,7 @@ import matplotlib.pyplot as plt
 import threading
 import json
 import datetime
+import pyvisa as visa
 from skimage.transform import resize
 from skimage.filters import gaussian
 from skimage.io import imsave
@@ -31,9 +34,11 @@ from scipy.ndimage import gaussian_filter
 from PIL import Image, ImageDraw, ImageFont
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QVBoxLayout, QHBoxLayout, QSlider, QLineEdit, 
-                             QSpinBox, QComboBox, QFileDialog,
-                             QGroupBox, QTabWidget, QGridLayout,QPlainTextEdit)
-from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
+                             QSpinBox, QComboBox, QFileDialog, QMessageBox,
+                             QGroupBox, QTabWidget, QGridLayout, QPlainTextEdit,
+                             QInputDialog, QCheckBox, QButtonGroup, QRadioButton,
+                             QMainWindow)
+from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen,QIcon
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QObject, QThread, QRect
 from analysis_tab import AnalysisTab
 
@@ -377,7 +382,9 @@ class CameraApp(QWidget):
     
         self.work_dir = ""
         self.auto_save = False
-    
+        self.setWindowIcon(QIcon("toto.png"))
+        
+
         # Launch full GUI setup
         self.initUI()
 
@@ -407,11 +414,16 @@ class CameraApp(QWidget):
         # Window 3: Analysis
         self.analysis_tab = AnalysisTab(self.get_last_image, self.log_message)
         
+        # Window 4: Pulse control
+        self.control_tab = QWidget()
+        self.init_control_tab()
     
         # Add window
         self.tabs.addTab(self.preview_tab, "Preview")
         self.tabs.addTab(self.capture_tab, "Captura")
         self.tabs.addTab(self.analysis_tab, "Análisis de Imagen")
+        self.tabs.addTab(self.control_tab, "Control de pulso")
+
     
         # Main layout
         main_layout = QVBoxLayout()
@@ -693,7 +705,311 @@ class CameraApp(QWidget):
         layout.addLayout(controls_layout)
     
         self.capture_tab.setLayout(layout)
+    
+    def init_control_tab(self):
+        '''
+        This tab has the porpuse of controling de intensity and width of the magnetic pulses that modify the PDM's
+        '''
+        main_layout = QVBoxLayout()
+
+         # === BOTÓN DE INICIO ===
+        self.init_button = QPushButton("INICIAR")
+        self.init_button.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold;")
+        self.init_button.clicked.connect(self.iniciar_conexion)
+        main_layout.addWidget(self.init_button)
+
+        # --- Main frame ---
+        main_group = QGroupBox("Control de pulsos y toma de datos")
+        main_group_layout = QVBoxLayout(main_group)
+
+        # --- Osciloscope ---
+        osc_group = QGroupBox("Osciloscopio")
+        osc_layout = QGridLayout(osc_group)
+
+        osc_layout.addWidget(QLabel("Nombre archivo datos:"), 0, 0)
+        self.osc_file_edit = QLineEdit()
+        osc_layout.addWidget(self.osc_file_edit, 0, 1,1,3)
+
+        osc_layout.addWidget(QLabel("Escala X:"), 1, 2)
+        self.osc_x_combo = QComboBox()
+        self.osc_x_combo.addItems(["1 ns/div", "2 ns/div", "5 ns/div", 
+                                  "10 ns/div", "20 ns/div", "50 ns/div", 
+                                  "100 ns/div", "200 ns/div", "500 ns/div", 
+                                  "1 µs/div", "2 µs/div", "5 µs/div", 
+                                  "10 µs/div", "20 µs/div", "50 µs/div", 
+                                  "100 µs/div", "200 µs/div", "500 µs/div", 
+                                  "1 ms/div", "2 ms/div", "5 ms/div", 
+                                  "10 ms/div", "20 ms/div", "50 ms/div", 
+                                  "100 ms/div", "200 ms/div", "500 ms/div", 
+                                  "1 s/div", "2 s/div", "5 s/div", "10 s/div"])  
+        osc_layout.addWidget(self.osc_x_combo,2,2)
+
+        osc_layout.addWidget(QLabel("Escala Y:"), 1, 3)
+        self.osc_y_combo = QComboBox()
+        self.osc_y_combo.addItems(["1 mV/div", "2 mV/div", "5 mV/div", 
+                                   "10 mV/div", "20 mV/div", "50 mV/div", 
+                                   "100 mV/div", "200 mV/div", "500 mV/div", 
+                                   "1 V/div", "2 V/div", "5 V/div", "10 V/div"])  
+        osc_layout.addWidget(self.osc_y_combo, 2, 3)
+
+        self.osci_scale_button = QPushButton("Cambiar Escala")
+        osc_layout.addWidget(self.osci_scale_button,3,2,1,2)
+
+        self.osc_save_checkbox = QCheckBox("Guardar foto del osciloscopio")
+        osc_layout.addWidget(self.osc_save_checkbox, 1,0, 1, 2)
+
+        self.osci_data_reader_button = QPushButton("Tomar datos del Osciloscopio")
+        osc_layout.addWidget(self.osci_data_reader_button,4,0,1,4)
+
+        main_group_layout.addWidget(osc_group)
+
+        # === GUARDAMOS referencias para deshabilitarlas inicialmente ===
+        self.osc_buttons = [self.osci_scale_button, self.osci_data_reader_button]
+        for btn in self.osc_buttons:
+            btn.setEnabled(False)
+
+        # --- Mid Frame ---
+        mid_layout = QHBoxLayout()
+
+        dom_group = QGroupBox("Saturar muestra y crear dominios")
+        dom_layout = QGridLayout(dom_group)
+
+        dom_layout.addWidget(QLabel("Tiempo de saturación [ms]"), 0, 0)
+        self.tiempo_saturacion_edit = QLineEdit()
+        dom_layout.addWidget(self.tiempo_saturacion_edit, 0, 1)
+
+        dom_layout.addWidget(QLabel("Campo de saturación [Oe]"), 1, 0)
+        self.campo_saturacion_edit = QLineEdit()
+        dom_layout.addWidget(self.campo_saturacion_edit, 1, 1)
+
+        dom_layout.addWidget(QLabel("Tiempo de dominio [ms]"), 0, 2)
+        self.tiempo_dominio_edit = QLineEdit()
+        dom_layout.addWidget(self.tiempo_dominio_edit, 0, 3)
+
+        dom_layout.addWidget(QLabel("Campo de dominio [Oe]"), 1, 2)
+        self.campo_dominio_edit = QLineEdit()
+        dom_layout.addWidget(self.campo_dominio_edit, 1, 3)
+
+        # dom_layout.addWidget(QLabel("Tipo de pulso"),2,1)
+        # self.combo_pulso = QComboBox()
+        # self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        # dom_layout.addWidget(self.combo_pulso,2,2)
+
+        dom_layout.addWidget(QLabel("Tipo de pulso:"),2,0)
+        self.combo_pulso = QComboBox()
+        self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        dom_layout.addWidget(self.combo_pulso,2,1)
+
+        dom_layout.addWidget(QLabel("Signo:"), 2, 2)
+
+        self.radio_signo_pos_dom = QRadioButton("Positivo")
+        self.radio_signo_neg_dom = QRadioButton("Negativo")
+
+        # Para que sean excluyentes, van en un mismo QButtonGroup
+        self.signo_group_dom = QButtonGroup()
+        self.signo_group_dom.addButton(self.radio_signo_pos_dom)
+        self.signo_group_dom.addButton(self.radio_signo_neg_dom)
+
+        signo_layout_dom = QHBoxLayout()
+        signo_layout_dom.addWidget(self.radio_signo_pos_dom)
+        signo_layout_dom.addWidget(self.radio_signo_pos_dom)
+
+        dom_layout.addLayout(signo_layout_dom, 3, 3)
+
+        self.saturate_dom_button = QPushButton("Saturar")
+        self.create_dom_button = QPushButton("Crear dominios")
+        dom_layout.addWidget(self.saturate_dom_button, 3, 1)
+        dom_layout.addWidget(self.create_dom_button, 3, 2)
+
+        mid_layout.addWidget(dom_group)
+
+        main_group_layout.addLayout(mid_layout)
+
+        # --- Combobox for configurations already saved ---
+        combo_group = QGroupBox()
+        combo_layout = QGridLayout(combo_group)
+
+        combo_layout.addWidget(QLabel("Seleccionar configuración"), 0, 0) 
+        self.combo = QComboBox() 
+        try: 
+          with open("../../params/params_preconfiguration.json", "r", encoding="utf-8") as f: 
+            #Everything will be saved in here 
+            data = json.load(f) 
+            for nombre, valores in data.items():   # nombre = clave, valores = diccionario
+                self.combo.addItem(nombre, valores)
+        except Exception as e: 
+            print(f"[WARNING] No se pudo cargar JSON: {e}")
+            
+        combo_layout.addWidget(self.combo, 0, 1)
+
+        main_group_layout.addWidget(combo_group)
+
+
+        # --- Inferior Frame ---
+        bottom_layout = QHBoxLayout()
+
+        # --- Cicle caracteristics ---
         
+        ciclo_group = QGroupBox("Características Ciclo")
+        ciclo_layout = QGridLayout(ciclo_group)
+
+        ciclo_layout.addWidget(QLabel("Constate campo-corriente [G/mA]:"), 0, 0)
+        self.campo_corr_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_corr_edit, 0, 1)
+
+        ciclo_layout.addWidget(QLabel("Resistencia [Ω]:"), 0, 2)
+        self.resistencia_edit = QLineEdit()
+        ciclo_layout.addWidget(self.resistencia_edit, 0, 3)
+
+        ciclo_layout.addWidget(QLabel("Campo [Oe]:"), 1, 0)
+        self.campo_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_ciclo_edit, 1, 1)
+
+        ciclo_layout.addWidget(QLabel("Tiempo [ms]:"), 1, 2)
+        self.campo_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_ciclo_edit, 1, 3)
+
+        ciclo_layout.addWidget(QLabel("Offset [V]:"), 2, 0)
+        self.offset_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.offset_ciclo_edit, 2, 1)
+
+        ciclo_layout.addWidget(QLabel("Nro de ciclos:"), 2, 2)
+        self.nro_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.nro_ciclo_edit, 2, 3)
+
+        ciclo_layout.addWidget(QLabel("Tipo de pulso:"),3,0)
+        self.combo_pulso_ciclo = QComboBox()
+        self.combo_pulso_ciclo.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        ciclo_layout.addWidget(self.combo_pulso_ciclo,3,1)
+
+        ciclo_layout.addWidget(QLabel("Signo:"), 3, 2)
+
+        self.radio_signo_pos = QRadioButton("Positivo")
+        self.radio_signo_neg = QRadioButton("Negativo")
+
+        # Para que sean excluyentes, van en un mismo QButtonGroup
+        self.signo_group = QButtonGroup()
+        self.signo_group.addButton(self.radio_signo_pos)
+        self.signo_group.addButton(self.radio_signo_neg)
+
+        signo_layout = QHBoxLayout()
+        signo_layout.addWidget(self.radio_signo_pos)
+        signo_layout.addWidget(self.radio_signo_neg)
+
+        ciclo_layout.addLayout(signo_layout, 3, 3)
+
+        bottom_layout.addWidget(ciclo_group)
+
+        # === GUARDAMOS referencias para deshabilitarlas inicialmente ===
+        self.gen_buttons = [self.saturate_dom_button, self.create_dom_button]
+        for btn in self.gen_buttons:
+            btn.setEnabled(False)
+
+
+        # --- Saturate and create domains ---
+
+        capture_group = QGroupBox("Captura")
+        capture_layout = QGridLayout(capture_group)
+        
+        bottom_layout.addWidget(capture_group)
+
+        main_group_layout.addLayout(bottom_layout)
+
+        # --- Add preconfiguration ---
+        self.update_dom_config_button = QPushButton("Agregar configuración")
+        main_group_layout.addWidget(self.update_dom_config_button)
+
+
+        main_layout.addWidget(main_group)
+        self.control_tab.setLayout(main_layout)
+
+        # Conections
+        self.saturate_dom_button.clicked.connect(self.saturate_dom)
+        self.create_dom_button.clicked.connect(self.create_dom)
+        self.update_dom_config_button.clicked.connect(self.update_dom_config)
+
+
+    def iniciar_conexion(self):
+        """
+        Intenta conectar con los equipos vía PyVISA.
+        Según los resultados, habilita los botones correspondientes.
+        """
+        rm = visa.ResourceManager()
+        self.osci = None
+        self.gen = None
+
+        try:
+            recursos = rm.list_resources()
+            print(recursos)
+            for resource in recursos:
+                try:
+                    instr = rm.open_resource(resource)
+                    instr.timeout = 2000
+                    IDN = instr.query("*IDN?")
+                    print(f"{resource}:{IDN.strip()}")
+                    instr.close()
+            # print("Recursos detectados:", recursos)
+                except Exception as e:
+                    print(f"{resource}: No se pudo indentificar ({e})")
+
+            self.osci = rm.open_resource("GPIB0::1::INSTR")
+            self.fungen = rm.open_resource("GPIB0::10::INSTR")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo escanear recursos VISA:\n{e}")
+            return
+
+        # --- lógica de activación según qué se conectó ---
+        if self.osci is not None and self.fungen is not None:
+            estado = "✅ Se conectaron ambos equipos (osciloscopio y generador)."
+            # Preconfiguramos el osciloscopio
+            self.osci.write("ACQUIRE:MODE SAMPLE")
+            self.osci.write("TRIG:A:MODE NORMAL")
+
+            # Preconfiguramos el generador
+            self.fungen.write("OUTP:LOAD INF")    # impedancia de salida: High Z
+            # Configurar modo ráfaga (Burst Mode)
+            self.fungen.write("BM:SOUR INT")      # fuente de ráfaga interna
+            self.fungen.write("BM:NCYC 1")        # 1 ciclo por ráfaga
+            self.fungen.write("BM:PHASe 0")       # fase inicial 0°
+            self.fungen.write("BM:STAT ON")       # activar modo burst
+            self.fungen.write("TRIG:SOUR BUS")    # trigger por software
+
+            for btn in self.gen_buttons:
+                btn.setEnabled(True)
+            for btn in self.osc_buttons:
+                btn.setEnabled(True)
+
+        elif self.osci is not None:
+            estado = "⚠️ Solo se conectó el osciloscopio."
+            # Preconfiguramos el osciloscopio
+            self.osci.write("ACQUIRE:MODE SAMPLE")
+            self.osci.write("TRIG:A:MODE NORMAL")
+
+            for btn in self.osc_buttons:
+                btn.setEnabled(True)
+
+        elif self.gen is not None:
+            estado = "⚠️ Solo se conectó el generador."
+            # Preconfiguramos el generador
+            self.fungen.write("OUTP:LOAD INF")    # impedancia de salida: High Z
+            # Configurar modo ráfaga (Burst Mode)
+            self.fungen.write("BM:SOUR INT")      # fuente de ráfaga interna
+            self.fungen.write("BM:NCYC 1")        # 1 ciclo por ráfaga
+            self.fungen.write("BM:PHASe 0")       # fase inicial 0°
+            self.fungen.write("BM:STAT ON")       # activar modo burst
+            self.fungen.write("TRIG:SOUR BUS")    # trigger por software
+
+            for btn in self.gen_buttons:
+                btn.setEnabled(True)
+
+        else:
+            estado = "❌ No se detectó ningún equipo."
+            return QMessageBox.warning(self, "Conexión fallida", estado)
+
+        QMessageBox.information(self, "Conexión completada", estado)
+
+
     def toggle_roi(self, text):
         self.roi_enabled = (text == "Sí")
         estado = "activado" if self.roi_enabled else "desactivado"
@@ -1391,6 +1707,55 @@ class CameraApp(QWidget):
         Devuelve la última imagen capturada en 16 bits, o None si no hay.
         """
         return getattr(self, "last_processed_image", None)
+    
+    def create_dom(self):
+        pass
+
+    def saturate_dom(self):
+        pass
+
+    def update_dom_config(self):
+        '''updates a .json file with data that the user wants'''
+        # Verificar existencia del JSON
+        file_name = "../../params/params_preconfiguration.json"
+        if not os.path.exists(file_name):
+            QMessageBox.warning(self, "Error", f"El archivo '{file_name}' no existe.")
+            return None
+        
+        with open(file_name, "r", encoding="utf-8") as f:
+            datos = json.load(f)
+        
+        # Consultar nombre de la nueva configuración
+        nombre, ok = QInputDialog.getText(self, "Nueva configuración", "Ingrese nombre de configuración:")
+        if not ok or not nombre.strip():
+            return  # usuario canceló
+        
+         # Verificar si la clave ya existe
+        if nombre in datos:
+            QMessageBox.warning(self, "Error", f"La clave '{nombre}' ya existe en el JSON.")
+            return
+
+        # Crear diccionario con los datos de los QLineEdit
+        nueva_info = {
+                "tiempo_saturacion": self.tiempo_saturacion_edit.text(),
+                "campo_saturacion": self.campo_saturacion_edit.text(),
+                "tiempo_dominio": self.tiempo_dominio_edit.text(),
+                "campo_dominio": self.campo_dominio_edit.text(),
+                "resistencia": self.resistencia_edit.text()
+            }
+        
+        # Agregar nueva configuración al diccionario
+        datos[nombre] = nueva_info
+
+        # Guardar de nuevo el JSON
+        with open(file_name, "w", encoding="utf-8") as f:
+            json.dump(datos, f, indent=4, ensure_ascii=False)
+        
+        # Actualizar combobox
+        self.combo.clear()
+        for nombre_config, valores in datos.items():
+            self.combo.addItem(nombre_config, valores)
+
 
     def log_message(self, message):
         """
@@ -1422,7 +1787,7 @@ class CameraApp(QWidget):
         if hasattr(self, "log_file") and self.log_file:
             self.log_file.close()
         event.accept()
-        
+
 
 # Main execution block
 if __name__ == "__main__":
@@ -1430,7 +1795,6 @@ if __name__ == "__main__":
     window = CameraApp()
     window.show()
     sys.exit(app.exec())
-
 
 
     
