@@ -1712,7 +1712,54 @@ class CameraApp(QWidget):
         pass
 
     def saturate_dom(self):
-        pass
+        """
+        Lee los valores de los campos y tiempos de saturación desde la interfaz,
+        calcula la corriente correspondiente al campo deseado,
+        y muestra la información o la envía al generador de pulsos.
+        """
+        # --- 0. Verificar que los campos no estén vacíos ---
+        if (not self.campo_saturacion_edit.text().strip() or
+            not self.tiempo_saturacion_edit.text().strip() or
+            not self.campo_corr_edit.text().strip() or
+            not self.resistencia_edit.text().strip()):
+            QMessageBox.warning(self, "Campos incompletos", "Completá todos los campos numéricos antes de continuar.")
+            return
+
+        # --- 1. Verificar que algún signo esté seleccionado ---
+        if not (self.radio_signo_pos_dom.isChecked() or self.radio_signo_neg_dom.isChecked()):
+            QMessageBox.warning(self, "Signo no seleccionado", "Seleccioná el signo del pulso antes de continuar.")
+            return
+
+        try:
+            # --- 2. Leer parámetros de saturación ---
+            campo_saturacion = float(self.campo_saturacion_edit.text())  # [Oe]
+            tiempo_saturacion = float(self.tiempo_saturacion_edit.text())  # [ms]
+
+            # --- 3. Leer signo seleccionado ---
+            signo = +1 if self.radio_signo_pos_dom.isChecked() else -1
+
+            # --- 4. Leer relación campo-corriente y resistencia ---
+            campo_corr = float(self.campo_corr_edit.text())  # [Oe/A]
+            resistencia = float(self.resistencia_edit.text())  # [Ohm]
+
+            # --- 5. Calcular corriente y tensión necesarias ---
+            corriente = campo_saturacion / campo_corr       # [A]
+            tension = corriente * resistencia/(10*0.95)                       # [V]           
+            #dividimos por 10 para tener la tensión enviada por el generador (estamos viendo la del OPAMP) y se tiene en cuenta una caida
+            # del 5% respecto de lo enviado vía digital a lo medido realmente.
+        except ValueError:
+            QMessageBox.warning(self, "Error de entrada", "Verificá que todos los valores sean numéricos.")
+
+        if self.fungen.query("BM:STAT?") == 0:
+            self.iniciar_conexion
+            QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
+            return
+        
+        
+
+
+
+            
 
     def update_dom_config(self):
         '''updates a .json file with data that the user wants'''
