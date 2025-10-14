@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
 """
-Autocorrelación de u_K(s) vs K_base — primer máximo (lag=0), plots mejorados
------------------------------------------------------------------------------
-- Reparametriza el contorno por arco.
+Autocorrelación de u_K(s) vs K_base — centrado correcto y picos marcados
+------------------------------------------------------------------------
+- Parametriza contorno por arco (M puntos).
 - Curva base por FFT ±K; u_K(s) por normales (FFT) + ray casting.
-- Autocorrelación circular NO normalizada (C_raw) y primer máximo: C_raw[0].
-- Plots:
-    (1) Autocorrelación C_raw(r) centrada en r=0 (simétrica), no normalizada.
-    (2) Resumen C_raw(0) vs K en escala log–log.
+- Autocorrelación circular NO normalizada (C_raw), simetrizada.
+- Gráfico de C_raw(r) con fftshift, eje de lags alineado, pico principal en r=0.
+- Resumen: C_raw(0) vs K en log–log + ajuste.
 
 Requisitos: numpy, matplotlib, scikit-image
 """
@@ -24,15 +22,11 @@ BASENAME = "Bin-P8139-190Oe-30ms-5Tw-"
 IDX      = 99
 EXTS     = [".png", ".tif", ".tiff", ".jpg", ".jpeg", ".bmp"]
 
-# Muestreo y Fourier
-Msamples = 512
-K_LIST   = list(range(2, 21, 2))   # barrido de armónicos
+Msamples = 512                         # usar PAR para que el centro sea exacto
+K_LIST   = list(range(1,20 , 1))       # barrido de armónicos
 
-# Escala (para eje de autocorrelación en µm; poné 1.0 si preferís px)
-PX_TO_UM = 0.4
-
-# Qué K mostrar en el plot de autocorrelación (no normalizada)
-SUBSET_K_FOR_AUTOCORR = [4, 12, 24]
+PX_TO_UM = 0.4                         # 1.0 si preferís px
+SUBSET_K_FOR_AUTOCORR = [4, 10, 15]    # algunos K para mostrar C(r)
 
 # ================== IO ==================
 def buscar_imagen(base_dir, basename, idx, exts):
@@ -77,8 +71,7 @@ def fft_lowpass_closed_equal_samples(curve_yx, K_keep):
     z = curve_yx[:,0] + 1j*curve_yx[:,1]
     Z = np.fft.fft(z)
     N = len(z)
-    keep = np.zeros(N, dtype=bool)
-    keep[0] = True
+    keep = np.zeros(N, dtype=bool); keep[0] = True
     K_keep = int(K_keep)
     for k in range(1, min(K_keep, N//2) + 1):
         keep[k % N]  = True
@@ -99,19 +92,15 @@ def normals_fft_from_curve(y_ref, x_ref):
 
 # ================== Intersecciones rayo–polilínea ==================
 def ray_segment_intersection_one_side(p_yx, n_yx, Y, X):
-    t_best = np.inf
-    q_best = p_yx.copy()
-    P = np.column_stack([Y, X])
-    P = ensure_closed_no_dup(P)
+    t_best = np.inf; q_best = p_yx.copy()
+    P = ensure_closed_no_dup(np.column_stack([Y, X]))
     for i in range(len(P)):
-        a = P[i]
-        b = P[(i+1) % len(P)]
+        a = P[i]; b = P[(i+1) % len(P)]
         ab = b - a
         A = np.column_stack([n_yx, -ab])
         rhs = a - p_yx
         det = A[0,0]*A[1,1] - A[0,1]*A[1,0]
-        if abs(det) < 1e-12:
-            continue
+        if abs(det) < 1e-12: continue
         invA = (1.0/det) * np.array([[ A[1,1], -A[0,1]],
                                      [-A[1,0],  A[0,0]]])
         t, u = invA @ rhs
@@ -148,42 +137,48 @@ def u_by_fft_normals_and_rays(y_ref, x_ref, y_real, x_real):
 def autocorr_circular(u):
     """
     C_raw[m] = <(u_j - ū) (u_{j+m} - ū)>_j  (no normalizada, circular)
-    Se fuerza simetría: C[m] = C[-m] promediando con el reflejo circular.
+    Simetrizada para C[m] = C[-m].
     """
     u = np.asarray(u, float)
+    u = np.nan_to_num(u, nan=0.0, posinf=0.0, neginf=0.0)
     u0 = u - np.mean(u)
     U = np.fft.fft(u0)
-    C = np.fft.ifft(U * np.conj(U)).real / u0.size  # C_raw (circular)
-    # --- simetrización exacta ---
+    C = np.fft.ifft(U * np.conj(U)).real / u0.size  # correlación circular
+    # simetrización exacta
     N = C.size
     idx_neg = (-np.arange(N)) % N
     C_sym = 0.5 * (C + C[idx_neg])
-    return C_sym  # C_raw simetrizada
+    return C_sym  # C_raw
 
-
-def centered_lag_axis(N, ds):
-    """
-    Lags enteros alineados con fftshift:
-    [-N//2, ..., -1, 0, 1, ..., N//2-1] * ds   (largo N)
-    """
-    m = np.arange(N)
-    m_centered = (m + N//2) % N - N//2
-    return m_centered * ds, m_centered
+def lag_axis_shifted(N, ds):
+    """Eje para graficar fftshift(C): largo N, centrado en 0."""
+    if N % 2 == 0:
+        m = np.arange(-N//2, N//2)          # [-N/2, ..., -1, 0, ..., N/2-1]
+    else:
+        m = np.arange(-(N//2), N//2 + 1)    # impar
+    return m * ds, m
 
 def find_local_peaks(y):
-    """Índices i con máximos locales estrictos (y[i-1] < y[i] >= y[i+1]) en 1..N-2.
-    No usa SciPy. Devuelve lista ordenada."""
+    """Índices de máximos locales estrictos en 1..N-2."""
     idx = []
-    N = len(y)
-    for i in range(1, N-1):
+    for i in range(1, len(y)-1):
         if y[i] > y[i-1] and y[i] >= y[i+1]:
             idx.append(i)
     return idx
 
+def check_alignment(C_raw, ds, label=""):
+    """Chequeo: C_raw[0] debe coincidir con el valor en r=0 de fftshift(C_raw)."""
+    Cc = np.fft.fftshift(C_raw)
+    r_axis_px, m_axis = lag_axis_shifted(len(C_raw), ds)
+    zero_idx = int(np.where(m_axis == 0)[0][0])
+    if not np.isclose(C_raw[0], Cc[zero_idx], rtol=1e-10, atol=1e-10):
+        print(f"[WARN] Desalineado en {label}: C_raw[0]={C_raw[0]:.6g} "
+              f"vs Cc@0={Cc[zero_idx]:.6g}")
+    return Cc, r_axis_px, zero_idx
 
 # ================== MAIN ==================
 if __name__ == "__main__":
-    print("[inicio] Autocorrelación de u_K(s) vs K_base — primer máximo y plots limpios")
+    print("[inicio] Autocorrelación de u_K(s) vs K_base — centrado correcto")
 
     # 1) cargar imagen y contorno
     path = buscar_imagen(BASE_DIR, BASENAME, IDX, EXTS)
@@ -215,79 +210,76 @@ if __name__ == "__main__":
         yS, xS = smooth[:,0], smooth[:,1]
 
         uK_px, _qy, _qx = u_by_fft_normals_and_rays(yS, xS, Y, X)
+        C_raw = autocorr_circular(uK_px)     # NO normalizada, simetrizada
 
-        # Autocorrelación circular NO normalizada
-        C_raw = autocorr_circular(uK_px)
-
-        # Primer máximo = lag 0
+        # Primer máximo = lag 0 (varianza)
         C0 = float(C_raw[0])
 
         results.append(dict(K=K, C_raw=C_raw, C0=C0))
         print(" listo.")
 
     # ================== PLOTS ==================
-    # (1) Autocorrelación NO normalizada, centrada en r=0 y simétrica (algunos K)
+    # (1) Autocorrelación NO normalizada, centrada en r=0 y picos marcados (algunos K)
     subset = [k for k in SUBSET_K_FOR_AUTOCORR if k in K_LIST]
     if subset:
         plt.figure(figsize=(11.5, 4.8))
         for K in subset:
             R = next(r for r in results if r["K"] == K)
-            C_raw = R["C_raw"]                      # ya simetrizada
-            Cc = np.fft.fftshift(C_raw)            # centrar pico en r=0
-            r_axis_px, mcent = centered_lag_axis(len(C_raw), ds_mean)
+            C_raw = R["C_raw"]
+            # chequeo y eje perfectamente alineado
+            Cc, r_axis_px, zero_idx = check_alignment(C_raw, ds_mean, label=f"K={K}")
             r_axis = r_axis_px * PX_TO_UM
-    
-            # índice de r=0 en el vector "shifted"
-            zero_idx = np.where(mcent == 0)[0][0]
-    
-            # detectar picos locales (sobre el array centrado)
-            peaks = find_local_peaks(Cc)
-    
-            # separar picos a la izquierda (<0) y derecha (>0) del cero
-            left_peaks  = [i for i in peaks if i <  zero_idx]
-            right_peaks = [i for i in peaks if i >  zero_idx]
-    
-            # elegir el pico lateral más cercano a 0 de cada lado (si existe)
-            left_star  = max(left_peaks)  if left_peaks  else None
-            right_star = min(right_peaks) if right_peaks else None
-    
-            # -- curva
+
+            # curva
             plt.plot(r_axis, Cc, lw=1.25, label=f"K={K}")
-    
-            # -- marcar el pico principal (r=0), que es C_raw[0]
-            plt.scatter([r_axis[zero_idx]], [Cc[zero_idx]], s=36, zorder=5, edgecolors='k')
+
+            # marcar pico principal en r=0 (valor usado en el resumen)
+            plt.scatter([r_axis[zero_idx]], [Cc[zero_idx]], s=50, zorder=5,
+                        edgecolors='k', facecolors='white')
             plt.annotate(f"C(0)={Cc[zero_idx]:.2f}",
                          xy=(r_axis[zero_idx], Cc[zero_idx]),
                          xytext=(10, 10), textcoords='offset points',
-                         fontsize=8, bbox=dict(boxstyle="round,pad=0.2", fc="w", ec="k", lw=0.5))
-    
-            # -- marcar los primeros picos laterales simétricos (si existen)
-            for star_idx in [left_star, right_star]:
-                if star_idx is not None:
-                    plt.scatter([r_axis[star_idx]], [Cc[star_idx]], s=24, zorder=5)
-                    plt.annotate(f"{r_axis[star_idx]:.2f} µm",
-                                 xy=(r_axis[star_idx], Cc[star_idx]),
-                                 xytext=(0, -14), textcoords='offset points',
-                                 ha='center', fontsize=8)
-    
+                         fontsize=8,
+                         bbox=dict(boxstyle="round,pad=0.2", fc="w", ec="k", lw=0.6))
+
+            # picos laterales más cercanos (simetría/estructura)
+            def _local_peaks(y):
+                return [i for i in range(1, len(y)-1) if (y[i] > y[i-1] and y[i] >= y[i+1])]
+            peaks = _local_peaks(Cc)
+            left  = [i for i in peaks if i <  zero_idx]
+            right = [i for i in peaks if i >  zero_idx]
+            if left:
+                iL = max(left)
+                plt.scatter([r_axis[iL]], [Cc[iL]], s=28, zorder=5)
+                plt.annotate(f"{r_axis[iL]:.2f} µm", xy=(r_axis[iL], Cc[iL]),
+                             xytext=(0, -14), textcoords='offset points',
+                             ha='center', fontsize=8)
+            if right:
+                iR = min(right)
+                plt.scatter([r_axis[iR]], [Cc[iR]], s=28, zorder=5)
+                plt.annotate(f"{r_axis[iR]:.2f} µm", xy=(r_axis[iR], Cc[iR]),
+                             xytext=(0, -14), textcoords='offset points',
+                             ha='center', fontsize=8)
+
         plt.axvline(0.0, color='k', lw=1.0, ls='--', alpha=0.6)
         plt.xlabel('lag r [µm]')
         plt.ylabel('C_raw(r) [px²]')
-        plt.title('Autocorrelación circular NO normalizada (centrada y con picos marcados)')
+        plt.title('Autocorrelación NO normalizada (centrada en r=0, picos marcados)')
         plt.legend(ncol=4, fontsize=9)
         plt.grid(alpha=0.25)
         plt.tight_layout()
         plt.show()
 
-    # (2) Resumen: C_raw(0) vs K en log–log
+    # (2) Resumen: C_raw(0) vs K en log–log + ajuste
     K_arr  = np.array([r["K"] for r in results], int)
     C0_arr = np.array([r["C0"] for r in results], float)
 
-    # Fit lineal en log–log (solo puntos positivos)
     mask_pos = (K_arr > 0) & (C0_arr > 0)
-    xlog = np.log10(K_arr[mask_pos])
-    ylog = np.log10(C0_arr[mask_pos])
-    m, b = np.polyfit(xlog, ylog, 1) if len(xlog) >= 2 else (np.nan, np.nan)
+    if mask_pos.sum() >= 2:
+        xlog = np.log10(K_arr[mask_pos]); ylog = np.log10(C0_arr[mask_pos])
+        m, b = np.polyfit(xlog, ylog, 1)
+    else:
+        m, b = np.nan, np.nan
 
     fig, ax = plt.subplots(figsize=(7.0, 4.6))
     ax.loglog(K_arr, C0_arr, 'o', ms=5, label='C_raw(0) datos')
@@ -303,4 +295,6 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
 
-    print(f"[fin] Ajuste log–log: pendiente ~ {m:.4f}  (si se muestran NaN, faltan puntos válidos)")
+    print(f"[fin] Ajuste log–log: pendiente ~ {m:.4f}  (NaN si faltan puntos válidos)")
+
+
