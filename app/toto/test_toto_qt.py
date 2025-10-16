@@ -796,11 +796,12 @@ class CameraApp(QWidget):
         # dom_layout.addWidget(self.combo_pulso,2,2)
 
         dom_layout.addWidget(QLabel("Tipo de pulso:"),2,0)
-        self.combo_pulso = QComboBox()
-        self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
-        dom_layout.addWidget(self.combo_pulso,2,1)
+        # self.combo_pulso = QComboBox()
+        # self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        # dom_layout.addWidget(self.combo_pulso,2,1)
+        dom_layout.addWidget(QLabel("Cuadrado"),2,1)
 
-        dom_layout.addWidget(QLabel("Signo:"), 2, 2)
+        dom_layout.addWidget(QLabel("Signo del dominio:"), 2, 2)
 
         self.radio_signo_pos_dom = QRadioButton("Positivo")
         self.radio_signo_neg_dom = QRadioButton("Negativo")
@@ -812,9 +813,9 @@ class CameraApp(QWidget):
 
         signo_layout_dom = QHBoxLayout()
         signo_layout_dom.addWidget(self.radio_signo_pos_dom)
-        signo_layout_dom.addWidget(self.radio_signo_pos_dom)
+        signo_layout_dom.addWidget(self.radio_signo_neg_dom)
 
-        dom_layout.addLayout(signo_layout_dom, 3, 3)
+        dom_layout.addLayout(signo_layout_dom, 2, 3)
 
         self.saturate_dom_button = QPushButton("Saturar")
         self.create_dom_button = QPushButton("Crear dominios")
@@ -1008,6 +1009,30 @@ class CameraApp(QWidget):
             return QMessageBox.warning(self, "Conexión fallida", estado)
 
         QMessageBox.information(self, "Conexión completada", estado)
+
+    def square_pulse(self,signo):
+        n_puntos = 1000 #entre 8 y 16000 puntos soporta
+        datos = np.zeros(n_puntos)
+        datos[1:-2] = signo*1
+        datos[0] = 0
+        datos[-1] = 0
+
+    def binarize_pulse(self,data):
+        import struct
+        # Escalado como dice el manual (1 V = 2047)
+        datos_int = np.int16(data * 2047)
+        # Convertir a binario (little endian para SWAP)
+        binario = struct.pack('<' + 'h'*len(datos_int), *datos_int)
+        
+        # Crear encabezado SCPI para bloque binario
+        bin_len = len(binario)
+        bin_len_str = str(bin_len)
+        header = f'DATA:DAC VOLATILE, #{len(bin_len_str)}{bin_len_str}'
+        
+        # Juntar todo (comando + binario) como un solo mensaje binario
+        mensaje = header.encode('ascii') + binario
+        
+        return mensaje
 
 
     def toggle_roi(self, text):
@@ -1755,7 +1780,20 @@ class CameraApp(QWidget):
             QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
             return
         
+        frec = 1/tiempo_saturacion
+        pulso = self.square_pulse(signo)        
+        binario = self.binarize_pulse(pulso)
+        self.fungen.write_raw(binario)
+
+        # Seleccionar y activar la forma de onda descargada
+        self.fungen.write('FUNC:USER VOLATILE')
+        self.fungen.write('FUNC:SHAP USER')
+        self.fungen.write('FREQ %f' % frec)
+        self.fungen.write('VOLT:OFFS 0')
+        self.fungen.write('VOLT %f' % tension)
         
+        self.fungen.write('*TRG')
+
 
 
 
