@@ -1,9 +1,10 @@
 {
-    "Predeterminada": {
+    "PREDETERMINADA": {
         "tiempo_saturacion": "",
         "campo_saturacion": "",
         "tiempo_dominio": "",
         "campo_dominio": "",
-        "resistencia": "103.2"
+        "resistencia": "103",
+        "campo-corr": "0.3956"
     }
 }

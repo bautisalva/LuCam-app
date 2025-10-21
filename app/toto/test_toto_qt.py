@@ -924,6 +924,9 @@ class CameraApp(QWidget):
         main_layout.addWidget(main_group)
         self.control_tab.setLayout(main_layout)
 
+        #activate predet.
+        self.load_dom_config()
+
         # Conections
         self.saturate_dom_button.clicked.connect(self.saturate_dom)
         self.create_dom_button.clicked.connect(self.create_dom)
@@ -1734,7 +1737,66 @@ class CameraApp(QWidget):
         return getattr(self, "last_processed_image", None)
     
     def create_dom(self):
-        pass
+        """
+        Lee los valores de los campos y tiempos de creación de dominio desde la interfaz,
+        calcula la corriente correspondiente al campo deseado,
+        y muestra la información o la envía al generador de pulsos.
+        """
+        # --- 0. Verificar que los campos no estén vacíos ---
+        if (not self.campo_dominio_edit.text().strip() or
+            not self.tiempo_dominio_edit.text().strip() or
+            not self.campo_corr_edit.text().strip() or
+            not self.resistencia_edit.text().strip()):
+            QMessageBox.warning(self, "Campos incompletos", "Completá todos los campos numéricos antes de continuar: \n"
+                                "Campo \n"
+                                "Tiempo\n"
+                                "Relación campo-corriente\n"
+                                "Resistencia")
+            return
+
+        # --- 1. Verificar que algún signo esté seleccionado ---
+        if not (self.radio_signo_pos_dom.isChecked() or self.radio_signo_neg_dom.isChecked()):
+            QMessageBox.warning(self, "Signo no seleccionado", "Seleccioná el signo del pulso antes de continuar.")
+            return
+
+        try:
+            # --- 2. Leer parámetros de saturación ---
+            campo_saturacion = float(self.campo_dominio_edit.text())  # [Oe]
+            tiempo_saturacion = float(self.tiempo_dominio_edit.text())  # [ms]
+
+            # --- 3. Leer signo seleccionado ---
+            signo = -1 if self.radio_signo_pos_dom.isChecked() else +1  #Cambio el signo para que nuclee en la dirección pedida (OPAMP inversor)
+
+            # --- 4. Leer relación campo-corriente y resistencia ---
+            campo_corr = float(self.campo_corr_edit.text())  # [Oe/A]
+            resistencia = float(self.resistencia_edit.text())  # [Ohm]
+
+            # --- 5. Calcular corriente y tensión necesarias ---
+            corriente = campo_saturacion / campo_corr       # [A]
+            tension = float(corriente * resistencia/(10*0.95))                       # [V]           
+            #dividimos por 10 para tener la tensión enviada por el generador (estamos viendo la del OPAMP) y se tiene en cuenta una caida
+            # del 5% respecto de lo enviado vía digital a lo medido realmente.
+        except ValueError:
+            QMessageBox.warning(self, "Error de entrada", "Verificá que todos los valores sean numéricos.")
+
+        if self.fungen.query("BM:STAT?") == 0:
+            self.iniciar_conexion
+            QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
+            return
+        
+        frec = float(1/tiempo_saturacion)
+        pulso = self.square_pulse(signo)        
+        binario = self.binarize_pulse(pulso)
+        self.fungen.write_raw(binario)
+
+        # Seleccionar y activar la forma de onda descargada
+        self.fungen.write('FUNC:USER VOLATILE')
+        self.fungen.write('FUNC:SHAP USER')
+        self.fungen.write('FREQ %f' % frec)
+        self.fungen.write('VOLT:OFFS 0')
+        self.fungen.write('VOLT %f' % tension)
+        
+        self.fungen.write('*TRG')
 
     def saturate_dom(self):
         """
@@ -1747,7 +1809,11 @@ class CameraApp(QWidget):
             not self.tiempo_saturacion_edit.text().strip() or
             not self.campo_corr_edit.text().strip() or
             not self.resistencia_edit.text().strip()):
-            QMessageBox.warning(self, "Campos incompletos", "Completá todos los campos numéricos antes de continuar.")
+            QMessageBox.warning(self, "Campos incompletos", "Completá todos los campos numéricos antes de continuar: \n"
+                                "Campo \n"
+                                "Tiempo\n"
+                                "Relación campo-corriente\n"
+                                "Resistencia")
             return
 
         # --- 1. Verificar que algún signo esté seleccionado ---
@@ -1769,7 +1835,7 @@ class CameraApp(QWidget):
 
             # --- 5. Calcular corriente y tensión necesarias ---
             corriente = campo_saturacion / campo_corr       # [A]
-            tension = corriente * resistencia/(10*0.95)                       # [V]           
+            tension = float(corriente * resistencia/(10*0.95))                       # [V]           
             #dividimos por 10 para tener la tensión enviada por el generador (estamos viendo la del OPAMP) y se tiene en cuenta una caida
             # del 5% respecto de lo enviado vía digital a lo medido realmente.
         except ValueError:
@@ -1780,7 +1846,7 @@ class CameraApp(QWidget):
             QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
             return
         
-        frec = 1/tiempo_saturacion
+        frec = float(1/tiempo_saturacion)
         pulso = self.square_pulse(signo)        
         binario = self.binarize_pulse(pulso)
         self.fungen.write_raw(binario)
@@ -1794,10 +1860,34 @@ class CameraApp(QWidget):
         
         self.fungen.write('*TRG')
 
+    def load_dom_config(self, nombre = "PREDETERMINADA"):
+        # Verificar existencia del JSON
+        file_name = "../../params/params_preconfiguration.json"
+        if not os.path.exists(file_name):
+            QMessageBox.warning(self, "Error", f"El archivo '{file_name}' no existe.")
+            return None
+        
+        with open(file_name, "r", encoding="utf-8") as f:
+            datos = json.load(f)
 
+        if nombre not in datos:
+            QMessageBox.warning(self, "Error", f"No se encontró la configuración '{nombre}' en el archivo JSON.")
+            return
 
+        config = datos[nombre]
 
-            
+        # -----------------------------
+        # 4. Cargar los valores en los QLineEdit
+        # -----------------------------
+        self.tiempo_saturacion_edit.setText(config.get("tiempo_saturacion", ""))
+        self.campo_saturacion_edit.setText(config.get("campo_saturacion", ""))
+        self.tiempo_dominio_edit.setText(config.get("tiempo_dominio", ""))
+        self.campo_dominio_edit.setText(config.get("campo_dominio", ""))
+        self.resistencia_edit.setText(config.get("resistencia", ""))
+        self.campo_corr_edit.setText(config.get("campo-corr", ""))
+
+        # (Opcional) mensaje de confirmación
+        # QMessageBox.information(self, "Configuración cargada", f"Se cargaron los valores de '{nombre}'.")
 
     def update_dom_config(self):
         '''updates a .json file with data that the user wants'''
@@ -1826,7 +1916,8 @@ class CameraApp(QWidget):
                 "campo_saturacion": self.campo_saturacion_edit.text(),
                 "tiempo_dominio": self.tiempo_dominio_edit.text(),
                 "campo_dominio": self.campo_dominio_edit.text(),
-                "resistencia": self.resistencia_edit.text()
+                "resistencia": self.resistencia_edit.text(),
+                "campo-corr": self.campo_corr_edit.text(),
             }
         
         # Agregar nueva configuración al diccionario
