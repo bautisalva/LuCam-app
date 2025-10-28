@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import threading
 import json
 import datetime
+import time
 import pyvisa as visa
 from skimage.transform import resize
 from skimage.filters import gaussian
@@ -925,7 +926,7 @@ class CameraApp(QWidget):
         self.control_tab.setLayout(main_layout)
 
         #activate predet.
-        self.load_dom_config()
+        # self.load_dom_config()
 
         # Conections
         self.saturate_dom_button.clicked.connect(self.saturate_dom)
@@ -1019,11 +1020,19 @@ class CameraApp(QWidget):
         datos[1:-2] = signo*1
         datos[0] = 0
         datos[-1] = 0
-
+        return datos
+    
+    def sqr_osci_pulse(self,signo):
+        n_puntos = 1000 #entre 8 y 16000 puntos soporta
+        datos = np.zeros(n_puntos)
+        t = np.linspace(0,1,len(datos[1: -2]))
+        datos[1:-2] = 1 + A*np.cos(w*t)-A
+        return datos
+    
     def binarize_pulse(self,data):
         import struct
         # Escalado como dice el manual (1 V = 2047)
-        datos_int = np.int16(data * 2047)
+        datos_int = np.int16(np.clip(data * 2047,-2047,2047))
         # Convertir a binario (little endian para SWAP)
         binario = struct.pack('<' + 'h'*len(datos_int), *datos_int)
         
@@ -1036,7 +1045,12 @@ class CameraApp(QWidget):
         mensaje = header.encode('ascii') + binario
         
         return mensaje
-
+    
+    def ascii_pulse(self,datos):
+        datos = np.clip(datos * 2047,-2047,2047).astype(int)
+        data_str = ",".join(str(v) for v in datos)
+        comando = "DATA:DAC VOLATILE," + data_str
+        return comando
 
     def toggle_roi(self, text):
         self.roi_enabled = (text == "Sí")
@@ -1773,7 +1787,8 @@ class CameraApp(QWidget):
 
             # --- 5. Calcular corriente y tensión necesarias ---
             corriente = campo_saturacion / campo_corr       # [A]
-            tension = float(corriente * resistencia/(10*0.95))                       # [V]           
+            tension = float((corriente * resistencia/(10*0.95))/1000) 
+            print(tension)                      # [V]           
             #dividimos por 10 para tener la tensión enviada por el generador (estamos viendo la del OPAMP) y se tiene en cuenta una caida
             # del 5% respecto de lo enviado vía digital a lo medido realmente.
         except ValueError:
@@ -1783,19 +1798,32 @@ class CameraApp(QWidget):
             self.iniciar_conexion
             QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
             return
+        frec = float(1000/tiempo_saturacion)
+        self.fungen.write('FREQ %f' % frec)
+        time.sleep(0.1)
+        # print(self.fungen.query("FREQ?"))
+        self.fungen.write('VOLT:OFFS 0')
+        time.sleep(0.1)
+        # print(self.fungen.query("VOLT:OFFS?"))
+        self.fungen.write('VOLT %f' % tension)
+        time.sleep(0.1)
         
-        frec = float(1/tiempo_saturacion)
         pulso = self.square_pulse(signo)        
         binario = self.binarize_pulse(pulso)
+        # comando = self.ascii_pulse(pulso)
+        self.fungen.write('FORM:BORD SWAP')
+        time.sleep(0.1)
+
         self.fungen.write_raw(binario)
+        # self.fungen.write(comando)
 
         # Seleccionar y activar la forma de onda descargada
         self.fungen.write('FUNC:USER VOLATILE')
+        # print(self.fungen.query("FUNC:USER?"))
         self.fungen.write('FUNC:SHAP USER')
-        self.fungen.write('FREQ %f' % frec)
-        self.fungen.write('VOLT:OFFS 0')
+        # print(self.fungen.query("FUNC:SHAP?"))
         self.fungen.write('VOLT %f' % tension)
-        
+        # print(self.fungen.query("VOLT?"))
         self.fungen.write('*TRG')
 
     def saturate_dom(self):
@@ -1835,7 +1863,8 @@ class CameraApp(QWidget):
 
             # --- 5. Calcular corriente y tensión necesarias ---
             corriente = campo_saturacion / campo_corr       # [A]
-            tension = float(corriente * resistencia/(10*0.95))                       # [V]           
+            tension = float((corriente * resistencia/(10*0.95))/1000) 
+            print(tension)                      # [V]           
             #dividimos por 10 para tener la tensión enviada por el generador (estamos viendo la del OPAMP) y se tiene en cuenta una caida
             # del 5% respecto de lo enviado vía digital a lo medido realmente.
         except ValueError:
@@ -1846,19 +1875,41 @@ class CameraApp(QWidget):
             QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
             return
         
-        frec = float(1/tiempo_saturacion)
+        frec = float(1000/tiempo_saturacion)
+        self.fungen.write('FREQ %f' % frec)
+        time.sleep(0.1)
+        # print(self.fungen.query("FREQ?"))
+        self.fungen.write('VOLT:OFFS 0')
+        time.sleep(0.1)
+        # print(self.fungen.query("VOLT:OFFS?"))
+        self.fungen.write('VOLT %f' % tension)
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
+        
         pulso = self.square_pulse(signo)        
         binario = self.binarize_pulse(pulso)
-        self.fungen.write_raw(binario)
+        # comando = self.ascii_pulse(pulso)
+        self.fungen.write('FORM:BORD SWAP')
+        time.sleep(0.1)
 
+        self.fungen.write_raw(binario)
+        # self.fungen.write(comando)
+        print(self.fungen.query('VOLT?'))
+                
         # Seleccionar y activar la forma de onda descargada
         self.fungen.write('FUNC:USER VOLATILE')
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
+        # print(self.fungen.query("FUNC:USER?"))
         self.fungen.write('FUNC:SHAP USER')
-        self.fungen.write('FREQ %f' % frec)
-        self.fungen.write('VOLT:OFFS 0')
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
         self.fungen.write('VOLT %f' % tension)
-        
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
+        # print(self.fungen.query("FUNC:SHAP?"))
         self.fungen.write('*TRG')
+
 
     def load_dom_config(self, nombre = "PREDETERMINADA"):
         # Verificar existencia del JSON
