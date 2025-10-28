@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import threading
 import json
 import datetime
+import time
 import pyvisa as visa
 from skimage.transform import resize
 from skimage.filters import gaussian
@@ -796,11 +797,12 @@ class CameraApp(QWidget):
         # dom_layout.addWidget(self.combo_pulso,2,2)
 
         dom_layout.addWidget(QLabel("Tipo de pulso:"),2,0)
-        self.combo_pulso = QComboBox()
-        self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
-        dom_layout.addWidget(self.combo_pulso,2,1)
+        # self.combo_pulso = QComboBox()
+        # self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
+        # dom_layout.addWidget(self.combo_pulso,2,1)
+        dom_layout.addWidget(QLabel("Cuadrado"),2,1)
 
-        dom_layout.addWidget(QLabel("Signo:"), 2, 2)
+        dom_layout.addWidget(QLabel("Signo del dominio:"), 2, 2)
 
         self.radio_signo_pos_dom = QRadioButton("Positivo")
         self.radio_signo_neg_dom = QRadioButton("Negativo")
@@ -812,9 +814,9 @@ class CameraApp(QWidget):
 
         signo_layout_dom = QHBoxLayout()
         signo_layout_dom.addWidget(self.radio_signo_pos_dom)
-        signo_layout_dom.addWidget(self.radio_signo_pos_dom)
+        signo_layout_dom.addWidget(self.radio_signo_neg_dom)
 
-        dom_layout.addLayout(signo_layout_dom, 3, 3)
+        dom_layout.addLayout(signo_layout_dom, 2, 3)
 
         self.saturate_dom_button = QPushButton("Saturar")
         self.create_dom_button = QPushButton("Crear dominios")
@@ -923,6 +925,9 @@ class CameraApp(QWidget):
         main_layout.addWidget(main_group)
         self.control_tab.setLayout(main_layout)
 
+        #activate predet.
+        # self.load_dom_config()
+
         # Conections
         self.saturate_dom_button.clicked.connect(self.saturate_dom)
         self.create_dom_button.clicked.connect(self.create_dom)
@@ -1009,6 +1014,43 @@ class CameraApp(QWidget):
 
         QMessageBox.information(self, "Conexión completada", estado)
 
+    def square_pulse(self,signo):
+        n_puntos = 1000 #entre 8 y 16000 puntos soporta
+        datos = np.zeros(n_puntos)
+        datos[1:-2] = signo*1
+        datos[0] = 0
+        datos[-1] = 0
+        return datos
+    
+    def sqr_osci_pulse(self,signo):
+        n_puntos = 1000 #entre 8 y 16000 puntos soporta
+        datos = np.zeros(n_puntos)
+        t = np.linspace(0,1,len(datos[1: -2]))
+        datos[1:-2] = 1 + A*np.cos(w*t)-A
+        return datos
+    
+    def binarize_pulse(self,data):
+        import struct
+        # Escalado como dice el manual (1 V = 2047)
+        datos_int = np.int16(np.clip(data * 2047,-2047,2047))
+        # Convertir a binario (little endian para SWAP)
+        binario = struct.pack('<' + 'h'*len(datos_int), *datos_int)
+        
+        # Crear encabezado SCPI para bloque binario
+        bin_len = len(binario)
+        bin_len_str = str(bin_len)
+        header = f'DATA:DAC VOLATILE, #{len(bin_len_str)}{bin_len_str}'
+        
+        # Juntar todo (comando + binario) como un solo mensaje binario
+        mensaje = header.encode('ascii') + binario
+        
+        return mensaje
+    
+    def ascii_pulse(self,datos):
+        datos = np.clip(datos * 2047,-2047,2047).astype(int)
+        data_str = ",".join(str(v) for v in datos)
+        comando = "DATA:DAC VOLATILE," + data_str
+        return comando
 
     def toggle_roi(self, text):
         self.roi_enabled = (text == "Sí")
@@ -1709,10 +1751,194 @@ class CameraApp(QWidget):
         return getattr(self, "last_processed_image", None)
     
     def create_dom(self):
-        pass
+        """
+        Lee los valores de los campos y tiempos de creación de dominio desde la interfaz,
+        calcula la corriente correspondiente al campo deseado,
+        y muestra la información o la envía al generador de pulsos.
+        """
+        # --- 0. Verificar que los campos no estén vacíos ---
+        if (not self.campo_dominio_edit.text().strip() or
+            not self.tiempo_dominio_edit.text().strip() or
+            not self.campo_corr_edit.text().strip() or
+            not self.resistencia_edit.text().strip()):
+            QMessageBox.warning(self, "Campos incompletos", "Completá todos los campos numéricos antes de continuar: \n"
+                                "Campo \n"
+                                "Tiempo\n"
+                                "Relación campo-corriente\n"
+                                "Resistencia")
+            return
+
+        # --- 1. Verificar que algún signo esté seleccionado ---
+        if not (self.radio_signo_pos_dom.isChecked() or self.radio_signo_neg_dom.isChecked()):
+            QMessageBox.warning(self, "Signo no seleccionado", "Seleccioná el signo del pulso antes de continuar.")
+            return
+
+        try:
+            # --- 2. Leer parámetros de saturación ---
+            campo_saturacion = float(self.campo_dominio_edit.text())  # [Oe]
+            tiempo_saturacion = float(self.tiempo_dominio_edit.text())  # [ms]
+
+            # --- 3. Leer signo seleccionado ---
+            signo = -1 if self.radio_signo_pos_dom.isChecked() else +1  #Cambio el signo para que nuclee en la dirección pedida (OPAMP inversor)
+
+            # --- 4. Leer relación campo-corriente y resistencia ---
+            campo_corr = float(self.campo_corr_edit.text())  # [Oe/A]
+            resistencia = float(self.resistencia_edit.text())  # [Ohm]
+
+            # --- 5. Calcular corriente y tensión necesarias ---
+            corriente = campo_saturacion / campo_corr       # [A]
+            tension = float((corriente * resistencia/(10*0.95))/1000) 
+            print(tension)                      # [V]           
+            #dividimos por 10 para tener la tensión enviada por el generador (estamos viendo la del OPAMP) y se tiene en cuenta una caida
+            # del 5% respecto de lo enviado vía digital a lo medido realmente.
+        except ValueError:
+            QMessageBox.warning(self, "Error de entrada", "Verificá que todos los valores sean numéricos.")
+
+        if self.fungen.query("BM:STAT?") == 0:
+            self.iniciar_conexion
+            QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
+            return
+        frec = float(1000/tiempo_saturacion)
+        self.fungen.write('FREQ %f' % frec)
+        time.sleep(0.1)
+        # print(self.fungen.query("FREQ?"))
+        self.fungen.write('VOLT:OFFS 0')
+        time.sleep(0.1)
+        # print(self.fungen.query("VOLT:OFFS?"))
+        self.fungen.write('VOLT %f' % tension)
+        time.sleep(0.1)
+        
+        pulso = self.square_pulse(signo)        
+        binario = self.binarize_pulse(pulso)
+        # comando = self.ascii_pulse(pulso)
+        self.fungen.write('FORM:BORD SWAP')
+        time.sleep(0.1)
+
+        self.fungen.write_raw(binario)
+        # self.fungen.write(comando)
+
+        # Seleccionar y activar la forma de onda descargada
+        self.fungen.write('FUNC:USER VOLATILE')
+        # print(self.fungen.query("FUNC:USER?"))
+        self.fungen.write('FUNC:SHAP USER')
+        # print(self.fungen.query("FUNC:SHAP?"))
+        self.fungen.write('VOLT %f' % tension)
+        # print(self.fungen.query("VOLT?"))
+        self.fungen.write('*TRG')
 
     def saturate_dom(self):
-        pass
+        """
+        Lee los valores de los campos y tiempos de saturación desde la interfaz,
+        calcula la corriente correspondiente al campo deseado,
+        y muestra la información o la envía al generador de pulsos.
+        """
+        # --- 0. Verificar que los campos no estén vacíos ---
+        if (not self.campo_saturacion_edit.text().strip() or
+            not self.tiempo_saturacion_edit.text().strip() or
+            not self.campo_corr_edit.text().strip() or
+            not self.resistencia_edit.text().strip()):
+            QMessageBox.warning(self, "Campos incompletos", "Completá todos los campos numéricos antes de continuar: \n"
+                                "Campo \n"
+                                "Tiempo\n"
+                                "Relación campo-corriente\n"
+                                "Resistencia")
+            return
+
+        # --- 1. Verificar que algún signo esté seleccionado ---
+        if not (self.radio_signo_pos_dom.isChecked() or self.radio_signo_neg_dom.isChecked()):
+            QMessageBox.warning(self, "Signo no seleccionado", "Seleccioná el signo del pulso antes de continuar.")
+            return
+
+        try:
+            # --- 2. Leer parámetros de saturación ---
+            campo_saturacion = float(self.campo_saturacion_edit.text())  # [Oe]
+            tiempo_saturacion = float(self.tiempo_saturacion_edit.text())  # [ms]
+
+            # --- 3. Leer signo seleccionado ---
+            signo = +1 if self.radio_signo_pos_dom.isChecked() else -1
+
+            # --- 4. Leer relación campo-corriente y resistencia ---
+            campo_corr = float(self.campo_corr_edit.text())  # [Oe/A]
+            resistencia = float(self.resistencia_edit.text())  # [Ohm]
+
+            # --- 5. Calcular corriente y tensión necesarias ---
+            corriente = campo_saturacion / campo_corr       # [A]
+            tension = float((corriente * resistencia/(10*0.95))/1000) 
+            print(tension)                      # [V]           
+            #dividimos por 10 para tener la tensión enviada por el generador (estamos viendo la del OPAMP) y se tiene en cuenta una caida
+            # del 5% respecto de lo enviado vía digital a lo medido realmente.
+        except ValueError:
+            QMessageBox.warning(self, "Error de entrada", "Verificá que todos los valores sean numéricos.")
+
+        if self.fungen.query("BM:STAT?") == 0:
+            self.iniciar_conexion
+            QMessageBox.warning(self, "Error", "El equipo no esta en modo Ráfaga.")
+            return
+        
+        frec = float(1000/tiempo_saturacion)
+        self.fungen.write('FREQ %f' % frec)
+        time.sleep(0.1)
+        # print(self.fungen.query("FREQ?"))
+        self.fungen.write('VOLT:OFFS 0')
+        time.sleep(0.1)
+        # print(self.fungen.query("VOLT:OFFS?"))
+        self.fungen.write('VOLT %f' % tension)
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
+        
+        pulso = self.square_pulse(signo)        
+        binario = self.binarize_pulse(pulso)
+        # comando = self.ascii_pulse(pulso)
+        self.fungen.write('FORM:BORD SWAP')
+        time.sleep(0.1)
+
+        self.fungen.write_raw(binario)
+        # self.fungen.write(comando)
+        print(self.fungen.query('VOLT?'))
+                
+        # Seleccionar y activar la forma de onda descargada
+        self.fungen.write('FUNC:USER VOLATILE')
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
+        # print(self.fungen.query("FUNC:USER?"))
+        self.fungen.write('FUNC:SHAP USER')
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
+        self.fungen.write('VOLT %f' % tension)
+        time.sleep(0.1)
+        print(self.fungen.query('VOLT?'))
+        # print(self.fungen.query("FUNC:SHAP?"))
+        self.fungen.write('*TRG')
+
+
+    def load_dom_config(self, nombre = "PREDETERMINADA"):
+        # Verificar existencia del JSON
+        file_name = "../../params/params_preconfiguration.json"
+        if not os.path.exists(file_name):
+            QMessageBox.warning(self, "Error", f"El archivo '{file_name}' no existe.")
+            return None
+        
+        with open(file_name, "r", encoding="utf-8") as f:
+            datos = json.load(f)
+
+        if nombre not in datos:
+            QMessageBox.warning(self, "Error", f"No se encontró la configuración '{nombre}' en el archivo JSON.")
+            return
+
+        config = datos[nombre]
+
+        # -----------------------------
+        # 4. Cargar los valores en los QLineEdit
+        # -----------------------------
+        self.tiempo_saturacion_edit.setText(config.get("tiempo_saturacion", ""))
+        self.campo_saturacion_edit.setText(config.get("campo_saturacion", ""))
+        self.tiempo_dominio_edit.setText(config.get("tiempo_dominio", ""))
+        self.campo_dominio_edit.setText(config.get("campo_dominio", ""))
+        self.resistencia_edit.setText(config.get("resistencia", ""))
+        self.campo_corr_edit.setText(config.get("campo-corr", ""))
+
+        # (Opcional) mensaje de confirmación
+        # QMessageBox.information(self, "Configuración cargada", f"Se cargaron los valores de '{nombre}'.")
 
     def update_dom_config(self):
         '''updates a .json file with data that the user wants'''
@@ -1741,7 +1967,8 @@ class CameraApp(QWidget):
                 "campo_saturacion": self.campo_saturacion_edit.text(),
                 "tiempo_dominio": self.tiempo_dominio_edit.text(),
                 "campo_dominio": self.campo_dominio_edit.text(),
-                "resistencia": self.resistencia_edit.text()
+                "resistencia": self.resistencia_edit.text(),
+                "campo-corr": self.campo_corr_edit.text(),
             }
         
         # Agregar nueva configuración al diccionario

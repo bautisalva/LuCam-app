@@ -374,3 +374,29 @@
 [11:26:53] FPS cambiado a 15.00
 === Se inició la app el día 14/10/2025 a las 11:29:30 ===
 [11:29:31] FPS cambiado a 15.00
+=== Se inició la app el día 14/10/2025 a las 13:32:03 ===
+[13:32:04] FPS cambiado a 15.00
+=== Se inició la app el día 14/10/2025 a las 13:38:41 ===
+[13:38:41] FPS cambiado a 15.00
+=== Se inició la app el día 14/10/2025 a las 14:12:45 ===
+[14:12:45] FPS cambiado a 15.00
+=== Se inició la app el día 14/10/2025 a las 14:17:26 ===
+[14:17:26] FPS cambiado a 15.00
+=== Se inició la app el día 14/10/2025 a las 14:19:53 ===
+[14:19:54] FPS cambiado a 15.00
+=== Se inició la app el día 16/10/2025 a las 10:07:09 ===
+[10:07:11] FPS cambiado a 15.00
+=== Se inició la app el día 16/10/2025 a las 10:11:50 ===
+[10:11:51] FPS cambiado a 15.00
+=== Se inició la app el día 16/10/2025 a las 10:12:51 ===
+[10:12:51] FPS cambiado a 15.00
+=== Se inició la app el día 16/10/2025 a las 10:13:23 ===
+[10:13:23] FPS cambiado a 15.00
+=== Se inició la app el día 21/10/2025 a las 10:36:36 ===
+[10:36:39] FPS cambiado a 15.00
+=== Se inició la app el día 21/10/2025 a las 10:47:00 ===
+[10:47:00] FPS cambiado a 15.00
+=== Se inició la app el día 21/10/2025 a las 10:50:01 ===
+[10:50:01] FPS cambiado a 15.00
+=== Se inició la app el día 21/10/2025 a las 10:51:23 ===
+[10:51:23] FPS cambiado a 15.00
