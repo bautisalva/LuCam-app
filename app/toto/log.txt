@@ -400,3 +400,7 @@
 [10:50:01] FPS cambiado a 15.00
 === Se inició la app el día 21/10/2025 a las 10:51:23 ===
 [10:51:23] FPS cambiado a 15.00
+=== Se inició la app el día 28/10/2025 a las 13:46:04 ===
+[13:46:05] FPS cambiado a 15.00
+=== Se inició la app el día 28/10/2025 a las 13:53:57 ===
+[13:53:57] FPS cambiado a 15.00
