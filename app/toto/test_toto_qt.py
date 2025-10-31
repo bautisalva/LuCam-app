@@ -248,7 +248,8 @@ class SequenceWorker(QObject):
     def __init__(self, *, camera, cycles, roi, do_resta,
                  background_gain, background_offset,
                  num_images_bg=1, num_images_frame=1,
-                 blur_sigma=0, outdir="", parent_log=None):
+                 blur_sigma=0, mode="Promedio",
+                 outdir="", parent_log=None):
         super().__init__()
         self.camera = camera
         self.cycles = int(cycles)
@@ -259,6 +260,7 @@ class SequenceWorker(QObject):
         self.num_images_bg = int(num_images_bg)
         self.num_images_frame = int(num_images_frame)
         self.blur_sigma = int(blur_sigma)
+        self.mode = mode or "Promedio"
         self.outdir = outdir
         os.makedirs(self.outdir, exist_ok=True)
         os.makedirs(os.path.join(self.outdir, "raw"), exist_ok=True)
@@ -287,8 +289,12 @@ class SequenceWorker(QObject):
         if len(imgs) == 1:
             out = imgs[0]
         else:
-            # Promedio simple para mantenerlo robusto
-            out = np.mean(np.stack(imgs, 0).astype(np.float32), axis=0).astype(np.uint16)
+            stack = np.stack(imgs, 0).astype(np.float32)
+            mode_lc = str(self.mode).lower()
+            if mode_lc.startswith("med"):
+                out = np.median(stack, axis=0).astype(np.uint16)
+            else:
+                out = np.mean(stack, axis=0).astype(np.uint16)
         if self.blur_sigma > 0:
             out = blur_uint16(out, sigma=self.blur_sigma)
         return out
@@ -341,35 +347,49 @@ class SequenceWorker(QObject):
             self.bg_ready.emit(bg.copy())
             from skimage.io import imsave as _imsave
             _imsave(os.path.join(self.outdir, "fondo.tif"), bg)
-            self.progress.emit(10, "Fondo capturado")
+            self.progress.emit(20, "Fondo capturado")
             if self.should_stop():
                 self.finished.emit(); return
 
-            # 2) Ciclos = fotos
-            total = max(1, self.cycles)
-            for k in range(1, total+1):
-                if self.should_stop(): break
-                # Paso de nucleación (usa configuración actual de UI)
-                self.log(f"[SEQ] Ciclo {k}/{total}: nucleación")
-                self.do_nucleation.emit()
-                time.sleep(0.01)
+            # 2) Nucleación y captura inicial antes de crecimiento
+            if self.should_stop():
+                self.finished.emit(); return
+
+            self.log("[SEQ] Enviando nucleación inicial...")
+            self.do_nucleation.emit()
+            time.sleep(0.01)
+
+            nuc_full = self._stack_capture(self.num_images_frame)
+            nuc_roi, nuc_box = self._apply_roi(nuc_full)
+            self._save_triplet(nuc_full, nuc_roi, nuc_box, "nucleacion")
+            self.image_ready.emit(nuc_roi.copy(), 0)
+            self.progress.emit(30, "Nucleación capturada")
+            if self.should_stop():
+                self.finished.emit(); return
+
+            # 3) Ciclos de crecimiento = fotos
+            total = max(0, self.cycles)
+            for k in range(1, total + 1):
+                if self.should_stop():
+                    break
 
                 # Paso de crecimiento (usa 'características del ciclo' actuales)
                 self.log(f"[SEQ] Ciclo {k}/{total}: crecimiento")
                 self.do_growth.emit()
                 time.sleep(0.01)
 
-                # Captura
                 full = self._stack_capture(self.num_images_frame)
                 roi_img, roi_box = self._apply_roi(full)
                 stem = f"frame_{k:04d}"
                 self._save_triplet(full, roi_img, roi_box, stem)
 
-                # Emitir preview
                 self.image_ready.emit(roi_img.copy(), k)
 
-                pct = 10 + int(90 * k / total)
+                pct = 30 + int(70 * k / max(1, total))
                 self.progress.emit(pct, f"Ciclo {k}/{total} listo")
+
+            if total == 0:
+                self.progress.emit(100, "Secuencia completada")
 
         except Exception as e:
             self.log(f"[ERROR][SEQ] {e}")
@@ -437,6 +457,7 @@ class CameraApp(QWidget):
         - SimulatedCamera (fallback)
         - PyQt6 for GUI and threading
     """
+    seq_log_signal = pyqtSignal(str)
     def __init__(self):
         super().__init__()
     
@@ -472,7 +493,10 @@ class CameraApp(QWidget):
         start_message = f"=== Se inició la app el día {now.strftime('%d/%m/%Y')} a las {now.strftime('%H:%M:%S')} ==="
         self.log_file.write(start_message + "\n")
         self.log_file.flush()
-    
+
+        # Redirigir logs generados desde hilos secundarios al hilo principal
+        self.seq_log_signal.connect(self.log_message)
+
         # Start preview worker thread
         self.preview_worker = PreviewWorker(self.camera)
         self.preview_thread = QThread()
@@ -1408,23 +1432,33 @@ class CameraApp(QWidget):
     # -- E) Lanzar / detener secuencia --
     
     def _seq_run(self):
+        if hasattr(self, 'seq_thread') and self.seq_thread is not None and self.seq_thread.isRunning():
+            self.log_message("[SEQ] Ya hay una secuencia en ejecución.")
+            return
         try:
             cycles = int(self.seq_cycles.value())
         except Exception:
             cycles = 1
-    
-        # Carpeta destino en work_dir con firma + timestamp
+
+        # Carpeta destino en work_dir (o cwd) con firma + timestamp
         ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
         sign = self._current_pulse_signature()
-        outdir = os.path.join(self.work_dir, f"SEQ_{sign}_{ts}")
-    
+        base_dir = self.work_dir if self.work_dir else os.getcwd()
+        outdir = os.path.join(base_dir, f"SEQ_{sign}_{ts}")
+
         roi = self._roi_tuple_or_none()
-    
+
         # Parámetros de resta de fondo y blur actuales (si usás otros nombres, ajustá aquí)
         bg_gain = getattr(self, 'background_gain', 1.0)
         bg_off  = getattr(self, 'background_offset', 0.0)
-        blur_sigma = getattr(self, 'preview_blur_strength', 0) if hasattr(self, 'preview_blur_strength') else 0
-    
+        blur_sigma = getattr(self, 'blur_strength', 0)
+        capture_mode = getattr(self, 'capture_mode', 'Promedio')
+        num_images = getattr(self, 'num_images_spinbox', None)
+        if num_images is not None:
+            num_images = max(1, int(num_images.value()))
+        else:
+            num_images = 1
+
         # Preparar Worker + hilo
         self.seq_thread = QThread()
         self.seq_worker = SequenceWorker(
@@ -1434,14 +1468,15 @@ class CameraApp(QWidget):
             do_resta=True,
             background_gain=bg_gain,
             background_offset=bg_off,
-            num_images_bg=1,           # usa tu pipeline si querés cambiarlo a promedio/mediana
-            num_images_frame=1,
+            num_images_bg=num_images,
+            num_images_frame=num_images,
             blur_sigma=blur_sigma,
+            mode=capture_mode,
             outdir=outdir,
-            parent_log=self.log_message
+            parent_log=self._seq_threadsafe_log
         )
         self.seq_worker.moveToThread(self.seq_thread)
-    
+
         # Conectar señales de control de pulsos a tus métodos existentes
         # Si tus métodos se llaman distinto, ajustá aquí. La idea: no duplicar lógica, reusar los ya conectados a tus botones.
         try:
@@ -1465,7 +1500,10 @@ class CameraApp(QWidget):
         self.seq_worker.bg_ready.connect(self._seq_on_bg)
         self.seq_worker.image_ready.connect(self._seq_on_image)
         self.seq_worker.finished.connect(self._seq_on_finished)
-    
+        self.seq_worker.finished.connect(self.seq_thread.quit)
+        self.seq_worker.finished.connect(self.seq_worker.deleteLater)
+        self.seq_thread.finished.connect(self.seq_thread.deleteLater)
+
         # UI
         self.seq_run_btn.setEnabled(False)
         self.seq_stop_btn.setEnabled(True)
@@ -1486,6 +1524,7 @@ class CameraApp(QWidget):
             self.seq_worker.stop()
         except Exception:
             pass
+        self.seq_stop_btn.setEnabled(False)
         self.log_message("[SEQ] Stop solicitado")
     
     
@@ -1494,8 +1533,10 @@ class CameraApp(QWidget):
     
     
     def _seq_on_bg(self, bg_img):
-        # si querés, podés mostrar el fondo en otra pestaña
-        pass
+        try:
+            self.background_image = bg_img
+        except Exception:
+            pass
     
     
     def _seq_on_image(self, img_roi, idx):
@@ -1518,7 +1559,18 @@ class CameraApp(QWidget):
             self.preview_worker.resume()
         except Exception:
             pass
+        try:
+            if hasattr(self, 'seq_thread') and self.seq_thread is not None:
+                self.seq_thread.wait()
+        except Exception:
+            pass
+        self.seq_thread = None
+        self.seq_worker = None
         self.log_message("[SEQ] Finalizada")
+
+    def _seq_threadsafe_log(self, message):
+        """Proxy para reenviar logs desde SequenceWorker al hilo principal."""
+        self.seq_log_signal.emit(str(message))
     
     
     # -- F) (Opcional) Método para disparar el pulso de crecimiento leyendo la celda "características del ciclo" --
@@ -1535,34 +1587,54 @@ class CameraApp(QWidget):
         except Exception:
             self.log_message("[GROW] Faltan constante campo-corr y/o resistencia")
             return
-    
-        H = float(self.campo_ciclo_edit.text())
-        t = float(self.tiempo_ciclo_edit.text())
+
+        try:
+            H = float(self.campo_ciclo_edit.text())
+            t = float(self.tiempo_ciclo_edit.text())
+        except Exception:
+            self.log_message("[GROW] Ingresá campo y tiempo del ciclo válidos.")
+            return
+        if t <= 0:
+            self.log_message("[GROW] El tiempo del ciclo debe ser positivo.")
+            return
+
+        if not getattr(self, 'fungen', None):
+            self.log_message("[GROW] Generador no conectado.")
+            return
 
         signo = -1 if self.radio_signo_pos_dom.isChecked() else +1
-    
+
         # Misma fórmula que usás en Control
         corriente = H / campo_corr
         V = (corriente * resistencia / (10 * 0.95)) / 1000.0
-    
+
         try:
             # SCPI mínimo: un ciclo cuadrado ~ t ms.
-            frec = float(1000/t)
-            self.fungen.write('FREQ %f' % freq)
+            frec = float(1000 / t)
+            self.fungen.write('FREQ %f' % frec)
             time.sleep(0.02)
             self.fungen.write('VOLT:OFFS 0')
             time.sleep(0.02)
             self.fungen.write('VOLT %f' % V)
             time.sleep(0.02)
-            
-            if self.combo_pulso_ciclo.curretText() == "Pulso Cuadrado":
-                pulso = self.square_pulse(signo)    
-            elif self.combo_pulso_ciclo.curretText() == "Pulso Oscilatorio":
-                A = self.amp_edit.text()
-                f = self.frec_edit.text()
-                pulso = self.sqr_osci_pulse(signo,A,f)    
-            elif self.combo_pulso_ciclo.curretText() == "Pulso Mixto":
-                pulso = self.square_pulse(signo)     #provicional
+
+            pulse_type = self.combo_pulso_ciclo.currentText().strip().lower()
+            if pulse_type == "pulso cuadrado":
+                pulso = self.square_pulse(signo)
+            elif pulse_type == "pulso oscilatorio":
+                try:
+                    A = float(self.amp_edit.text())
+                    f = float(self.frec_edit.text())
+                except Exception:
+                    self.log_message("[GROW] Parámetros de pulso oscilatorio inválidos; usando cuadrado.")
+                    pulso = self.square_pulse(signo)
+                else:
+                    pulso = self.sqr_osci_pulse(signo, A, f)
+            elif pulse_type == "pulso mixto":
+                self.log_message("[GROW] Pulso mixto no implementado; usando cuadrado.")
+                pulso = self.square_pulse(signo)
+            else:
+                pulso = self.square_pulse(signo)
 
 
             binario = self.binarize_pulse(pulso)
@@ -1578,11 +1650,11 @@ class CameraApp(QWidget):
             # print(self.fungen.query("FUNC:USER?"))
             self.fungen.write('FUNC:SHAP USER')
             # print(self.fungen.query("FUNC:SHAP?"))
-            self.fungen.write('VOLT %f' % tension)
+            self.fungen.write('VOLT %f' % V)
             # print(self.fungen.query("VOLT?"))
             self.fungen.write('*TRG')
 
-            
+
         except Exception as e:
             self.log_message(f"[GROW][ERROR] {e}")
             
