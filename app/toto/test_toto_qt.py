@@ -347,35 +347,49 @@ class SequenceWorker(QObject):
             self.bg_ready.emit(bg.copy())
             from skimage.io import imsave as _imsave
             _imsave(os.path.join(self.outdir, "fondo.tif"), bg)
-            self.progress.emit(10, "Fondo capturado")
+            self.progress.emit(20, "Fondo capturado")
             if self.should_stop():
                 self.finished.emit(); return
 
-            # 2) Ciclos = fotos
-            total = max(1, self.cycles)
-            for k in range(1, total+1):
-                if self.should_stop(): break
-                # Paso de nucleación (usa configuración actual de UI)
-                self.log(f"[SEQ] Ciclo {k}/{total}: nucleación")
-                self.do_nucleation.emit()
-                time.sleep(0.01)
+            # 2) Nucleación y captura inicial antes de crecimiento
+            if self.should_stop():
+                self.finished.emit(); return
+
+            self.log("[SEQ] Enviando nucleación inicial...")
+            self.do_nucleation.emit()
+            time.sleep(0.01)
+
+            nuc_full = self._stack_capture(self.num_images_frame)
+            nuc_roi, nuc_box = self._apply_roi(nuc_full)
+            self._save_triplet(nuc_full, nuc_roi, nuc_box, "nucleacion")
+            self.image_ready.emit(nuc_roi.copy(), 0)
+            self.progress.emit(30, "Nucleación capturada")
+            if self.should_stop():
+                self.finished.emit(); return
+
+            # 3) Ciclos de crecimiento = fotos
+            total = max(0, self.cycles)
+            for k in range(1, total + 1):
+                if self.should_stop():
+                    break
 
                 # Paso de crecimiento (usa 'características del ciclo' actuales)
                 self.log(f"[SEQ] Ciclo {k}/{total}: crecimiento")
                 self.do_growth.emit()
                 time.sleep(0.01)
 
-                # Captura
                 full = self._stack_capture(self.num_images_frame)
                 roi_img, roi_box = self._apply_roi(full)
                 stem = f"frame_{k:04d}"
                 self._save_triplet(full, roi_img, roi_box, stem)
 
-                # Emitir preview
                 self.image_ready.emit(roi_img.copy(), k)
 
-                pct = 10 + int(90 * k / total)
+                pct = 30 + int(70 * k / max(1, total))
                 self.progress.emit(pct, f"Ciclo {k}/{total} listo")
+
+            if total == 0:
+                self.progress.emit(100, "Secuencia completada")
 
         except Exception as e:
             self.log(f"[ERROR][SEQ] {e}")
@@ -443,6 +457,7 @@ class CameraApp(QWidget):
         - SimulatedCamera (fallback)
         - PyQt6 for GUI and threading
     """
+    seq_log_signal = pyqtSignal(str)
     def __init__(self):
         super().__init__()
     
@@ -478,7 +493,10 @@ class CameraApp(QWidget):
         start_message = f"=== Se inició la app el día {now.strftime('%d/%m/%Y')} a las {now.strftime('%H:%M:%S')} ==="
         self.log_file.write(start_message + "\n")
         self.log_file.flush()
-    
+
+        # Redirigir logs generados desde hilos secundarios al hilo principal
+        self.seq_log_signal.connect(self.log_message)
+
         # Start preview worker thread
         self.preview_worker = PreviewWorker(self.camera)
         self.preview_thread = QThread()
@@ -1455,7 +1473,7 @@ class CameraApp(QWidget):
             blur_sigma=blur_sigma,
             mode=capture_mode,
             outdir=outdir,
-            parent_log=self.log_message
+            parent_log=self._seq_threadsafe_log
         )
         self.seq_worker.moveToThread(self.seq_thread)
 
@@ -1549,6 +1567,10 @@ class CameraApp(QWidget):
         self.seq_thread = None
         self.seq_worker = None
         self.log_message("[SEQ] Finalizada")
+
+    def _seq_threadsafe_log(self, message):
+        """Proxy para reenviar logs desde SequenceWorker al hilo principal."""
+        self.seq_log_signal.emit(str(message))
     
     
     # -- F) (Opcional) Método para disparar el pulso de crecimiento leyendo la celda "características del ciclo" --
