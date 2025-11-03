@@ -1078,65 +1078,13 @@ class CameraApp(QWidget):
         '''
         main_layout = QVBoxLayout()
 
-         # === BOTÓN DE INICIO ===
+        # === BOTÓN DE INICIO ===
         self.init_button = QPushButton("INICIAR")
         self.init_button.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold;")
         self.init_button.clicked.connect(self.iniciar_conexion)
         main_layout.addWidget(self.init_button)
 
-        # --- Main frame ---
-        main_group = QGroupBox("Control de pulsos y toma de datos")
-        main_group_layout = QVBoxLayout(main_group)
-
-        # --- Osciloscope ---
-        osc_group = QGroupBox("Osciloscopio")
-        osc_layout = QGridLayout(osc_group)
-
-        osc_layout.addWidget(QLabel("Nombre archivo datos:"), 0, 0)
-        self.osc_file_edit = QLineEdit()
-        osc_layout.addWidget(self.osc_file_edit, 0, 1,1,3)
-
-        osc_layout.addWidget(QLabel("Escala X:"), 1, 2)
-        self.osc_x_combo = QComboBox()
-        self.osc_x_combo.addItems(["1 ns/div", "2 ns/div", "5 ns/div", 
-                                  "10 ns/div", "20 ns/div", "50 ns/div", 
-                                  "100 ns/div", "200 ns/div", "500 ns/div", 
-                                  "1 µs/div", "2 µs/div", "5 µs/div", 
-                                  "10 µs/div", "20 µs/div", "50 µs/div", 
-                                  "100 µs/div", "200 µs/div", "500 µs/div", 
-                                  "1 ms/div", "2 ms/div", "5 ms/div", 
-                                  "10 ms/div", "20 ms/div", "50 ms/div", 
-                                  "100 ms/div", "200 ms/div", "500 ms/div", 
-                                  "1 s/div", "2 s/div", "5 s/div", "10 s/div"])  
-        osc_layout.addWidget(self.osc_x_combo,2,2)
-
-        osc_layout.addWidget(QLabel("Escala Y:"), 1, 3)
-        self.osc_y_combo = QComboBox()
-        self.osc_y_combo.addItems(["1 mV/div", "2 mV/div", "5 mV/div", 
-                                   "10 mV/div", "20 mV/div", "50 mV/div", 
-                                   "100 mV/div", "200 mV/div", "500 mV/div", 
-                                   "1 V/div", "2 V/div", "5 V/div", "10 V/div"])  
-        osc_layout.addWidget(self.osc_y_combo, 2, 3)
-
-        self.osci_scale_button = QPushButton("Cambiar Escala")
-        osc_layout.addWidget(self.osci_scale_button,3,2,1,2)
-
-        self.osc_save_checkbox = QCheckBox("Guardar foto del osciloscopio")
-        osc_layout.addWidget(self.osc_save_checkbox, 1,0, 1, 2)
-
-        self.osci_data_reader_button = QPushButton("Tomar datos del Osciloscopio")
-        osc_layout.addWidget(self.osci_data_reader_button,4,0,1,4)
-
-        main_group_layout.addWidget(osc_group)
-
-        # === GUARDAMOS referencias para deshabilitarlas inicialmente ===
-        self.osc_buttons = [self.osci_scale_button, self.osci_data_reader_button]
-        for btn in self.osc_buttons:
-            btn.setEnabled(False)
-
-        # --- Mid Frame ---
-        mid_layout = QHBoxLayout()
-
+        # --- Controles manuales de dominios ---
         dom_group = QGroupBox("Saturar muestra y crear dominios")
         dom_layout = QGridLayout(dom_group)
 
@@ -1144,40 +1092,31 @@ class CameraApp(QWidget):
         self.tiempo_saturacion_edit = QLineEdit()
         dom_layout.addWidget(self.tiempo_saturacion_edit, 0, 1)
 
-        dom_layout.addWidget(QLabel("Campo de saturación [Oe]"), 1, 0)
+        dom_layout.addWidget(QLabel("Campo de saturación [Oe]"), 0, 2)
         self.campo_saturacion_edit = QLineEdit()
-        dom_layout.addWidget(self.campo_saturacion_edit, 1, 1)
+        dom_layout.addWidget(self.campo_saturacion_edit, 0, 3)
 
-        dom_layout.addWidget(QLabel("Tiempo de dominio [ms]"), 0, 2)
+        dom_layout.addWidget(QLabel("Tiempo de dominio [ms]"), 1, 0)
         self.tiempo_dominio_edit = QLineEdit()
-        dom_layout.addWidget(self.tiempo_dominio_edit, 0, 3)
+        dom_layout.addWidget(self.tiempo_dominio_edit, 1, 1)
 
         dom_layout.addWidget(QLabel("Campo de dominio [Oe]"), 1, 2)
         self.campo_dominio_edit = QLineEdit()
         dom_layout.addWidget(self.campo_dominio_edit, 1, 3)
 
         dom_layout.addWidget(QLabel("Constante campo-corriente [G/mA]"), 2, 0)
-        self.campo_corr_edit = QLineEdit()
+        self.campo_corr_edit = QLineEdit("0.3956")
         dom_layout.addWidget(self.campo_corr_edit, 2, 1)
 
         dom_layout.addWidget(QLabel("Resistencia [Ω]"), 2, 2)
-        self.resistencia_edit = QLineEdit()
+        self.resistencia_edit = QLineEdit("103")
         dom_layout.addWidget(self.resistencia_edit, 2, 3)
 
-        # dom_layout.addWidget(QLabel("Tipo de pulso"),2,1)
-        # self.combo_pulso = QComboBox()
-        # self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
-        # dom_layout.addWidget(self.combo_pulso,2,2)
-
-        dom_layout.addWidget(QLabel("Tipo de pulso:"),3,0)
-        dom_layout.addWidget(QLabel("Cuadrado"),3,1)
-
-        dom_layout.addWidget(QLabel("Signo del dominio:"), 3, 2)
-
+        dom_layout.addWidget(QLabel("Signo del dominio:"), 3, 0)
         self.radio_signo_pos_dom = QRadioButton("Positivo")
         self.radio_signo_neg_dom = QRadioButton("Negativo")
+        self.radio_signo_pos_dom.setChecked(True)
 
-        # Para que sean excluyentes, van en un mismo QButtonGroup
         self.signo_group_dom = QButtonGroup()
         self.signo_group_dom.addButton(self.radio_signo_pos_dom)
         self.signo_group_dom.addButton(self.radio_signo_neg_dom)
@@ -1185,157 +1124,33 @@ class CameraApp(QWidget):
         signo_layout_dom = QHBoxLayout()
         signo_layout_dom.addWidget(self.radio_signo_pos_dom)
         signo_layout_dom.addWidget(self.radio_signo_neg_dom)
-
-        dom_layout.addLayout(signo_layout_dom, 3, 3)
+        dom_layout.addLayout(signo_layout_dom, 3, 1, 1, 3)
 
         self.saturate_dom_button = QPushButton("Saturar")
         self.create_dom_button = QPushButton("Crear dominios")
-        dom_layout.addWidget(self.saturate_dom_button, 3, 1)
-        dom_layout.addWidget(self.create_dom_button, 3, 2)
+        botones_layout = QHBoxLayout()
+        botones_layout.addWidget(self.saturate_dom_button)
+        botones_layout.addWidget(self.create_dom_button)
+        dom_layout.addLayout(botones_layout, 4, 0, 1, 4)
 
-        mid_layout.addWidget(dom_group)
+        main_layout.addWidget(dom_group)
 
-        main_group_layout.addLayout(mid_layout)
+        # --- Sección de secuencias ---
+        sequence_section = self._build_sequence_section()
+        main_layout.addWidget(sequence_section)
 
-        # --- Combobox for configurations already saved ---
-        combo_group = QGroupBox()
-        combo_layout = QGridLayout(combo_group)
+        main_layout.addStretch()
 
-        combo_layout.addWidget(QLabel("Seleccionar configuración"), 0, 0) 
-        self.combo = QComboBox() 
-        try: 
-          with open("../../params/params_preconfiguration.json", "r", encoding="utf-8") as f: 
-            #Everything will be saved in here 
-            data = json.load(f) 
-            for nombre, valores in data.items():   # nombre = clave, valores = diccionario
-                self.combo.addItem(nombre, valores)
-        except Exception as e: 
-            print(f"[WARNING] No se pudo cargar JSON: {e}")
-            
-        combo_layout.addWidget(self.combo, 0, 1)
+        self.control_tab.setLayout(main_layout)
 
-        main_group_layout.addWidget(combo_group)
-
-
-        # --- Inferior Frame ---
-        bottom_layout = QHBoxLayout()
-
-        # --- Cicle caracteristics ---
-        
-        ciclo_group = QGroupBox("Características Ciclo")
-        ciclo_layout = QGridLayout(ciclo_group)
-
-        ciclo_layout.addWidget(QLabel("Constate campo-corriente [G/mA]:"), 0, 0)
-        self.campo_corr_edit = QLineEdit()
-        ciclo_layout.addWidget(self.campo_corr_edit, 0, 1)
-
-        ciclo_layout.addWidget(QLabel("Resistencia [Ω]:"), 0, 2)
-        self.resistencia_edit = QLineEdit()
-        ciclo_layout.addWidget(self.resistencia_edit, 0, 3)
-
-        ciclo_layout.addWidget(QLabel("Campo [Oe]:"), 1, 0)
-        self.campo_ciclo_edit = QLineEdit()
-        ciclo_layout.addWidget(self.campo_ciclo_edit, 1, 1)
-
-        ciclo_layout.addWidget(QLabel("Tiempo [ms]:"), 1, 2)
-        self.tiempo_ciclo_edit = QLineEdit()
-        ciclo_layout.addWidget(self.tiempo_ciclo_edit, 1, 3)
-
-        ciclo_layout.addWidget(QLabel("Offset [V]:"), 2, 0)
-        self.offset_ciclo_edit = QLineEdit()
-        ciclo_layout.addWidget(self.offset_ciclo_edit, 2, 1)
-
-        ciclo_layout.addWidget(QLabel("Nro de ciclos:"), 2, 2)
-        self.nro_ciclo_edit = QLineEdit()
-        ciclo_layout.addWidget(self.nro_ciclo_edit, 2, 3)
-
-        ciclo_layout.addWidget(QLabel("Tipo de pulso:"),3,0)
-        self.combo_pulso_ciclo = QComboBox()
-        self.combo_pulso_ciclo.addItems(["Pulso cuadrado","Pulso Mixto", "Pulso Oscilatorio"])
-        ciclo_layout.addWidget(self.combo_pulso_ciclo,3,1)
-
-        # --- Campos adicionales (ocultos inicialmente) ---
-        # Oscilatorio
-        self.label_amp = QLabel("Amplitud de oscilación [%] (0-50):")
-        self.amp_edit = QLineEdit()
-        self.label_frec = QLabel("Cantidad de oscilaciones:")
-        self.frec_edit = QLineEdit()
-
-        ciclo_layout.addWidget(self.label_amp, 4, 0)
-        ciclo_layout.addWidget(self.amp_edit, 4, 1)
-        ciclo_layout.addWidget(self.label_frec, 4, 2)
-        ciclo_layout.addWidget(self.frec_edit, 4, 3)
-
-        # Asimétrico
-        self.label_asim = QLabel("% de asimetría:")
-        self.asim_edit = QLineEdit()
-        self.label_altura = QLabel("Altura de asimetría [V]:")
-        self.altura_edit = QLineEdit()
-
-        ciclo_layout.addWidget(self.label_asim, 5, 0)
-        ciclo_layout.addWidget(self.asim_edit, 5, 1)
-        ciclo_layout.addWidget(self.label_altura, 5, 2)
-        ciclo_layout.addWidget(self.altura_edit, 5, 3)
-
-        # Ocultamos todos los campos adicionales al inicio
-        for widget in [self.label_amp, self.amp_edit, self.label_frec, self.frec_edit,
-                    self.label_asim, self.asim_edit, self.label_altura, self.altura_edit]:
-            widget.hide()
-
-        # Función de actualización
-        def actualizar_campos_pulso(tipo):
-            # Ocultamos todos
-            for widget in [self.label_amp, self.amp_edit, self.label_frec, self.frec_edit,
-                        self.label_asim, self.asim_edit, self.label_altura, self.altura_edit]:
-                widget.hide()
-
-            if tipo == "Pulso Oscilatorio":
-                self.label_amp.show()
-                self.amp_edit.show()
-                self.label_frec.show()
-                self.frec_edit.show()
-
-            elif tipo == "Pulso Mixto":
-                self.label_asim.show()
-                self.asim_edit.show()
-                self.label_altura.show()
-                self.altura_edit.show()
-
-        # Conexión del combo a la función
-        self.combo_pulso_ciclo.currentTextChanged.connect(actualizar_campos_pulso)
-
-
-        bottom_layout.addWidget(ciclo_group)
-        
-        self.gen_buttons=[self.saturate_dom_button,self.create_dom_button]
+        # Deshabilitar acciones dependientes del generador hasta conectar
+        self.gen_buttons = [self.saturate_dom_button, self.create_dom_button]
+        if hasattr(self, "seq_run_btn"):
+            self.gen_buttons.append(self.seq_run_btn)
         for btn in self.gen_buttons:
             btn.setEnabled(False)
 
-        # --- Saturate and create domains ---
-
-        capture_group = QGroupBox("Captura")
-        capture_layout = QGridLayout(capture_group)
-        
-        bottom_layout.addWidget(capture_group)
-
-
-        main_group_layout.addLayout(bottom_layout)
-
-        sequence_section = self._build_sequence_section()
-        main_group_layout.addWidget(sequence_section)
-
-        # --- Add preconfiguration ---
-        self.update_dom_config_button = QPushButton("Agregar configuración")
-        main_group_layout.addWidget(self.update_dom_config_button)
-
-
-        main_layout.addWidget(main_group)
-        self.control_tab.setLayout(main_layout)
-
-        #activate predet.
-        # self.load_dom_config()
-
-        # Conections
+        # Conexiones
         self.saturate_dom_button.clicked.connect(self.saturate_dom)
         self.create_dom_button.clicked.connect(self.create_dom)
 
@@ -1495,8 +1310,7 @@ class CameraApp(QWidget):
         Según los resultados, habilita los botones correspondientes.
         """
         rm = visa.ResourceManager()
-        self.osci = None
-        self.gen = None
+        self.fungen = None
 
         try:
             recursos = rm.list_resources()
@@ -1508,66 +1322,33 @@ class CameraApp(QWidget):
                     IDN = instr.query("*IDN?")
                     print(f"{resource}:{IDN.strip()}")
                     instr.close()
-            # print("Recursos detectados:", recursos)
                 except Exception as e:
                     print(f"{resource}: No se pudo indentificar ({e})")
 
-            self.osci = rm.open_resource("GPIB0::1::INSTR")
             self.fungen = rm.open_resource("GPIB0::10::INSTR")
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"No se pudo escanear recursos VISA:\n{e}")
             return
 
-        # --- lógica de activación según qué se conectó ---
-        if self.osci is not None and self.fungen is not None:
-            estado = "✅ Se conectaron ambos equipos (osciloscopio y generador)."
-            # Preconfiguramos el osciloscopio
-            self.osci.write("ACQUIRE:MODE SAMPLE")
-            self.osci.write("TRIG:A:MODE NORMAL")
+        if self.fungen is None:
+            QMessageBox.warning(self, "Conexión fallida", "❌ No se detectó el generador de funciones.")
+            return
 
-            # Preconfiguramos el generador
+        try:
             self.fungen.write("OUTP:LOAD INF")    # impedancia de salida: High Z
-            # Configurar modo ráfaga (Burst Mode)
             self.fungen.write("BM:SOUR INT")      # fuente de ráfaga interna
             self.fungen.write("BM:NCYC 1")        # 1 ciclo por ráfaga
             self.fungen.write("BM:PHASe 0")       # fase inicial 0°
             self.fungen.write("BM:STAT ON")       # activar modo burst
             self.fungen.write("TRIG:SOUR BUS")    # trigger por software
+        except Exception as e:
+            QMessageBox.warning(self, "Generador", f"⚠️ No se pudo configurar el generador:\n{e}")
 
-            for btn in self.gen_buttons:
-                btn.setEnabled(True)
-            for btn in self.osc_buttons:
-                btn.setEnabled(True)
+        for btn in getattr(self, "gen_buttons", []):
+            btn.setEnabled(True)
 
-        elif self.osci is not None:
-            estado = "⚠️ Solo se conectó el osciloscopio."
-            # Preconfiguramos el osciloscopio
-            self.osci.write("ACQUIRE:MODE SAMPLE")
-            self.osci.write("TRIG:A:MODE NORMAL")
-
-            for btn in self.osc_buttons:
-                btn.setEnabled(True)
-
-        elif self.fungen is not None:
-            estado = "⚠️ Solo se conectó el generador."
-            # Preconfiguramos el generador
-            self.fungen.write("OUTP:LOAD INF")    # impedancia de salida: High Z
-            # Configurar modo ráfaga (Burst Mode)
-            self.fungen.write("BM:SOUR INT")      # fuente de ráfaga interna
-            self.fungen.write("BM:NCYC 1")        # 1 ciclo por ráfaga
-            self.fungen.write("BM:PHASe 0")       # fase inicial 0°
-            self.fungen.write("BM:STAT ON")       # activar modo burst
-            self.fungen.write("TRIG:SOUR BUS")    # trigger por software
-
-            for btn in self.gen_buttons:
-                btn.setEnabled(True)
-
-        else:
-            estado = "❌ No se detectó ningún equipo."
-            return QMessageBox.warning(self, "Conexión fallida", estado)
-
-        QMessageBox.information(self, "Conexión completada", estado)
+        QMessageBox.information(self, "Conexión completada", "✅ Generador conectado y configurado.")
 
     def _parse_int_or(self, text, default=1):
         try:
@@ -1578,7 +1359,10 @@ class CameraApp(QWidget):
     def _apply_burst_cycles_from_ui(self):
         if not hasattr(self, "fungen") or self.fungen is None:
             return
-        ncyc = self._parse_int_or(self.nro_ciclo_edit.text(), 1)
+        nro_widget = getattr(self, "nro_ciclo_edit", None)
+        if nro_widget is None:
+            return
+        ncyc = self._parse_int_or(nro_widget.text(), 1)
         try:
             self.fungen.write(f"BM:NCYC {ncyc}")
             self.log_message(f"[GEN] BM:NCYC = {ncyc}")
@@ -1878,101 +1662,75 @@ class CameraApp(QWidget):
         """Ejemplo genérico: arma un pulso usando las celdas de 'características del ciclo'.
         Ajustá los nombres de widgets si tus IDs reales difieren.
         """
-        # Conversión H->V usando tus celdas ya existentes
-        try:
-            if hasattr(self, 'seq_thread') and self.seq_thread is not None:
-                self.seq_thread.wait()
-        except Exception:
-            self.log_message("[GROW] Faltan constante campo-corr y/o resistencia")
-            return
+        config = self._pulse_config_from_controls("crecimiento")
 
         try:
-            H = float(self.campo_ciclo_edit.text())
-            t = float(self.tiempo_ciclo_edit.text())
+            campo_corr = float(self.campo_corr_edit.text())
+            resistencia = float(self.resistencia_edit.text())
         except Exception:
-            self.log_message("[GROW] Ingresá campo y tiempo del ciclo válidos.")
+            self.log_message("[GROW] Definí la constante campo-corriente y la resistencia.")
             return
-        if t <= 0:
-            self.log_message("[GROW] El tiempo del ciclo debe ser positivo.")
+
+        if campo_corr == 0:
+            self.log_message("[GROW] La constante campo-corriente debe ser distinta de cero.")
             return
 
         if not getattr(self, 'fungen', None):
             self.log_message("[GROW] Generador no conectado.")
             return
 
-        signo = -1 if self.radio_signo_pos_dom.isChecked() else +1
+        try:
+            campo = float(config.get("campo", 0.0))
+            tiempo = float(config.get("tiempo", 0.0))
+            signo = int(config.get("signo", 1))
+            tipo = str(config.get("tipo", "Pulso cuadrado")).lower()
+            amplitud = float(config.get("amplitud", 0.0))
+            oscilaciones = int(config.get("oscilaciones", 1))
+        except Exception:
+            self.log_message("[GROW] Parámetros inválidos para el pulso de crecimiento.")
+            return
 
-        # Misma fórmula que usás en Control
-        corriente = H / campo_corr
-        V = (corriente * resistencia / (10 * 0.95)) / 1000.0
+        if tiempo <= 0:
+            self.log_message("[GROW] El tiempo del pulso debe ser positivo.")
+            return
+
+        corriente = campo / campo_corr
+        tension = (corriente * resistencia / (10 * 0.95)) / 1000.0
+        frecuencia = 1000.0 / tiempo
+
+        if "oscilatorio" in tipo:
+            forma = sqr_osci_pulse(signo, amplitud, oscilaciones)
+        else:
+            forma = square_pulse(signo)
+
+        binario = binarize_pulse(forma)
 
         try:
-            # SCPI mínimo: un ciclo cuadrado ~ t ms.
-            frec = float(1000 / t)
-            self.fungen.write('FREQ %f' % frec)
-            time.sleep(0.02)
+            if self.fungen.query("BM:STAT?") == 0:
+                self.log_message("[GROW] El modo ráfaga está deshabilitado en el generador.")
+                return
+        except Exception:
+            self.log_message("[GROW] No se pudo consultar el modo ráfaga del generador.")
+
+        try:
+            self.fungen.write('FREQ %f' % frecuencia)
+            time.sleep(0.05)
             self.fungen.write('VOLT:OFFS 0')
-            time.sleep(0.02)
-            self.fungen.write('VOLT %f' % V)
-            time.sleep(0.02)
-
-            pulse_type = self.combo_pulso_ciclo.currentText().strip().lower()
-            if pulse_type == "pulso cuadrado":
-                pulso = self.square_pulse(signo)
-            elif pulse_type == "pulso oscilatorio":
-                try:
-                    A = float(self.amp_edit.text())
-                    f = float(self.frec_edit.text())
-                except Exception:
-                    self.log_message("[GROW] Parámetros de pulso oscilatorio inválidos; usando cuadrado.")
-                    pulso = self.square_pulse(signo)
-                else:
-                    pulso = self.sqr_osci_pulse(signo, A, f)
-            elif pulse_type == "pulso mixto":
-                self.log_message("[GROW] Pulso mixto no implementado; usando cuadrado.")
-                pulso = self.square_pulse(signo)
-            else:
-                pulso = self.square_pulse(signo)
-
-            pulse_type = self.combo_pulso_ciclo.currentText().strip().lower()
-            if pulse_type == "pulso cuadrado":
-                pulso = square_pulse(signo)
-            elif pulse_type == "pulso oscilatorio":
-                try:
-                    A = float(self.amp_edit.text())
-                    f = float(self.frec_edit.text())
-                except Exception:
-                    self.log_message("[GROW] Parámetros de pulso oscilatorio inválidos; usando cuadrado.")
-                    pulso = square_pulse(signo)
-                else:
-                    pulso = sqr_osci_pulse(signo, A, f)
-            elif pulse_type == "pulso mixto":
-                self.log_message("[GROW] Pulso mixto no implementado; usando cuadrado.")
-                pulso = square_pulse(signo)
-            else:
-                pulso = square_pulse(signo)
-
-
-            binario = binarize_pulse(pulso)
-            # comando = self.ascii_pulse(pulso)
+            time.sleep(0.05)
+            self.fungen.write('VOLT %f' % tension)
+            time.sleep(0.05)
             self.fungen.write('FORM:BORD SWAP')
-            time.sleep(0.1)
-    
+            time.sleep(0.02)
             self.fungen.write_raw(binario)
-            # self.fungen.write(comando)
-    
-            # Seleccionar y activar la forma de onda descargada
             self.fungen.write('FUNC:USER VOLATILE')
-            # print(self.fungen.query("FUNC:USER?"))
+            time.sleep(0.02)
             self.fungen.write('FUNC:SHAP USER')
-            # print(self.fungen.query("FUNC:SHAP?"))
-            self.fungen.write('VOLT %f' % V)
-            # print(self.fungen.query("VOLT?"))
+            time.sleep(0.02)
+            self.fungen.write('VOLT %f' % tension)
+            time.sleep(0.02)
             self.fungen.write('*TRG')
-
-
-        except Exception as e:
-            self.log_message(f"[GROW][ERROR] {e}")
+        except Exception as exc:
+            self.log_message(f"[GROW][ERROR] No se pudo enviar el pulso: {exc}")
             
     def apply_real_camera_values_to_sliders(self):
         """
