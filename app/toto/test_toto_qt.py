@@ -1156,18 +1156,23 @@ class CameraApp(QWidget):
         self.campo_dominio_edit = QLineEdit()
         dom_layout.addWidget(self.campo_dominio_edit, 1, 3)
 
+        dom_layout.addWidget(QLabel("Constante campo-corriente [G/mA]"), 2, 0)
+        self.campo_corr_edit = QLineEdit()
+        dom_layout.addWidget(self.campo_corr_edit, 2, 1)
+
+        dom_layout.addWidget(QLabel("Resistencia [Ω]"), 2, 2)
+        self.resistencia_edit = QLineEdit()
+        dom_layout.addWidget(self.resistencia_edit, 2, 3)
+
         # dom_layout.addWidget(QLabel("Tipo de pulso"),2,1)
         # self.combo_pulso = QComboBox()
         # self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
         # dom_layout.addWidget(self.combo_pulso,2,2)
 
-        dom_layout.addWidget(QLabel("Tipo de pulso:"),2,0)
-        # self.combo_pulso = QComboBox()
-        # self.combo_pulso.addItems(["Pulso Pos.+","Pulso Neg.-","Pulso Mixto", "Pulso Oscilatorio"])
-        # dom_layout.addWidget(self.combo_pulso,2,1)
-        dom_layout.addWidget(QLabel("Cuadrado"),2,1)
+        dom_layout.addWidget(QLabel("Tipo de pulso:"),3,0)
+        dom_layout.addWidget(QLabel("Cuadrado"),3,1)
 
-        dom_layout.addWidget(QLabel("Signo del dominio:"), 2, 2)
+        dom_layout.addWidget(QLabel("Signo del dominio:"), 3, 2)
 
         self.radio_signo_pos_dom = QRadioButton("Positivo")
         self.radio_signo_neg_dom = QRadioButton("Negativo")
@@ -1181,7 +1186,7 @@ class CameraApp(QWidget):
         signo_layout_dom.addWidget(self.radio_signo_pos_dom)
         signo_layout_dom.addWidget(self.radio_signo_neg_dom)
 
-        dom_layout.addLayout(signo_layout_dom, 2, 3)
+        dom_layout.addLayout(signo_layout_dom, 3, 3)
 
         self.saturate_dom_button = QPushButton("Saturar")
         self.create_dom_button = QPushButton("Crear dominios")
@@ -1333,7 +1338,6 @@ class CameraApp(QWidget):
         # Conections
         self.saturate_dom_button.clicked.connect(self.saturate_dom)
         self.create_dom_button.clicked.connect(self.create_dom)
-        self.update_dom_config_button.clicked.connect(self.update_dom_config)
 
 
     def _make_sequence_pulse_group(self, title):
@@ -1528,8 +1532,7 @@ class CameraApp(QWidget):
             self.fungen.write("BM:SOUR INT")      # fuente de ráfaga interna
             self.fungen.write("BM:NCYC 1")        # 1 ciclo por ráfaga
             self.fungen.write("BM:PHASe 0")       # fase inicial 0°
-            self.fungen.write("BM:STAT ON")
-            self._apply_burst_cycles_from_ui()# activar modo burst
+            self.fungen.write("BM:STAT ON")       # activar modo burst
             self.fungen.write("TRIG:SOUR BUS")    # trigger por software
 
             for btn in self.gen_buttons:
@@ -1877,8 +1880,8 @@ class CameraApp(QWidget):
         """
         # Conversión H->V usando tus celdas ya existentes
         try:
-            campo_corr = float(self.campo_corr_edit.text())
-            resistencia = float(self.resistencia_edit.text())
+            if hasattr(self, 'seq_thread') and self.seq_thread is not None:
+                self.seq_thread.wait()
         except Exception:
             self.log_message("[GROW] Faltan constante campo-corr y/o resistencia")
             return
@@ -2845,10 +2848,11 @@ class CameraApp(QWidget):
         with open(file_name, "w", encoding="utf-8") as f:
             json.dump(datos, f, indent=4, ensure_ascii=False)
         
-        # Actualizar combobox
-        self.combo.clear()
-        for nombre_config, valores in datos.items():
-            self.combo.addItem(nombre_config, valores)
+        combo = getattr(self, "combo", None)
+        if combo is not None:
+            combo.clear()
+            for nombre_config, valores in datos.items():
+                combo.addItem(nombre_config, valores)
 
 
     def log_message(self, message):
