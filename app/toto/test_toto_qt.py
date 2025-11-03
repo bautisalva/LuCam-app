@@ -287,6 +287,27 @@ class SequenceWorker(QObject):
         self.roi = roi
         self.num_images_bg = max(1, int(num_images_bg))
         self.num_images_frame = max(1, int(num_images_frame))
+    # Señales para que la APP ejecute los pulsos usando LO QUE YA ESTÁ SELECCIONADO en la UI
+    do_saturate = pyqtSignal()
+    do_nucleation = pyqtSignal()
+    do_growth = pyqtSignal()
+
+    def __init__(self, *, camera, cycles, roi, do_resta,
+                 background_gain, background_offset,
+                 num_images_bg=1, num_images_frame=1,
+                 blur_sigma=0, mode="Promedio",
+                 outdir="", parent_log=None):
+        super().__init__()
+        self.camera = camera
+        self.cycles = int(cycles)
+        self.roi = roi  # (x,y,w,h) o None
+        self.do_resta = bool(do_resta)
+        self.bg_gain = float(background_gain)
+        self.bg_offset = float(background_offset)
+        self.num_images_bg = int(num_images_bg)
+        self.num_images_frame = int(num_images_frame)
+        self.blur_sigma = int(blur_sigma)
+        self.mode = mode or "Promedio"
         self.outdir = outdir
         self.raw_dir = os.path.join(self.outdir, "raw")
         os.makedirs(self.outdir, exist_ok=True)
@@ -329,6 +350,12 @@ class SequenceWorker(QObject):
                 resultado = np.median(stack, axis=0).astype(np.uint16)
             else:
                 resultado = np.mean(stack, axis=0).astype(np.uint16)
+            stack = np.stack(imgs, 0).astype(np.float32)
+            mode_lc = str(self.mode).lower()
+            if mode_lc.startswith("med"):
+                out = np.median(stack, axis=0).astype(np.uint16)
+            else:
+                out = np.mean(stack, axis=0).astype(np.uint16)
         if self.blur_sigma > 0:
             resultado = blur_uint16(resultado, sigma=self.blur_sigma)
         return resultado
@@ -364,8 +391,7 @@ class SequenceWorker(QObject):
             imsave(os.path.join(self.outdir, f"{stem}_resta.tif"), resta)
 
     def _enviar_pulso(self, etiqueta, configuracion):
-        tipo = str(configuracion.get('tipo', 'pulso cuadrado')).lower()
-        self.log(f"[SEQ] {etiqueta} — {tipo}")
+        self.log(f"[SEQ] {etiqueta}")
         if self.fungen is None:
             self.log("[SEQ] Generador no conectado: se omite el pulso.")
             time.sleep(0.05)
@@ -373,7 +399,11 @@ class SequenceWorker(QObject):
 
         campo = float(configuracion.get('campo', 0.0))
         tiempo = float(configuracion.get('tiempo', 0.0))
+        tipo = str(configuracion.get('tipo', 'pulso cuadrado')).lower()
         signo = int(configuracion.get('signo', 1))
+        amplitud = float(configuracion.get('amplitud', 0.0))
+        oscilaciones = int(configuracion.get('oscilaciones', 1))
+        offset = float(configuracion.get('offset', 0.0))
 
         if tiempo <= 0:
             raise ValueError("El tiempo del pulso debe ser positivo.")
@@ -384,12 +414,17 @@ class SequenceWorker(QObject):
         tension = (corriente * self.resistencia / (10 * 0.95)) / 1000.0
         frecuencia = 1000.0 / tiempo
 
-        forma = square_pulse(signo)
+        if tipo == "pulso oscilatorio":
+            forma = sqr_osci_pulse(signo, amplitud, oscilaciones)
+        else:
+            forma = square_pulse(signo)
 
         binario = binarize_pulse(forma)
 
         try:
             self.fungen.write('FREQ %f' % frecuencia)
+            time.sleep(0.05)
+            self.fungen.write('VOLT:OFFS %f' % offset)
             time.sleep(0.05)
             self.fungen.write('VOLT %f' % tension)
             time.sleep(0.05)
@@ -451,6 +486,63 @@ class SequenceWorker(QObject):
             self.progress.emit(100, "Secuencia finalizada")
         except Exception as exc:
             self.log(f"[SEQ][ERROR] {exc}")
+            self.progress.emit(5, "Saturación OK")
+            if self.should_stop():
+                self.finished.emit(); return
+
+            # 1) Fondo una sola vez
+            self.log("[SEQ] Capturando fondo...")
+            bg = self._stack_capture(self.num_images_bg)
+            self.background = bg.copy()
+            self.bg_ready.emit(bg.copy())
+            from skimage.io import imsave as _imsave
+            _imsave(os.path.join(self.outdir, "fondo.tif"), bg)
+            self.progress.emit(20, "Fondo capturado")
+            if self.should_stop():
+                self.finished.emit(); return
+
+            # 2) Nucleación y captura inicial antes de crecimiento
+            if self.should_stop():
+                self.finished.emit(); return
+
+            self.log("[SEQ] Enviando nucleación inicial...")
+            self.do_nucleation.emit()
+            time.sleep(0.01)
+
+            nuc_full = self._stack_capture(self.num_images_frame)
+            nuc_roi, nuc_box = self._apply_roi(nuc_full)
+            self._save_triplet(nuc_full, nuc_roi, nuc_box, "nucleacion")
+            self.image_ready.emit(nuc_roi.copy(), 0)
+            self.progress.emit(30, "Nucleación capturada")
+            if self.should_stop():
+                self.finished.emit(); return
+
+            # 3) Ciclos de crecimiento = fotos
+            total = max(0, self.cycles)
+            for k in range(1, total + 1):
+                if self.should_stop():
+                    break
+
+                # Paso de crecimiento (usa 'características del ciclo' actuales)
+                self.log(f"[SEQ] Ciclo {k}/{total}: crecimiento")
+                self.do_growth.emit()
+                time.sleep(0.01)
+
+                full = self._stack_capture(self.num_images_frame)
+                roi_img, roi_box = self._apply_roi(full)
+                stem = f"frame_{k:04d}"
+                self._save_triplet(full, roi_img, roi_box, stem)
+
+                self.image_ready.emit(roi_img.copy(), k)
+
+                pct = 30 + int(70 * k / max(1, total))
+                self.progress.emit(pct, f"Ciclo {k}/{total} listo")
+
+            if total == 0:
+                self.progress.emit(100, "Secuencia completada")
+
+        except Exception as e:
+            self.log(f"[ERROR][SEQ] {e}")
         finally:
             self.finished.emit()
 class PreviewWorker(QObject):
@@ -1105,14 +1197,137 @@ class CameraApp(QWidget):
 
         main_group_layout.addLayout(mid_layout)
 
+        # --- Combobox for configurations already saved ---
+        combo_group = QGroupBox()
+        combo_layout = QGridLayout(combo_group)
+
+        combo_layout.addWidget(QLabel("Seleccionar configuración"), 0, 0) 
+        self.combo = QComboBox() 
+        try: 
+          with open("../../params/params_preconfiguration.json", "r", encoding="utf-8") as f: 
+            #Everything will be saved in here 
+            data = json.load(f) 
+            for nombre, valores in data.items():   # nombre = clave, valores = diccionario
+                self.combo.addItem(nombre, valores)
+        except Exception as e: 
+            print(f"[WARNING] No se pudo cargar JSON: {e}")
+            
+        combo_layout.addWidget(self.combo, 0, 1)
+
+        main_group_layout.addWidget(combo_group)
+
+
+        # --- Inferior Frame ---
+        bottom_layout = QHBoxLayout()
+
+        # --- Cicle caracteristics ---
+        
+        ciclo_group = QGroupBox("Características Ciclo")
+        ciclo_layout = QGridLayout(ciclo_group)
+
+        ciclo_layout.addWidget(QLabel("Constate campo-corriente [G/mA]:"), 0, 0)
+        self.campo_corr_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_corr_edit, 0, 1)
+
+        ciclo_layout.addWidget(QLabel("Resistencia [Ω]:"), 0, 2)
+        self.resistencia_edit = QLineEdit()
+        ciclo_layout.addWidget(self.resistencia_edit, 0, 3)
+
+        ciclo_layout.addWidget(QLabel("Campo [Oe]:"), 1, 0)
+        self.campo_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.campo_ciclo_edit, 1, 1)
+
+        ciclo_layout.addWidget(QLabel("Tiempo [ms]:"), 1, 2)
+        self.tiempo_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.tiempo_ciclo_edit, 1, 3)
+
+        ciclo_layout.addWidget(QLabel("Offset [V]:"), 2, 0)
+        self.offset_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.offset_ciclo_edit, 2, 1)
+
+        ciclo_layout.addWidget(QLabel("Nro de ciclos:"), 2, 2)
+        self.nro_ciclo_edit = QLineEdit()
+        ciclo_layout.addWidget(self.nro_ciclo_edit, 2, 3)
+
+        ciclo_layout.addWidget(QLabel("Tipo de pulso:"),3,0)
+        self.combo_pulso_ciclo = QComboBox()
+        self.combo_pulso_ciclo.addItems(["Pulso cuadrado","Pulso Mixto", "Pulso Oscilatorio"])
+        ciclo_layout.addWidget(self.combo_pulso_ciclo,3,1)
+
+        # --- Campos adicionales (ocultos inicialmente) ---
+        # Oscilatorio
+        self.label_amp = QLabel("Amplitud de oscilación [%] (0-50):")
+        self.amp_edit = QLineEdit()
+        self.label_frec = QLabel("Cantidad de oscilaciones:")
+        self.frec_edit = QLineEdit()
+
+        ciclo_layout.addWidget(self.label_amp, 4, 0)
+        ciclo_layout.addWidget(self.amp_edit, 4, 1)
+        ciclo_layout.addWidget(self.label_frec, 4, 2)
+        ciclo_layout.addWidget(self.frec_edit, 4, 3)
+
+        # Asimétrico
+        self.label_asim = QLabel("% de asimetría:")
+        self.asim_edit = QLineEdit()
+        self.label_altura = QLabel("Altura de asimetría [V]:")
+        self.altura_edit = QLineEdit()
+
+        ciclo_layout.addWidget(self.label_asim, 5, 0)
+        ciclo_layout.addWidget(self.asim_edit, 5, 1)
+        ciclo_layout.addWidget(self.label_altura, 5, 2)
+        ciclo_layout.addWidget(self.altura_edit, 5, 3)
+
+        # Ocultamos todos los campos adicionales al inicio
+        for widget in [self.label_amp, self.amp_edit, self.label_frec, self.frec_edit,
+                    self.label_asim, self.asim_edit, self.label_altura, self.altura_edit]:
+            widget.hide()
+
+        # Función de actualización
+        def actualizar_campos_pulso(tipo):
+            # Ocultamos todos
+            for widget in [self.label_amp, self.amp_edit, self.label_frec, self.frec_edit,
+                        self.label_asim, self.asim_edit, self.label_altura, self.altura_edit]:
+                widget.hide()
+
+            if tipo == "Pulso Oscilatorio":
+                self.label_amp.show()
+                self.amp_edit.show()
+                self.label_frec.show()
+                self.frec_edit.show()
+
+            elif tipo == "Pulso Mixto":
+                self.label_asim.show()
+                self.asim_edit.show()
+                self.label_altura.show()
+                self.altura_edit.show()
+
+        # Conexión del combo a la función
+        self.combo_pulso_ciclo.currentTextChanged.connect(actualizar_campos_pulso)
+
+
+        bottom_layout.addWidget(ciclo_group)
+        
         self.gen_buttons=[self.saturate_dom_button,self.create_dom_button]
         for btn in self.gen_buttons:
             btn.setEnabled(False)
 
         # --- Saturate and create domains ---
 
+        capture_group = QGroupBox("Captura")
+        capture_layout = QGridLayout(capture_group)
+        
+        bottom_layout.addWidget(capture_group)
+
+
+        main_group_layout.addLayout(bottom_layout)
+
         sequence_section = self._build_sequence_section()
         main_group_layout.addWidget(sequence_section)
+
+        # --- Add preconfiguration ---
+        self.update_dom_config_button = QPushButton("Agregar configuración")
+        main_group_layout.addWidget(self.update_dom_config_button)
+
 
         main_layout.addWidget(main_group)
         self.control_tab.setLayout(main_layout)
@@ -1149,7 +1364,7 @@ class CameraApp(QWidget):
 
         tipo_label = QLabel("Tipo de pulso:")
         tipo_combo = QComboBox()
-        tipo_combo.addItems(["Pulso cuadrado"])
+        tipo_combo.addItems(["Pulso cuadrado", "Pulso oscilatorio"])
         layout.addWidget(tipo_label, 1, 0)
         layout.addWidget(tipo_combo, 1, 1)
 
@@ -1160,11 +1375,39 @@ class CameraApp(QWidget):
         layout.addWidget(signo_label, 1, 2)
         layout.addWidget(signo_combo, 1, 3)
 
+        amp_label = QLabel("Amplitud oscilación [%]:")
+        amp_spin = QDoubleSpinBox()
+        amp_spin.setRange(0.0, 50.0)
+        amp_spin.setDecimals(1)
+        amp_spin.setSingleStep(1.0)
+        amp_spin.setValue(0.0)
+        layout.addWidget(amp_label, 2, 0)
+        layout.addWidget(amp_spin, 2, 1)
+
+        osc_label = QLabel("Oscilaciones:")
+        osc_spin = QSpinBox()
+        osc_spin.setRange(1, 100)
+        osc_spin.setValue(1)
+        layout.addWidget(osc_label, 2, 2)
+        layout.addWidget(osc_spin, 2, 3)
+
+        def toggle_extra(text):
+            show = "oscilatorio" in text.lower()
+            amp_label.setVisible(show)
+            amp_spin.setVisible(show)
+            osc_label.setVisible(show)
+            osc_spin.setVisible(show)
+
+        tipo_combo.currentTextChanged.connect(toggle_extra)
+        toggle_extra(tipo_combo.currentText())
+
         controls = {
             "campo": campo_spin,
             "tiempo": tiempo_spin,
             "tipo": tipo_combo,
             "signo": signo_combo,
+            "amplitud": amp_spin,
+            "oscilaciones": osc_spin,
         }
         return group, controls
 
@@ -1241,6 +1484,8 @@ class CameraApp(QWidget):
             "tiempo": controls.get("tiempo").value() if controls.get("tiempo") else 0.0,
             "tipo": controls.get("tipo").currentText() if controls.get("tipo") else "Pulso cuadrado",
             "signo": controls.get("signo").currentData() if controls.get("signo") else 1,
+            "amplitud": controls.get("amplitud").value() if controls.get("amplitud") else 0.0,
+            "oscilaciones": controls.get("oscilaciones").value() if controls.get("oscilaciones") else 1,
         }
         return config
 
@@ -1324,6 +1569,22 @@ class CameraApp(QWidget):
 
         QMessageBox.information(self, "Conexión completada", estado)
 
+    def _parse_int_or(self, text, default=1):
+        try:
+            return max(1, int(float(text)))
+        except Exception:
+            return default
+    
+    def _apply_burst_cycles_from_ui(self):
+        if not hasattr(self, "fungen") or self.fungen is None:
+            return
+        ncyc = self._parse_int_or(self.nro_ciclo_edit.text(), 1)
+        try:
+            self.fungen.write(f"BM:NCYC {ncyc}")
+            self.log_message(f"[GEN] BM:NCYC = {ncyc}")
+        except Exception as e:
+            self.log_message(f"[GEN][ERROR] No se pudo setear BM:NCYC: {e}")
+    
     def _burst_enabled(self):
         try:
             resp = self.fungen.query("BM:STAT?").strip().upper()
@@ -1451,6 +1712,9 @@ class CameraApp(QWidget):
 
         ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
         sign = self._sequence_signature()
+        # Carpeta destino en work_dir (o cwd) con firma + timestamp
+        ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        sign = self._current_pulse_signature()
         base_dir = self.work_dir if self.work_dir else os.getcwd()
         outdir = os.path.join(base_dir, f"SEQ_{sign}_{ts}")
 
@@ -1463,6 +1727,18 @@ class CameraApp(QWidget):
         else:
             num_images = 1
 
+        # Parámetros de resta de fondo y blur actuales (si usás otros nombres, ajustá aquí)
+        bg_gain = getattr(self, 'background_gain', 1.0)
+        bg_off  = getattr(self, 'background_offset', 0.0)
+        blur_sigma = getattr(self, 'blur_strength', 0)
+        capture_mode = getattr(self, 'capture_mode', 'Promedio')
+        num_images = getattr(self, 'num_images_spinbox', None)
+        if num_images is not None:
+            num_images = max(1, int(num_images.value()))
+        else:
+            num_images = 1
+
+        # Preparar Worker + hilo
         self.seq_thread = QThread()
         self.seq_worker = SequenceWorker(
             camera=self.camera,
@@ -1487,6 +1763,35 @@ class CameraApp(QWidget):
         if getattr(self, 'fungen', None) is None:
             self.log_message("[SEQ] Generador no conectado: los pulsos se omitirán.")
 
+            do_resta=True,
+            background_gain=bg_gain,
+            background_offset=bg_off,
+            num_images_bg=num_images,
+            num_images_frame=num_images,
+            blur_sigma=blur_sigma,
+            mode=capture_mode,
+            outdir=outdir,
+            parent_log=self._seq_threadsafe_log
+        )
+        self.seq_worker.moveToThread(self.seq_thread)
+
+        # Conectar señales de control de pulsos a tus métodos existentes
+        # Si tus métodos se llaman distinto, ajustá aquí. La idea: no duplicar lógica, reusar los ya conectados a tus botones.
+        try:
+            self.seq_worker.do_saturate.connect(self.saturate_dom)
+        except Exception:
+            pass
+        try:
+            self.seq_worker.do_nucleation.connect(self.create_dom)
+        except Exception:
+            pass
+        # Crecimiento: si no tenés un método, podés implementar uno simple que lea la celda "características del ciclo" y dispare ese pulso.
+        try:
+            self.seq_worker.do_growth.connect(self.growth_pulse_from_cycle_cells)
+        except Exception:
+            # fallback: si no existe, repetimos create_dom como aproximación
+            self.seq_worker.do_growth.connect(self.create_dom)
+    
         # Señales de progreso/imagen
         self.seq_thread.started.connect(self.seq_worker.run)
         self.seq_worker.progress.connect(self._seq_on_progress)
@@ -1566,6 +1871,109 @@ class CameraApp(QWidget):
         self.seq_log_signal.emit(str(message))
     
     
+    # -- F) (Opcional) Método para disparar el pulso de crecimiento leyendo la celda "características del ciclo" --
+    # Si tu UI ya tiene un botón/método equivalente, borrá esto y conectá ese método arriba.
+    
+    def growth_pulse_from_cycle_cells(self):
+        """Ejemplo genérico: arma un pulso usando las celdas de 'características del ciclo'.
+        Ajustá los nombres de widgets si tus IDs reales difieren.
+        """
+        # Conversión H->V usando tus celdas ya existentes
+        try:
+            if hasattr(self, 'seq_thread') and self.seq_thread is not None:
+                self.seq_thread.wait()
+        except Exception:
+            self.log_message("[GROW] Faltan constante campo-corr y/o resistencia")
+            return
+
+        try:
+            H = float(self.campo_ciclo_edit.text())
+            t = float(self.tiempo_ciclo_edit.text())
+        except Exception:
+            self.log_message("[GROW] Ingresá campo y tiempo del ciclo válidos.")
+            return
+        if t <= 0:
+            self.log_message("[GROW] El tiempo del ciclo debe ser positivo.")
+            return
+
+        if not getattr(self, 'fungen', None):
+            self.log_message("[GROW] Generador no conectado.")
+            return
+
+        signo = -1 if self.radio_signo_pos_dom.isChecked() else +1
+
+        # Misma fórmula que usás en Control
+        corriente = H / campo_corr
+        V = (corriente * resistencia / (10 * 0.95)) / 1000.0
+
+        try:
+            # SCPI mínimo: un ciclo cuadrado ~ t ms.
+            frec = float(1000 / t)
+            self.fungen.write('FREQ %f' % frec)
+            time.sleep(0.02)
+            self.fungen.write('VOLT:OFFS 0')
+            time.sleep(0.02)
+            self.fungen.write('VOLT %f' % V)
+            time.sleep(0.02)
+
+            pulse_type = self.combo_pulso_ciclo.currentText().strip().lower()
+            if pulse_type == "pulso cuadrado":
+                pulso = self.square_pulse(signo)
+            elif pulse_type == "pulso oscilatorio":
+                try:
+                    A = float(self.amp_edit.text())
+                    f = float(self.frec_edit.text())
+                except Exception:
+                    self.log_message("[GROW] Parámetros de pulso oscilatorio inválidos; usando cuadrado.")
+                    pulso = self.square_pulse(signo)
+                else:
+                    pulso = self.sqr_osci_pulse(signo, A, f)
+            elif pulse_type == "pulso mixto":
+                self.log_message("[GROW] Pulso mixto no implementado; usando cuadrado.")
+                pulso = self.square_pulse(signo)
+            else:
+                pulso = self.square_pulse(signo)
+
+            pulse_type = self.combo_pulso_ciclo.currentText().strip().lower()
+            if pulse_type == "pulso cuadrado":
+                pulso = square_pulse(signo)
+            elif pulse_type == "pulso oscilatorio":
+                try:
+                    A = float(self.amp_edit.text())
+                    f = float(self.frec_edit.text())
+                except Exception:
+                    self.log_message("[GROW] Parámetros de pulso oscilatorio inválidos; usando cuadrado.")
+                    pulso = square_pulse(signo)
+                else:
+                    pulso = sqr_osci_pulse(signo, A, f)
+            elif pulse_type == "pulso mixto":
+                self.log_message("[GROW] Pulso mixto no implementado; usando cuadrado.")
+                pulso = square_pulse(signo)
+            else:
+                pulso = square_pulse(signo)
+
+
+            binario = binarize_pulse(pulso)
+            # comando = self.ascii_pulse(pulso)
+            self.fungen.write('FORM:BORD SWAP')
+            time.sleep(0.1)
+    
+            self.fungen.write_raw(binario)
+            # self.fungen.write(comando)
+    
+            # Seleccionar y activar la forma de onda descargada
+            self.fungen.write('FUNC:USER VOLATILE')
+            # print(self.fungen.query("FUNC:USER?"))
+            self.fungen.write('FUNC:SHAP USER')
+            # print(self.fungen.query("FUNC:SHAP?"))
+            self.fungen.write('VOLT %f' % V)
+            # print(self.fungen.query("VOLT?"))
+            self.fungen.write('*TRG')
+
+
+        except Exception as e:
+            self.log_message(f"[GROW][ERROR] {e}")
+            
     def apply_real_camera_values_to_sliders(self):
         """
         Lee los valores reales de cámara (o defaults en simulación)
