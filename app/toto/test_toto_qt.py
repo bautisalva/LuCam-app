@@ -276,7 +276,8 @@ class SequenceWorker(QObject):
     def __init__(self, *, camera, fungen, satur_pulse, nucleation_pulse,
                  growth_pulse, cycles, roi, num_images_bg, num_images_frame,
                  outdir, campo_corr, resistencia, blur_sigma=0,
-                 do_resta=True, mode="Promedio", parent_log=None):
+                 do_resta=True, mode="Promedio", parent_log=None,
+                 background_gain=1.0, background_offset=0.0):
         super().__init__()
         self.camera = camera
         self.fungen = fungen
@@ -297,6 +298,8 @@ class SequenceWorker(QObject):
         self.do_resta = bool(do_resta)
         self.mode = mode or "Promedio"
         self.parent_log = parent_log or (lambda msg: None)
+        self.background_gain = float(background_gain)
+        self.background_offset = float(background_offset)
 
         self._stop = False
         self.background_full = None
@@ -351,9 +354,17 @@ class SequenceWorker(QObject):
             return None
         x, y, w, h = roi_box
         bg_roi = self.background_full[y:y + h, x:x + w]
-        diff = roi_img.astype(np.int32) - bg_roi.astype(np.int32)
-        diff = np.clip(diff, 0, 65535).astype(np.uint16)
-        return diff
+        image_float = roi_img.astype(np.float32)
+        bg_float = bg_roi.astype(np.float32)
+        diff = self.background_gain * (image_float - bg_float + self.background_offset)
+
+        min_val = diff.min()
+        max_val = diff.max()
+        if max_val == min_val:
+            return np.zeros_like(roi_img, dtype=np.uint16)
+
+        norm = (diff - min_val) / (max_val - min_val)
+        return (norm * 65535).astype(np.uint16)
 
     def _save_frame(self, full_img, roi_img, roi_box, nombre, indice):
         stem = f"{indice:03d}_{nombre}"
@@ -1446,6 +1457,8 @@ class CameraApp(QWidget):
             do_resta=True,
             mode=capture_mode,
             parent_log=self._seq_threadsafe_log,
+            background_gain=getattr(self, 'background_gain', 1.0),
+            background_offset=getattr(self, 'background_offset', 0.0),
         )
         self.seq_worker.moveToThread(self.seq_thread)
 
