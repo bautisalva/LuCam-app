@@ -358,10 +358,11 @@ class SequenceWorker(QObject):
     def _save_frame(self, full_img, roi_img, roi_box, nombre, indice):
         stem = f"{indice:03d}_{nombre}"
         imsave(os.path.join(self.raw_dir, f"{stem}_raw.tif"), full_img)
-        imsave(os.path.join(self.outdir, f"{stem}_roi.tif"), roi_img)
         resta = self._subtract_background(roi_img, roi_box)
         if resta is not None:
             imsave(os.path.join(self.outdir, f"{stem}_resta.tif"), resta)
+            return resta
+        return roi_img
 
     def _enviar_pulso(self, etiqueta, configuracion):
         tipo = str(configuracion.get('tipo', 'pulso cuadrado')).lower()
@@ -424,10 +425,8 @@ class SequenceWorker(QObject):
             self.progress.emit(10, "Capturando fondo")
             fondo_full = self._capture_stack(self.num_images_bg)
             self.background_full = fondo_full.copy()
-            fondo_roi, roi_box = self._apply_roi(fondo_full)
             imsave(os.path.join(self.outdir, "fondo_raw.tif"), fondo_full)
-            imsave(os.path.join(self.outdir, "fondo_roi.tif"), fondo_roi)
-            self.bg_ready.emit(fondo_roi.copy())
+            self.bg_ready.emit(fondo_full.copy())
             if self._should_stop():
                 return
 
@@ -438,8 +437,8 @@ class SequenceWorker(QObject):
 
             imagen_nuc = self._capture_stack(self.num_images_frame)
             nuc_roi, nuc_box = self._apply_roi(imagen_nuc)
-            self._save_frame(imagen_nuc, nuc_roi, nuc_box, "nucleacion", 0)
-            self.image_ready.emit(nuc_roi.copy(), 0)
+            preview = self._save_frame(imagen_nuc, nuc_roi, nuc_box, "nucleacion", 0)
+            self.image_ready.emit(preview.copy(), 0)
             if self._should_stop():
                 return
 
@@ -453,8 +452,8 @@ class SequenceWorker(QObject):
                     break
                 imagen = self._capture_stack(self.num_images_frame)
                 roi_img, roi_box = self._apply_roi(imagen)
-                self._save_frame(imagen, roi_img, roi_box, f"ciclo_{ciclo:03d}", ciclo)
-                self.image_ready.emit(roi_img.copy(), ciclo)
+                preview = self._save_frame(imagen, roi_img, roi_box, f"ciclo_{ciclo:03d}", ciclo)
+                self.image_ready.emit(preview.copy(), ciclo)
 
             self.progress.emit(100, "Secuencia finalizada")
         except Exception as exc:
@@ -1494,6 +1493,11 @@ class CameraApp(QWidget):
     def _seq_on_bg(self, bg_img):
         try:
             self.background_image = bg_img
+            pix = self._to_qpixmap(bg_img)
+            self.seq_preview.setPixmap(pix.scaled(
+                self.seq_preview.width(), self.seq_preview.height(),
+                Qt.KeepAspectRatio, Qt.SmoothTransformation
+            ))
         except Exception:
             pass
     
@@ -1518,9 +1522,11 @@ class CameraApp(QWidget):
             self.preview_worker.resume()
         except Exception:
             pass
+        thread = getattr(self, 'seq_thread', None)
         try:
-            if hasattr(self, 'seq_thread') and self.seq_thread is not None:
-                self.seq_thread.wait()
+            if thread is not None and thread.isRunning():
+                thread.quit()
+                thread.wait(2000)
         except Exception:
             pass
         self.seq_thread = None
