@@ -91,6 +91,30 @@ def sqr_osci_pulse(signo, amplitud_porcentaje, oscilaciones):
     return datos
 
 
+def triangular_pulse(signo, amplitud_porcentaje, triangulos, geometria):
+    """Genera un pulso triangular normalizado para el generador."""
+
+    n_puntos = 1000
+    datos = np.zeros(n_puntos)
+    interior = datos[1:-2]
+    M = len(interior)
+    if M <= 0:
+        return datos
+
+    triangulos = max(1, int(triangulos))
+    amplitud = max(0.0, float(amplitud_porcentaje)) / 100.0
+    eps = 1e-6
+    geometria = float(np.clip(geometria, eps, 1 - eps))
+
+    t = np.linspace(0.0, float(triangulos), M, endpoint=False)
+    phi = t % 1.0
+    subida = -1.0 + 2.0 * (phi / geometria)
+    bajada = 1.0 - 2.0 * ((phi - geometria) / (1.0 - geometria))
+    onda = np.where(phi < geometria, subida, bajada)
+    interior[:] = signo * (1.0 + onda * amplitud)
+    return datos
+
+
 def binarize_pulse(data):
     import struct
 
@@ -277,7 +301,8 @@ class SequenceWorker(QObject):
                  growth_pulse, cycles, roi, num_images_bg, num_images_frame,
                  outdir, campo_corr, resistencia, blur_sigma=0,
                  do_resta=True, mode="Promedio", parent_log=None,
-                 background_gain=1.0, background_offset=0.0):
+                 background_gain=1.0, background_offset=0.0,
+                 sequence_mode="completa", repetitions=1):
         super().__init__()
         self.camera = camera
         self.fungen = fungen
@@ -288,10 +313,8 @@ class SequenceWorker(QObject):
         self.roi = roi
         self.num_images_bg = max(1, int(num_images_bg))
         self.num_images_frame = max(1, int(num_images_frame))
-        self.outdir = outdir
-        self.raw_dir = os.path.join(self.outdir, "raw")
-        os.makedirs(self.outdir, exist_ok=True)
-        os.makedirs(self.raw_dir, exist_ok=True)
+        self.base_outdir = outdir
+        os.makedirs(self.base_outdir, exist_ok=True)
         self.campo_corr = float(campo_corr)
         self.resistencia = float(resistencia)
         self.blur_sigma = max(0, int(blur_sigma))
@@ -300,6 +323,11 @@ class SequenceWorker(QObject):
         self.parent_log = parent_log or (lambda msg: None)
         self.background_gain = float(background_gain)
         self.background_offset = float(background_offset)
+        self.sequence_mode = str(sequence_mode or "completa").lower()
+        self.repetitions = max(1, int(repetitions))
+
+        self.current_outdir = None
+        self.current_raw_dir = None
 
         self._stop = False
         self.background_full = None
@@ -368,10 +396,10 @@ class SequenceWorker(QObject):
 
     def _save_frame(self, full_img, roi_img, roi_box, nombre, indice):
         stem = f"{indice:03d}_{nombre}"
-        imsave(os.path.join(self.raw_dir, f"{stem}_raw.tif"), full_img)
+        imsave(os.path.join(self.current_raw_dir, f"{stem}_raw.tif"), full_img)
         resta = self._subtract_background(roi_img, roi_box)
         if resta is not None:
-            imsave(os.path.join(self.outdir, f"{stem}_resta.tif"), resta)
+            imsave(os.path.join(self.current_outdir, f"{stem}_resta.tif"), resta)
             return resta
         return roi_img
 
@@ -388,6 +416,8 @@ class SequenceWorker(QObject):
         signo = int(configuracion.get('signo', 1))
         amplitud = float(configuracion.get('amplitud', 0.0))
         oscilaciones = int(configuracion.get('oscilaciones', 1))
+        triangulos = int(configuracion.get('triangulos', oscilaciones))
+        geometria = float(configuracion.get('geometria', 0.5))
         offset = float(configuracion.get('offset', 0.0))
 
         if tiempo <= 0:
@@ -401,6 +431,8 @@ class SequenceWorker(QObject):
 
         if tipo == "pulso oscilatorio":
             forma = sqr_osci_pulse(signo, amplitud, max(1, oscilaciones))
+        elif tipo == "pulso triangular":
+            forma = triangular_pulse(signo, amplitud, max(1, triangulos), geometria)
         else:
             forma = square_pulse(signo)
 
@@ -426,47 +458,102 @@ class SequenceWorker(QObject):
         except Exception as exc:
             raise RuntimeError(f"No se pudo enviar el pulso ({exc})")
 
+    def _prepare_directories(self, rep_idx):
+        if self.repetitions == 1:
+            outdir = self.base_outdir
+        else:
+            outdir = os.path.join(self.base_outdir, f"rep_{rep_idx:03d}")
+        raw_dir = os.path.join(outdir, "raw")
+        os.makedirs(outdir, exist_ok=True)
+        os.makedirs(raw_dir, exist_ok=True)
+        self.current_outdir = outdir
+        self.current_raw_dir = raw_dir
+
+    def _emit_progress(self, rep_idx, fraction, message):
+        total = max(1, self.repetitions)
+        fraction = min(max(fraction, 0.0), 1.0)
+        overall = ((rep_idx - 1) + fraction) / total
+        pct = int(min(100, overall * 100))
+        self.progress.emit(pct, f"Rep {rep_idx}/{total} — {message}")
+
+    def _run_full_sequence(self, rep_idx):
+        self._emit_progress(rep_idx, 0.0, "Saturación")
+        self._enviar_pulso("Saturación inicial", self.satur_pulse)
+        if self._should_stop():
+            return
+
+        self._emit_progress(rep_idx, 0.1, "Capturando fondo")
+        fondo_full = self._capture_stack(self.num_images_bg)
+        self.background_full = fondo_full.copy()
+        imsave(os.path.join(self.current_outdir, "fondo_raw.tif"), fondo_full)
+        self.bg_ready.emit(fondo_full.copy())
+        if self._should_stop():
+            return
+
+        self._emit_progress(rep_idx, 0.25, "Nucleación")
+        self._enviar_pulso("Pulso de nucleación", self.nucleation_pulse)
+        if self._should_stop():
+            return
+
+        imagen_nuc = self._capture_stack(self.num_images_frame)
+        nuc_roi, nuc_box = self._apply_roi(imagen_nuc)
+        preview = self._save_frame(imagen_nuc, nuc_roi, nuc_box, "nucleacion", 0)
+        self.image_ready.emit(preview.copy(), 0)
+        if self._should_stop():
+            return
+
+        for ciclo in range(1, self.cycles + 1):
+            if self._should_stop():
+                break
+            avance = 0.25 + 0.7 * (ciclo / max(1, self.cycles))
+            self._emit_progress(rep_idx, min(avance, 0.95), f"Crecimiento {ciclo}/{self.cycles}")
+            self._enviar_pulso(f"Pulso de crecimiento {ciclo}", self.growth_pulse)
+            if self._should_stop():
+                break
+            imagen = self._capture_stack(self.num_images_frame)
+            roi_img, roi_box = self._apply_roi(imagen)
+            preview = self._save_frame(imagen, roi_img, roi_box, f"ciclo_{ciclo:03d}", ciclo)
+            self.image_ready.emit(preview.copy(), ciclo)
+
+    def _run_growth_only(self, rep_idx):
+        self._emit_progress(rep_idx, 0.0, "Capturando fondo")
+        fondo_full = self._capture_stack(self.num_images_bg)
+        self.background_full = fondo_full.copy()
+        imsave(os.path.join(self.current_outdir, "fondo_raw.tif"), fondo_full)
+        self.bg_ready.emit(fondo_full.copy())
+        if self._should_stop():
+            return
+
+        for ciclo in range(1, self.cycles + 1):
+            if self._should_stop():
+                break
+            avance = 0.05 + 0.9 * (ciclo / max(1, self.cycles))
+            self._emit_progress(rep_idx, min(avance, 0.95), f"Crecimiento {ciclo}/{self.cycles}")
+            self._enviar_pulso(f"Pulso de crecimiento {ciclo}", self.growth_pulse)
+            if self._should_stop():
+                break
+            imagen = self._capture_stack(self.num_images_frame)
+            roi_img, roi_box = self._apply_roi(imagen)
+            preview = self._save_frame(imagen, roi_img, roi_box, f"ciclo_{ciclo:03d}", ciclo)
+            self.image_ready.emit(preview.copy(), ciclo)
+
     def run(self):
         try:
-            self.progress.emit(0, "Saturación")
-            self._enviar_pulso("Saturación inicial", self.satur_pulse)
-            if self._should_stop():
-                return
-
-            self.progress.emit(10, "Capturando fondo")
-            fondo_full = self._capture_stack(self.num_images_bg)
-            self.background_full = fondo_full.copy()
-            imsave(os.path.join(self.outdir, "fondo_raw.tif"), fondo_full)
-            self.bg_ready.emit(fondo_full.copy())
-            if self._should_stop():
-                return
-
-            self.progress.emit(25, "Nucleación")
-            self._enviar_pulso("Pulso de nucleación", self.nucleation_pulse)
-            if self._should_stop():
-                return
-
-            imagen_nuc = self._capture_stack(self.num_images_frame)
-            nuc_roi, nuc_box = self._apply_roi(imagen_nuc)
-            preview = self._save_frame(imagen_nuc, nuc_roi, nuc_box, "nucleacion", 0)
-            self.image_ready.emit(preview.copy(), 0)
-            if self._should_stop():
-                return
-
-            for ciclo in range(1, self.cycles + 1):
+            total = self.repetitions
+            for rep_idx in range(1, total + 1):
                 if self._should_stop():
                     break
-                avance = 25 + int(70 * ciclo / max(1, self.cycles))
-                self.progress.emit(avance, f"Crecimiento {ciclo}/{self.cycles}")
-                self._enviar_pulso(f"Pulso de crecimiento {ciclo}", self.growth_pulse)
-                if self._should_stop():
-                    break
-                imagen = self._capture_stack(self.num_images_frame)
-                roi_img, roi_box = self._apply_roi(imagen)
-                preview = self._save_frame(imagen, roi_img, roi_box, f"ciclo_{ciclo:03d}", ciclo)
-                self.image_ready.emit(preview.copy(), ciclo)
+                self.log(f"[SEQ] Iniciando repetición {rep_idx}/{total} (modo {self.sequence_mode})")
+                self._prepare_directories(rep_idx)
+                self.background_full = None
 
-            self.progress.emit(100, "Secuencia finalizada")
+                if self.sequence_mode == "crecer":
+                    self._run_growth_only(rep_idx)
+                else:
+                    self._run_full_sequence(rep_idx)
+
+            if not self._should_stop():
+                self._emit_progress(total, 1.0, "Secuencia finalizada")
         except Exception as exc:
             self.log(f"[SEQ][ERROR] {exc}")
         finally:
@@ -1105,7 +1192,7 @@ class CameraApp(QWidget):
 
         tipo_label = QLabel("Tipo de pulso:")
         tipo_combo = QComboBox()
-        tipo_combo.addItems(["Pulso cuadrado", "Pulso oscilatorio"])
+        tipo_combo.addItems(["Pulso cuadrado", "Pulso oscilatorio", "Pulso triangular"])
         layout.addWidget(tipo_label, 1, 0)
         layout.addWidget(tipo_combo, 1, 1)
 
@@ -1132,12 +1219,30 @@ class CameraApp(QWidget):
         layout.addWidget(osc_label, 2, 2)
         layout.addWidget(osc_spin, 2, 3)
 
+        geom_label = QLabel("Factor geometría:")
+        geom_spin = QDoubleSpinBox()
+        geom_spin.setRange(0.0, 1.0)
+        geom_spin.setDecimals(2)
+        geom_spin.setSingleStep(0.05)
+        geom_spin.setValue(0.5)
+        layout.addWidget(geom_label, 3, 0)
+        layout.addWidget(geom_spin, 3, 1)
+
         def toggle_extra(text):
-            show = "oscilatorio" in text.lower()
-            amp_label.setVisible(show)
-            amp_spin.setVisible(show)
-            osc_label.setVisible(show)
-            osc_spin.setVisible(show)
+            text_lower = text.lower()
+            is_osci = "oscilatorio" in text_lower
+            is_tri = "triangular" in text_lower
+
+            amp_label.setText("Amplitud oscilación [%]:" if is_osci else "Amplitud triangular [%]:")
+            amp_label.setVisible(is_osci or is_tri)
+            amp_spin.setVisible(is_osci or is_tri)
+
+            osc_label.setText("Oscilaciones:" if is_osci else "Triángulos:")
+            osc_label.setVisible(is_osci or is_tri)
+            osc_spin.setVisible(is_osci or is_tri)
+
+            geom_label.setVisible(is_tri)
+            geom_spin.setVisible(is_tri)
 
         tipo_combo.currentTextChanged.connect(toggle_extra)
         toggle_extra(tipo_combo.currentText())
@@ -1149,6 +1254,7 @@ class CameraApp(QWidget):
             "signo": signo_combo,
             "amplitud": amp_spin,
             "oscilaciones": osc_spin,
+            "geometria": geom_spin,
         }
         return group, controls
 
@@ -1174,6 +1280,20 @@ class CameraApp(QWidget):
         self.seq_cycle_spin.setValue(5)
         cycles_layout.addWidget(self.seq_cycle_spin)
         controls_layout.addLayout(cycles_layout)
+
+        mode_layout = QHBoxLayout()
+        mode_layout.addWidget(QLabel("Modo:"))
+        self.seq_mode_combo = QComboBox()
+        self.seq_mode_combo.addItem("Completa", "completa")
+        self.seq_mode_combo.addItem("Crecer", "crecer")
+        mode_layout.addWidget(self.seq_mode_combo)
+
+        mode_layout.addWidget(QLabel("Repeticiones:"))
+        self.seq_repeat_spin = QSpinBox()
+        self.seq_repeat_spin.setRange(1, 100)
+        self.seq_repeat_spin.setValue(1)
+        mode_layout.addWidget(self.seq_repeat_spin)
+        controls_layout.addLayout(mode_layout)
 
         buttons_layout = QHBoxLayout()
         self.seq_run_btn = QPushButton("Iniciar secuencia")
@@ -1214,8 +1334,13 @@ class CameraApp(QWidget):
                 continue
             campo = controls["campo"].value()
             tiempo = controls["tiempo"].value()
+            tipo = controls["tipo"].currentText().lower()
+            amplitud = controls["amplitud"].value()
             if campo > 0 and tiempo > 0:
-                partes.append(f"{prefijo}{campo:g}Oe_{tiempo:g}ms")
+                extra = ""
+                if "oscilatorio" in tipo or "triangular" in tipo:
+                    extra = f"_Amp{amplitud:g}"
+                partes.append(f"{prefijo}{campo:g}Oe_{tiempo:g}ms{extra}")
         return "_".join(partes) if partes else "secuencia"
 
     def _pulse_config_from_controls(self, key):
@@ -1227,6 +1352,8 @@ class CameraApp(QWidget):
             "signo": controls.get("signo").currentData() if controls.get("signo") else 1,
             "amplitud": controls.get("amplitud").value() if controls.get("amplitud") else 0.0,
             "oscilaciones": controls.get("oscilaciones").value() if controls.get("oscilaciones") else 1,
+            "triangulos": controls.get("oscilaciones").value() if controls.get("oscilaciones") else 1,
+            "geometria": controls.get("geometria").value() if controls.get("geometria") else 0.5,
         }
         return config
 
@@ -1409,6 +1536,16 @@ class CameraApp(QWidget):
         except Exception:
             cycles = 1
 
+        sequence_mode = "completa"
+        repetitions = 1
+        if hasattr(self, "seq_mode_combo"):
+            sequence_mode = str(self.seq_mode_combo.currentData() or "completa")
+        if hasattr(self, "seq_repeat_spin"):
+            try:
+                repetitions = max(1, int(self.seq_repeat_spin.value()))
+            except Exception:
+                repetitions = 1
+
         try:
             campo_corr = float(self.campo_corr_edit.text())
             resistencia = float(self.resistencia_edit.text())
@@ -1424,7 +1561,8 @@ class CameraApp(QWidget):
         sign = self._sequence_signature()
         ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
         base_dir = self.work_dir if self.work_dir else os.getcwd()
-        outdir = os.path.join(base_dir, f"SEQ_{sign}_{ts}")
+        modo_tag = "CRECER" if sequence_mode == "crecer" else "FULL"
+        outdir = os.path.join(base_dir, f"SEQ_{sign}_{modo_tag}_{ts}")
 
         roi = self._roi_tuple_or_none()
 
@@ -1459,6 +1597,8 @@ class CameraApp(QWidget):
             parent_log=self._seq_threadsafe_log,
             background_gain=getattr(self, 'background_gain', 1.0),
             background_offset=getattr(self, 'background_offset', 0.0),
+            sequence_mode=sequence_mode,
+            repetitions=repetitions,
         )
         self.seq_worker.moveToThread(self.seq_thread)
 
@@ -1487,7 +1627,7 @@ class CameraApp(QWidget):
             pass
     
         self.seq_thread.start()
-        self.log_message("[SEQ] Iniciada")
+        self.log_message(f"[SEQ] Iniciada — modo {sequence_mode}, repeticiones {repetitions}")
     
     
     def _seq_stop(self):
@@ -1582,6 +1722,8 @@ class CameraApp(QWidget):
             tipo = str(config.get("tipo", "Pulso cuadrado")).lower()
             amplitud = float(config.get("amplitud", 0.0))
             oscilaciones = int(config.get("oscilaciones", 1))
+            triangulos = int(config.get("triangulos", oscilaciones))
+            geometria = float(config.get("geometria", 0.5))
         except Exception:
             self.log_message("[GROW] Parámetros inválidos para el pulso de crecimiento.")
             return
@@ -1596,6 +1738,8 @@ class CameraApp(QWidget):
 
         if "oscilatorio" in tipo:
             forma = sqr_osci_pulse(signo, amplitud, oscilaciones)
+        elif "triangular" in tipo:
+            forma = triangular_pulse(signo, amplitud, triangulos, geometria)
         else:
             forma = square_pulse(signo)
 
