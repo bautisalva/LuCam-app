@@ -200,6 +200,7 @@ class ImageEnhancer:
 def _natsort_key(s):
     return [int(t) if t.isdigit() else t.lower() for t in re.split(r'(\d+)', s)]
 
+
 def seleccionar_roi_qt(imagen_2d, titulo="Seleccionar ROI"):
     """
     Selector de ROI con PyQt5 + QRubberBand.
@@ -211,11 +212,25 @@ def seleccionar_roi_qt(imagen_2d, titulo="Seleccionar ROI"):
         print("[ROI-Qt] No se pudo importar PyQt5:", e)
         return None
 
+    # --- INICIO DE LA MODIFICACIÓN ---
+    # Validar la imagen de entrada antes de procesarla
+    if imagen_2d is None or imagen_2d.size == 0:
+        print("[ROI-Qt] Error: La imagen de entrada está vacía.")
+        return None
+    if not np.any(imagen_2d):  # Comprueba si la imagen no es completamente negra/cero
+        print("[ROI-Qt] Advertencia: La imagen para seleccionar el ROI es completamente negra.")
+    # --- FIN DE LA MODIFICACIÓN ---
+
     img = imagen_2d.astype(np.float32)
     p1, p99 = np.percentile(img, [1, 99])
     if not np.isfinite(p1) or not np.isfinite(p99) or p99 <= p1:
         p1, p99 = float(img.min()), float(img.max())
-    img8 = np.clip((img - p1) / (p99 - p1 + 1e-9), 0, 1)
+
+    # Evitar división por cero si la imagen es plana
+    if p99 <= p1:
+        p99 = p1 + 1
+
+    img8 = np.clip((img - p1) / (p99 - p1), 0, 1)
     img8 = (img8 * 255).astype(np.uint8)
 
     h, w = img8.shape
@@ -254,17 +269,17 @@ def seleccionar_roi_qt(imagen_2d, titulo="Seleccionar ROI"):
         def get_roi_rc(self):
             if self.sel_rect is None:
                 return None
-            x0 = max(0, min(self.sel_rect.left(),  self.pixmap().width()-1))
-            y0 = max(0, min(self.sel_rect.top(),   self.pixmap().height()-1))
-            x1 = max(0, min(self.sel_rect.right()+1, self.pixmap().width()))
-            y1 = max(0, min(self.sel_rect.bottom()+1, self.pixmap().height()))
+            x0 = max(0, min(self.sel_rect.left(), self.pixmap().width() - 1))
+            y0 = max(0, min(self.sel_rect.top(), self.pixmap().height() - 1))
+            x1 = max(0, min(self.sel_rect.right() + 1, self.pixmap().width()))
+            y1 = max(0, min(self.sel_rect.bottom() + 1, self.pixmap().height()))
             return (int(y0), int(y1), int(x0), int(x1))  # (r0,r1,c0,c1)
 
     class RoiDialog(QtWidgets.QDialog):
         def __init__(self, pixmap, title):
             super().__init__()
             self.setWindowTitle(title)
-            self.resize(min(1000, w+80), min(800, h+120))
+            self.resize(min(1000, w + 80), min(800, h + 120))
             vbox = QtWidgets.QVBoxLayout(self)
 
             self.label = ImageLabel(pixmap)
@@ -298,8 +313,6 @@ def seleccionar_roi_qt(imagen_2d, titulo="Seleccionar ROI"):
             return None
         return roi
     return None
-
-
 # =============================================================================
 # Batch principal usando ImageEnhancer
 # =============================================================================
@@ -394,15 +407,15 @@ def binarizar_carpeta(
 # Ejemplo mínimo
 # =============================================================================
 if __name__ == "__main__":
-    IN  = r"D:\MEDICIONES L7\Mediciones 6-11\var osc rugosidad\SEQ_Sat320Oe_50ms_Nuc190Oe_300ms_Grow220Oe_60ms_Amp20_FULL_20251106_154505\rep_002"
-    OUT = r"D:\MEDICIONES L7\Mediciones 6-11\var osc rugosidad\SEQ_Sat320Oe_50ms_Nuc190Oe_300ms_Grow220Oe_60ms_Amp20_FULL_20251106_154505\rep_002\out"
+    IN  = r"C:\Users\usuario\Documents\Labo 67\LuCam-app\Data\Mediciones 27-11\toto_bauti_capos\SEQ_Sat300Oe_100ms_Nuc190Oe_300ms_Grow195Oe_100ms_FULL_20251127_154215\rep_001"
+    OUT = r"C:\Users\usuario\Documents\Labo 67\LuCam-app\Data\Mediciones 27-11\toto_bauti_capos\SEQ_Sat300Oe_100ms_Nuc190Oe_300ms_Grow195Oe_100ms_FULL_20251127_154215\rep_001\out"
 
     # ROI fijo (se ignora si usar_roi_qt=True)
     ROI_FIJO = (200, 800, 300, 1100)
 
     # ROI manual
     USAR_ROI_QT     = True       # abre selector Qt
-    FOTO_IDX_ROI    = 10          # imagen (1-based) donde elegir el ROI
+    FOTO_IDX_ROI    = 7          # imagen (1-based) donde elegir el ROI
     NOMBRE_IMG_ROI  = None       # o un substring de archivo (prioriza sobre el índice)
     ROI_OBLIGATORIO = True       # si cancelás, aborta; si False, usa imagen completa
 
